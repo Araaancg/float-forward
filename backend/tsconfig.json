@@ -1,0 +1,41 @@
+{
+    "compilerOptions": {
+      "target": "ES2022",
+      "lib": ["ES2022", "esnext.asynciterable", "dom"],
+      "typeRoots": ["./node_modules/@types", "./src/types"],
+      "allowSyntheticDefaultImports": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "module": "CommonJS",
+      "pretty": true,
+      "strict": false,
+      "sourceMap": true,
+      "outDir": "./build",
+      "allowJs": true,
+      "noEmit": false,
+      "esModuleInterop": true,
+      "noImplicitAny": false,
+      "baseUrl": ".",
+      "types": ["node"],
+      "rootDir": "src",
+      "skipLibCheck": true
+    },
+    "flags": {
+      "isExported": true,
+      "isExternal": true
+    },
+    "typedocOptions": {
+      "entryPoints": ["src/index.ts"],
+      "out": "docs"
+    },
+    "ts-node": {
+      "esm": true,
+      "experimentalSpecifierResolution": "node"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "tests"]
+  }
+  

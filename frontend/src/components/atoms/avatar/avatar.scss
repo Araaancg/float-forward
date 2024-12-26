@@ -1,0 +1,8 @@
+.avatar {
+    @apply relative w-12 h-12 rounded-full border-2 border-solid border-green-primary
+    flex justify-center items-center cursor-pointer;
+
+    &-content {
+        @apply rounded-full object-cover;
+    }
+}

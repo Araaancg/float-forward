@@ -1,0 +1,23 @@
+.sidebar {
+  @apply h-screen bg-white-secondary px-6 py-8
+    hidden xs:flex flex-col justify-between items-center;
+  border-right: 5px solid theme("colors.green.primary");
+
+  &.close {
+    width: 100px;
+  }
+  &.open {
+    width: 290px;
+  }
+
+  &-top,
+  &-bottom {
+    @apply w-full flex flex-col gap-12;
+    &-links {
+      @apply flex flex-col justify-center gap-6;
+      & > li {
+        @apply flex flex-row justify-start items-center gap-3;
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+.textfield-container {
+    @apply flex flex-col gap-2 transition-all w-full ;
+    gap: 0.5rem;
+  
+    & > label {
+      @apply flex text-black-primary font-normal text-base;
+      // gap: 0.25rem;
+      // font-size: 0.875rem;
+    }
+  
+    &-input {
+      @apply rounded-lg border border-solid border-grey 
+      relative flex justify-between items-center bg-white-secondary w-full;
+  
+      &:hover {
+        @apply border-black-primary;
+      }
+  
+      &.invalid {
+        @apply border-2 border-solid border-error;
+      }
+  
+      &:focus-within {
+        @apply border-2 border-solid border-black-primary ;
+      }
+  
+      & > input[type="text"],
+      & > input[type="email"],
+      & > input[type="password"] {
+        @apply w-full py-2 px-4 bg-white-secondary rounded-lg box-border text-black-primary;
+  
+        &::placeholder {
+          @apply text-grey text-base;
+        }
+  
+        &:disabled {
+          @apply bg-disabled-input text-grey;
+        }
+        &:focus {
+          outline: none;
+        }
+        * {
+          outline: none;
+        }
+      }
+    }
+  
+    & > p.helper-text {
+      @apply text-black-primary text-xs;
+    }
+  }

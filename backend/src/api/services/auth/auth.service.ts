@@ -2,12 +2,9 @@
 
 import httpStatus from 'http-status'
 import Container, { Service } from 'typedi'
-import { TokenService } from './token.service'
-import mongoose, { Model } from 'mongoose'
-import { NodemailerService } from '../../../common/utils/nodemailer/nodemailer.service'
-import { ApiError } from '../../../common/helpers/middlewares'
 import { UserService } from '../user.service'
-import { MAIL } from '../../../common/config'
+import { TokenService } from './token.service'
+import { Model } from 'mongoose'
 
 
 @Service()
@@ -17,10 +14,10 @@ export class AuthService {
   constructor(
     private tokenService: TokenService,
     private userService: UserService,
-    private emailService: any
+    // private emailService: any
   ) {
-    this.tokenModel = Container.get('Token'),
-    this.emailService = new NodemailerService(MAIL)
+    this.tokenModel = Container.get('Token')
+    // this.emailService = new NodemailerService(MAIL)
   }
 
   /**
@@ -30,18 +27,18 @@ export class AuthService {
    * @param {string} email - A string representing the email address of the user trying to log in.
    * @returns a Promise that resolves to an unknown value.
    */
-  async signupPasswordless({
-    email,
-    name,
-  }: {
-    email: string
-    name: string
-  }): Promise<unknown> {
-    const user = await this.userService.create({ email, name })
-    console.log('user->', user)
+//   async signupPasswordless({
+//     email,
+//     name,
+//   }: {
+//     email: string
+//     name: string
+//   }): Promise<unknown> {
+//     const user = await this.userService.create({ email, name })
+//     console.log('user->', user)
 
-    return this.send2FA(user)
-  }
+//     return this.send2FA(user)
+//   }
 
   /**
  * The `loginPasswordless` function logs in a user using a passwordless authentication method by
@@ -50,16 +47,16 @@ export class AuthService {
  * @param {string} email - A string representing the email address of the user trying to log in.
  * @returns a Promise that resolves to an unknown value.
  */
-  async loginPasswordless(email: string): Promise<unknown> {
+//   async loginPasswordless(email: string): Promise<unknown> {
 
-    const user = (await this.userService.get({ email }, null))[0]
+//     const user = (await this.userService.get({ email }, null))[0]
     
-    if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Please register user in the DB manually ahead of using it')
-    }
+//     if (!user) {
+//       throw new ApiError(httpStatus.NOT_FOUND, 'Please register user in the DB manually ahead of using it')
+//     }
 
-    return this.send2FA({ email, _id: new mongoose.Types.ObjectId() })
-  }
+//     return this.send2FA({ email, _id: new mongoose.Types.ObjectId() })
+//   }
 
   /**
  * The function sends a verification email to a user with a generated token.
@@ -69,13 +66,13 @@ export class AuthService {
  * @returns an object with a property "emailSent" which is a boolean value indicating whether the email
  * was successfully sent or not.
  */
-  private async send2FA(user: Partial<any>): Promise<unknown> {
-    const token = await this.tokenService.generateVerifyEmailToken(user)
-    console.log('token->', token)
-    const result = this.emailService.sendVerificationEmail(user.email, token)
+//   private async send2FA(user: Partial<any>): Promise<unknown> {
+//     const token = await this.tokenService.generateVerifyEmailToken(user)
+//     console.log('token->', token)
+//     const result = this.emailService.sendVerificationEmail(user.email, token)
 
-    return { emailSent: !!result }
-  }
+//     return { emailSent: !!result }
+//   }
 
   /**
    * The function `verifyEmail` verifies an access token, retrieves the corresponding user, deletes the
@@ -84,22 +81,22 @@ export class AuthService {
    * for email verification.
    * @returns the result of calling the `generateAuthTokens` method of the `tokenService` object.
    */
-  async verifyEmail(access_token: string): Promise<unknown> {
-    const { token } = await this.tokenService.verifyToken(
-      access_token,
-      'VerifyEmail'
-    )
+//   async verifyEmail(access_token: string): Promise<unknown> {
+//     const { token } = await this.tokenService.verifyToken(
+//       access_token,
+//       'VerifyEmail'
+//     )
 
-    const user = (await this.userService.get({ _id: token.user }, null))[0]
+//     const user = (await this.userService.get({ _id: token.user }, null))[0]
 
-    if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
-    }
+//     if (!user) {
+//       throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
+//     }
 
-    await token.deleteOne()
+//     await token.deleteOne()
 
-    return this.tokenService.generateAuthTokens(user)
-  }
+//     return this.tokenService.generateAuthTokens(user)
+//   }
 
   /**
    * The above function logs out a user by deleting their refresh token from the database.
@@ -107,21 +104,21 @@ export class AuthService {
    * token used for authentication.
    * @returns an object with the property "logout" set to true.
    */
-  async logout(refreshToken: string): Promise<unknown> {
-      return async () => {
-        const refreshTokenDoc = await this.tokenModel.findOne({
-          token: refreshToken,
-          type: 'Refresh',
-          blacklisted: false
-        })
+//   async logout(refreshToken: string): Promise<unknown> {
+//       return async () => {
+//         const refreshTokenDoc = await this.tokenModel.findOne({
+//           token: refreshToken,
+//           type: 'Refresh',
+//           blacklisted: false
+//         })
 
-        if (!refreshTokenDoc) {
-          throw new ApiError(httpStatus.NOT_FOUND, 'Not found')
-        }
+//         if (!refreshTokenDoc) {
+//           throw new ApiError(httpStatus.NOT_FOUND, 'Not found')
+//         }
 
-        await refreshTokenDoc.deleteOne()
-      }
-  }
+//         await refreshTokenDoc.deleteOne()
+//       }
+//   }
 
 
   /**
@@ -132,29 +129,29 @@ export class AuthService {
    * token.
    * @returns a Promise that resolves to an unknown value.
    */
-  async refreshAuth({
-    refreshToken
-  }: {
-    refreshToken: string
-  }): Promise<unknown> {
-    try {
-      const { token } = await this.tokenService.verifyToken(
-        refreshToken,
-        'Refresh'
-      )
+//   async refreshAuth({
+//     refreshToken
+//   }: {
+//     refreshToken: string
+//   }): Promise<unknown> {
+//     try {
+//       const { token } = await this.tokenService.verifyToken(
+//         refreshToken,
+//         'Refresh'
+//       )
 
-      const user = (await this.userService.get({ _id: token.user }, null))[0]
+//       const user = (await this.userService.get({ _id: token.user }, null))[0]
 
 
-      if (!user) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
-      }
+//       if (!user) {
+//         throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
+//       }
 
-      await token.deleteOne()
+//       await token.deleteOne()
 
-      return this.tokenService.generateAuthTokens(user)
-    } catch (error) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate')
-    }
-  }
+//       return this.tokenService.generateAuthTokens(user)
+//     } catch (error) {
+//       throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate')
+//     }
+//   }
 }

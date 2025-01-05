@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { type Request } from 'express'
 import { JwtPayload } from 'jsonwebtoken'
 import { Schema } from 'mongoose'

@@ -10,14 +10,14 @@ export const UserSchema = new mongoose.Schema<any>(
   { timestamps: true, versionKey: false }
 );
 
-UserSchema.statics.isEmailTaken = async function (email, excludeUserId) {
-  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
-  return !!user;
-};
+// UserSchema.statics.isEmailTaken = async function (email, excludeUserId) {
+//   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+//   return !!user;
+// };
 
-UserSchema.statics.isNameTaken = async function (name, excludeUserId) {
-  if (name) {
-    const user = await this.findOne({ name, _id: { $ne: excludeUserId } });
-    return !!user;
-  } else return false;
-};
+// UserSchema.statics.isNameTaken = async function (name, excludeUserId) {
+//   if (name) {
+//     const user = await this.findOne({ name, _id: { $ne: excludeUserId } });
+//     return !!user;
+//   } else return false;
+// };

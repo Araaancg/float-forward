@@ -3,8 +3,8 @@ import moment from 'moment'
 import mongoose, { AnyObject, Model, ObjectId } from 'mongoose'
 import Container, { Service } from 'typedi'
 import httpStatus from 'http-status'
-import { ApiError } from '../../../common/helpers/middlewares'
 import { JSON_WEB_TOKENS } from '../../../common/config'
+import { ApiError } from '../../../common/middlewares/error-handler'
 
 @Service()
 export class TokenService {
@@ -34,7 +34,7 @@ export class TokenService {
       type,
     }
 
-    return jwt.sign(payload, JSON_WEB_TOKENS.PRIVATE_KEY, {
+    return jwt.sign(payload, JSON_WEB_TOKENS.PRIVATE_KEY!, {
       algorithm: 'ES256',
       keyid: '4a9c726f4db1238e97fb605af'
     })
@@ -72,7 +72,7 @@ export class TokenService {
     let payload
 
     try {
-      payload = jwt.verify(token, JSON_WEB_TOKENS.PRIVATE_KEY)
+      payload = jwt.verify(token, JSON_WEB_TOKENS.PRIVATE_KEY!)
     } catch (error) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid token')
     }

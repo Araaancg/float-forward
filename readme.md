@@ -67,7 +67,7 @@ git clone https://github.com/Araaancg/brookes-dissertation.git
 ## Documentation
 For further documentation on the project, please read the following documents that can be found in the `/docs/` folder in the project root.
 
-- [Architecture & Technologies](./docs/architecture-and-tecnologies.md)
+- [Architecture & Technologies](./docs/architecture-and-technologies.md)
 - [Database Schema](./docs/database-schema.md)
 - [API Documentation](./docs/backend-documentation/api-intro.md)
 

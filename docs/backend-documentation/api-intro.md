@@ -60,7 +60,7 @@ The `common` folder contains utility functions, middleware, and other reusable c
 The `models` folder houses all the Mongoose ORM models. These models are used to interact with the MongoDB database, defining schemas, validation rules, and other configurations for the data stored in the database.
 
 - Each model corresponds to a specific collection in the database.
-- For more detailed information about each schema, please refer to the [database-schema.md](./database-schema.md) file.
+- For more detailed information about each schema, please refer to the [database-schema.md](../database-schema.md) file.
 
 ---
 
@@ -80,12 +80,3 @@ All the endpoint documentation can be looked in the `/endpoints/` folder where t
 
 - [Authentication](./endpoints/authentication.md)
 - [Users](./endpoints/users.md)
-
-
----
-
-## Conclusion
-
-This API is designed to handle user authentication, profile management, and other features related to your project. By following this documentation, developers should have a clear understanding of how the API works, how to integrate it with their application, and what data is required to interact with it.
-
-For more detailed information, refer to the database schema and other relevant documentation files.

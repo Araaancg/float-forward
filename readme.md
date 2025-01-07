@@ -1,4 +1,4 @@
-# AIDENT | Community-based disaster handling platform
+# AIDNET | Community-based disaster handling platform
 
 ## Table of Contents
 

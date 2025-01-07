@@ -14,7 +14,7 @@ const userRoutes = () => {
     .get(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY!),
       // validate(schemas),
-      // userController.get
+      userController.get
     );
 
   router

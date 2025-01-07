@@ -7,14 +7,14 @@ import { UserService } from '../services/user.service'
 export class UserController {
   constructor(private userService: UserService) { }
 
-//   get = catchAsync(async (req: Request, res: Response) => {
+  get = catchAsync(async (req: Request, res: Response) => {
     
-//     const { limit = 10, skip = 0, ...body } = req.query
+    const { limit = 10, skip = 0, ...body } = req.query
 
-//     const result = await this.userService.get(body, { limit, skip })
+    const result = await this.userService.get(body, { limit, skip })
 
-//     res.send(result)
-//   })
+    res.send(result)
+  })
 
 //   create = catchAsync(async (req: any, res: Response) => {
 //     const result = await this.userService.create(

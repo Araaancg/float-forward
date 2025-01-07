@@ -1,4 +1,8 @@
 import Container, { Service } from "typedi";
+import { ApiError } from "../../common/middlewares/error-handler";
+import httpStatus from "http-status";
+import { IUser } from "../../common/types/user.types";
+import { Types } from "mongoose";
 
 @Service()
 export class UserService {
@@ -8,64 +12,55 @@ export class UserService {
     this.userModel = Container.get("User");
   }
 
-  //   async get(
-  //     filter?: { [key: string]: any },
-  //     options?: { [key: string]: any },
-  //   ): Promise<any> {
-  //     return await this.userModel.find(filter, {}, options)
-  //   }
+  async get(
+    filter?: { [key: string]: any },
+    options?: { [key: string]: any }
+  ): Promise<any> {
+    return await this.userModel.find(filter, {}, options);
+  }
 
-  //   async create(
-  //     user: Partial<any>
-  //   ): Promise<any> {
-  //       return async () => {
-  //         const { name, email } = user
+  async getByEmail(email: string) {
+    const user = await this.userModel.find({email})
+    return user[0]
+  }
 
-  //         // Check user name is not taken
-  //         if (await this.userModel.isNameTaken(name)) {
-  //           throw new ApiError(httpStatus.CONFLICT, 'USER NAME ALREADY TAKEN')
-  //         }
+  async create(user: Partial<IUser>): Promise<any> {  
+    const { email } = user
+    // Check user email is not taken - first and last names can be taken
+    if (await this.userModel.isEmailTaken(email)) {
+      throw new ApiError(
+        httpStatus.CONFLICT,
+        "This email is already in use, please login instead"
+      );
+    }
+    const userCreated = await this.userModel.create([user])
+    return userCreated[0]
+  }
 
-  //         // Check user email is not taken
-  //         if (await this.userModel.isEmailTaken(email)) {
-  //           throw new ApiError(httpStatus.CONFLICT, 'THIS EMAIL IS ALREADY IN USE, PLEASE LOGIN INSTEAD')
-  //         }
+  // async update(_id: Types.ObjectId, user: Partial<IUser>): Promise<unknown> {
+  //   return async () => {
+  //     const { email } = user;
 
-  //         // Create the user.
-  //         return (await this.userModel.create([user]))[0]
-  //       }
+  //     const _user = (await this.get({ _id }, {}))[0];
 
-  //   }
+  //     if (!_user) {
+  //       throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  //     }
 
-  //   async update(
-  //     _id: Types.ObjectId,
-  //     user: Partial<any>
-  //   ): Promise<unknown> {
-  //       return async () => {
-  //         const { name } = user
+  //     // if (await this.userModel.isEmailTaken()) {
+  //     //   throw new ApiError(
+  //     //     httpStatus.CONFLICT,
+  //     //     "This email is already in use, please use another one instead"
+  //     //   );
+  //     // }
 
-  //         const _user = (await this.get({ _id }, {}))[0]
+  //     // Assign the updated data and save it
+  //     Object.assign(_user, user);
+  //     await _user.save();
 
-  //         if (!_user) {
-  //           throw new ApiError(httpStatus.NOT_FOUND, 'CHAT NOT FOUND')
-  //         }
-
-  //         if (await this.userModel.isNameTaken(name, _user._id)) {
-  //           throw new ApiError(httpStatus.CONFLICT, 'USER NAME ALREADY TAKEN')
-  //         }
-
-  //         if (await this.userModel.isEmailTaken(name)) {
-  //           throw new ApiError(httpStatus.CONFLICT, 'THIS EMAIL IS ALREADY IN USE, PLEASE USE ANOTHER ONE INSTEAD')
-  //         }
-
-  //         // Assign the updated data and save it
-  //         Object.assign(_user, user)
-  //         await _user.save()
-
-  //         return _user
-  //       }
-
-  //   }
+  //     return _user;
+  //   };
+  // }
 
   //   async delete(
   //     _id: Types.ObjectId

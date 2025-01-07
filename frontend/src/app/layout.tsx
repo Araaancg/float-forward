@@ -1,6 +1,7 @@
 "use client";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({
         /> */}
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
       </head>
-      <body className={`${inter.className} relative`}>{children}</body>
+      <body className={`${inter.className} relative`}>
+        <SessionProvider>{children}</SessionProvider>
+      </body>
     </html>
   );
 }

@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import Button from "@/components/atoms/button/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./login-schema";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const {
@@ -16,20 +18,18 @@ export default function LoginForm() {
     resolver: yupResolver(schema),
   });
 
-  const sendData = async (data: any) => {
-    console.log(data);
-    // const res = await fetch("/api/auth/login", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    // });
-    // const response = await res.json();
-    // reset();
+  const handleLogin = async (data: { email: string; password: string }) => {
+    await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirectTo: "/",
+    });
   };
 
   return (
     <form
       className="w-full flex flex-col gap-4"
-      onSubmit={handleSubmit(sendData)}
+      onSubmit={handleSubmit(handleLogin)}
     >
       <TextField
         register={register}
@@ -45,15 +45,8 @@ export default function LoginForm() {
         name="password"
         type="password"
         placeholder="Your password"
-        label="Repeat password"
+        label="Passwrod"
       />
-      <Button
-        variant="no-color"
-        isLink
-        linkProps={{ href: "/auth/forgot-password" }}
-      >
-        <span className="text-black-primary text-xs">Forgot password?</span>
-      </Button>
       <Button isFullWidth disabled={!isValid} type="submit">
         Login
       </Button>

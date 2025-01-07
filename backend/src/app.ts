@@ -5,7 +5,7 @@ import {
   errorConverter,
   errorHandler,
 } from "./common/middlewares/error-handler";
-import { initializeDatabase } from "./common/mong-init";
+import { initializeDatabase } from "./common/mongodb-init";
 import { isProd } from "./common/config";
 import routes from "./common/routes";
 

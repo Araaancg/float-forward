@@ -3,9 +3,18 @@ import Image from "next/image";
 import Button from "@/components/atoms/button/Button";
 import MenuBurgerIcon from "@/components/atoms/icons/MenuHamburgerIcon";
 import Menu from "../menu/Menu";
+import { IUser } from "@/interfaces";
 import "./topbar.scss";
 
-export default function Topbar({ isSidebarOpen }: { isSidebarOpen: boolean }) {
+export default function Topbar({
+  isSidebarOpen,
+  isLoggedIn,
+  user,
+}: {
+  isSidebarOpen: boolean;
+  isLoggedIn: boolean;
+  user?: IUser
+}) {
   const [showMenu, setShowMenu] = useState<boolean>(false);
   return (
     <div className="topbar">
@@ -15,13 +24,18 @@ export default function Topbar({ isSidebarOpen }: { isSidebarOpen: boolean }) {
         alt="AIDNET logo"
         width={100}
         height={25}
-        className="xs:hidden"
+        className="sm:hidden"
       />
       <Button variant="no-color" onClick={() => setShowMenu(true)}>
-        <MenuBurgerIcon className="xs:hidden" />
+        <MenuBurgerIcon className="sm:hidden" />
       </Button>
 
-      <Menu showMenu={showMenu} toggleMenu={() => setShowMenu(!showMenu)} />
+      <Menu
+        showMenu={showMenu}
+        toggleMenu={() => setShowMenu(!showMenu)}
+        isLoggedIn={isLoggedIn}
+        user={user}
+      />
 
       {/* DESKTOP */}
       <ul

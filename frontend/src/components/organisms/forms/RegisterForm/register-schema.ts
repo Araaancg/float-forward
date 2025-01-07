@@ -12,7 +12,7 @@ export const schema = yup
         "El formato del email no parece válido!"
       ),
     password: yup.string().required("This field is required"),
-    repeatedPassword: yup
+    confirmPassword: yup
       .string()
       .required("This field is required")
       .oneOf([yup.ref('password')], 'Passwords must match'),

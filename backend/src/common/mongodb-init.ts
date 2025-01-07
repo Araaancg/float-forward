@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import Container from 'typedi';
 import { MONGODB_URI } from './config';
 import { UserSchema } from '../models/user.schema';
+import { SessionSchema } from '../models/session.schema';
 
 export class DatabaseConnection {
   private static connection: mongoose.Connection | null = null;
@@ -27,6 +28,7 @@ export class DatabaseConnection {
     const connection = DatabaseConnection.connection;
     
     Container.set('User', connection.model('User', UserSchema));
+    Container.set('Session', connection.model('Session', SessionSchema));
   }
 }
 

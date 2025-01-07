@@ -4,7 +4,7 @@
     backdrop-filter: blur(8px);
 
     &-container {
-        @apply w-10/12 xs:w-1/2 xs:h-1/2 text-black-primary p-6 overflow-y-auto 
+        @apply w-10/12 sm:w-1/2 sm:h-1/2 text-black-primary p-6 overflow-y-auto 
         bg-white-secondary rounded-lg;
     }
 }

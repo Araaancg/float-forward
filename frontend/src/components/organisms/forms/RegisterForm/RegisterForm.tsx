@@ -4,8 +4,12 @@ import { useForm } from "react-hook-form";
 import Button from "@/components/atoms/button/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./register-schema";
+import { signIn } from "next-auth/react";
+// import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
+  // const router = useRouter()
+
   const {
     register,
     reset,
@@ -16,20 +20,34 @@ export default function RegisterForm() {
     resolver: yupResolver(schema),
   });
 
-  const sendData = async (data: any) => {
-    console.log(data);
-    // const res = await fetch("/api/auth/login", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    // });
-    // const response = await res.json();
-    // reset();
+  const handleRegister = async (data: { 
+    email: string; 
+    password: string; 
+    confirmPassword: string;
+    name: string;
+  }) => {
+    await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+      name: data.name,
+      isRegistering: true,
+      redirectTo: "/",
+    });
+  
+    // if (result?.error) {
+    //   // Handle error
+    //   console.error(result.error);
+    // } else {
+    //   // Redirect or handle success
+    //   router.push('/');
+    // }
   };
 
   return (
     <form
       className="w-full flex flex-col gap-4"
-      onSubmit={handleSubmit(sendData)}
+      onSubmit={handleSubmit(handleRegister)}
     >
       <TextField
         register={register}
@@ -58,7 +76,7 @@ export default function RegisterForm() {
       <TextField
         register={register}
         errors={errors}
-        name="repeatedPassword"
+        name="confirmPassword"
         type="password"
         placeholder="Your password"
         label="Password"

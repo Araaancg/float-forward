@@ -2,14 +2,13 @@ import { Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import { ApiError } from "./error-handler";
 import jwt from "jsonwebtoken";
-import GeneralTypes from "../types/general-types";
 
 /**
  * Get token from request header
  * @param req IReques
  * @returns Token
  */
-const getTokenFromHeader = (req: GeneralTypes.IRequest): string => {
+const getTokenFromHeader = (req: any): string => {
   if (
     (req.headers.authorization &&
       req.headers.authorization.split(" ")[0] === "Token") ||
@@ -33,7 +32,7 @@ export const auth = (publicKey: string) =>
     jwt.verify(token, publicKey, function (err, decoded) {
       if (err) {
         return next(
-          new ApiError(httpStatus.UNAUTHORIZED, err.message || "UNAUTHORIZED")
+          new ApiError(httpStatus.UNAUTHORIZED, err.message || "Unauthorized")
         );
       }
       req.token = decoded;

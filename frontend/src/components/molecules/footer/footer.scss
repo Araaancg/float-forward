@@ -1,0 +1,16 @@
+.footer {
+  @apply flex flex-col-reverse xs:flex-row w-screen justify-around items-start xs:items-center gap-8 py-12 px-6;
+  background: linear-gradient(
+    180deg,
+    rgba(155, 197, 61, 1) 0%,
+    rgba(255, 255, 255, 1) 45%
+  );
+  &-links {
+    &-title {
+      @apply text-sm font-semibold;
+    }
+    & > li {
+      @apply font-normal;
+    }
+  }
+}

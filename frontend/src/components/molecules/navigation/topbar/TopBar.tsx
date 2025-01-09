@@ -44,17 +44,17 @@ export default function Topbar({
         }`}
       >
         <li>
-          <Button isLink variant="no-color">
+          <Button isLink variant="no-color" color="black">
             About us
           </Button>
         </li>
         <li>
-          <Button isLink variant="no-color">
+          <Button isLink variant="no-color" color="black">
             Contact
           </Button>
         </li>
         <li>
-          <Button isLink variant="no-color">
+          <Button isLink variant="no-color" color="black">
             Help
           </Button>
         </li>

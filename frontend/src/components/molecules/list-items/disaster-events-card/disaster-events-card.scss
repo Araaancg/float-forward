@@ -1,0 +1,13 @@
+.decard {
+  @apply flex flex-row justify-center items-center w-full rounded-md;
+  height: 70vh;
+  background-color: white;
+  box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.25);
+
+  &-info {
+    @apply flex flex-col justify-center items-end p-6 w-1/2 text-base gap-5;
+  }
+  &-image {
+    @apply relative w-1/2 h-full rounded-md;
+  }
+}

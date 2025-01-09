@@ -1,18 +1,23 @@
 import Link from "next/link";
 import "./breadcrumbs.scss";
+import { HTMLAttributes } from "react";
 
-interface IBreadcrumbs {
-  links: {
-    placeholder: string;
-    url: string;
-  }[];
+export interface IBreadcrumb {
+  placeholder: string;
+  url: string;
 }
 
-export default function Breadcrumbs({ links }: IBreadcrumbs) {
+interface BreadcrumbsProps extends HTMLAttributes<HTMLDivElement> {
+  links: IBreadcrumb[];
+}
+
+export default function Breadcrumbs({ links, className, ...props }: BreadcrumbsProps) {
   return (
-    <div className="breadcrumbs">
+    <div className={`breadcrumbs ${className || ''}`} {...props}>
       <div className="breadcrumbs-home">
-        <Link href={"/"} className="breadcrumbs-single">Home</Link>
+        <Link href={"/"} className="breadcrumbs-single">
+          Home
+        </Link>
       </div>
       <span> / </span>
       {links.map((link, i) => (
@@ -20,9 +25,7 @@ export default function Breadcrumbs({ links }: IBreadcrumbs) {
           <Link href={link.url} className="breadcrumbs-single">
             {link.placeholder}
           </Link>
-          {i !== links.length - 1 && (
-            <span className="ml-4"> / </span>
-          )}
+          {i !== links.length - 1 && <span className="ml-4"> / </span>}
         </div>
       ))}
     </div>

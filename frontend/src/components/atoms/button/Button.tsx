@@ -5,7 +5,8 @@ import "./button.scss";
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "no-color";
-  size?: "lg" | "sm";
+  color?: "green" | "yellow" | "black" | "red" | "lightBlue" | "darkBlue"
+  size?: "lg" | "sm" | "xs";
   isLink?: boolean;
   linkProps?: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>;
   isFullWidth?: boolean;
@@ -13,6 +14,7 @@ interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export default function Button({
   variant = "primary",
+  color = "green",
   size = "lg",
   isLink = false,
   isFullWidth = false,
@@ -20,7 +22,7 @@ export default function Button({
   type = "button",
   ...props
 }: IButton) {
-  const buttonClasses = `button ${variant} ${size} ${isFullWidth ? "w-full": "w-fit"} ${
+  const buttonClasses = `button ${variant} ${color} ${size} ${isFullWidth ? "w-full": "w-fit"} ${
     props.className || ""
   }`;
 
@@ -34,3 +36,4 @@ export default function Button({
     </button>
   );
 }
+

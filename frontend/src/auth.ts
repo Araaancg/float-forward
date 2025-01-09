@@ -70,10 +70,10 @@ export const authOptions = {
 
           // Return the user object and tokens
           return {
-            id: data.user._id,
+            _id: data.user._id,
             email: data.user.email,
             name: data.user.fullName,
-            image: data.user.profileImage,
+            profilePicture: data.user.profileImage,
             accessToken: data.access.token,
             refreshToken: data.refresh.token,
           };

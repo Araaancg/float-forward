@@ -3,7 +3,7 @@ const theme = {
     colors: {
       black: {
         primary: "#1B2021",
-        opacity50: "1B202122"
+        opacity50: "31B202122",
       },
       grey: "#7F7F7F",
       white: {
@@ -19,6 +19,14 @@ const theme = {
       error: "F02D3A",
       info: "#4EA5FF",
       disabled: { input: "#DCDCDD", button: "#BCBABA" },
+      pins: {
+        yellow: { primary: "#FFBF00", opacity: "#FFBF00CC" },
+        green: { primary: "#9BC53D", opacity: "#9BC53DCC" },
+        red: { primary: "#F02D3A", opacity: "#F02D3ACC" },
+        black: { primary: "#1B2021", opacity: "#1B2021CC" },
+        lightBlue: { primary: "#4EA5FF", opacity: "#4EA5FFCC" },
+        darkBlue: { primary: "#1976D2", opacity: "#1976D2CC" },
+      },
     },
     screens: {
       xxs: "370px", // smaller mobile

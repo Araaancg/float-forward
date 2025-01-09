@@ -7,14 +7,58 @@ a.button {
   &.lg {
     @apply py-2 px-4 text-base;
   }
+  &.sm {
+    @apply py-1 px-2 text-sm;
+  }
+  &.xs {
+    @apply py-1 px-2 text-xs;
+  }
 }
 
 button.button.primary,
 a.button.button.primary {
   @apply bg-green-opacity90 text-white-secondary font-semibold;
 
-  &:hover {
-    @apply bg-green-primary;
+  &.green {
+    @apply bg-pins-green-opacity;
+    &:hover {
+      @apply bg-pins-green-primary;
+    }
+  }
+
+  &.yellow {
+    @apply bg-pins-yellow-opacity;
+    &:hover {
+      @apply bg-pins-yellow-primary;
+    }
+  }
+
+  &.red {
+    @apply bg-pins-red-opacity;
+    &:hover {
+      @apply bg-pins-red-primary;
+    }
+  }
+
+  &.black {
+    @apply bg-pins-black-opacity;
+    &:hover {
+      @apply bg-pins-black-primary;
+    }
+  }
+
+  &.lightBlue {
+    @apply bg-pins-lightBlue-opacity;
+    &:hover {
+      @apply bg-pins-lightBlue-primary;
+    }
+  }
+
+  &.darkBlue {
+    @apply bg-pins-darkBlue-opacity;
+    &:hover {
+      @apply bg-pins-darkBlue-primary;
+    }
   }
 
   &:disabled {
@@ -27,13 +71,37 @@ a.button.button.secondary {
   @apply bg-transparent border-2 border-solid border-green-primary;
 
   &:hover {
-    @apply bg-green-opacity50 ;
+    @apply bg-green-opacity50;
   }
 }
 
 button.button.no-color,
 a.button.button.no-color {
-  @apply text-black-primary bg-transparent p-0;
+  @apply bg-transparent p-0;
+
+  &.green {
+    @apply text-green-primary;
+  }
+
+  &.yellow {
+    @apply text-pins-yellow-primary;
+  }
+
+  &.red {
+    @apply text-pins-red-primary;
+  }
+
+  &.lightBlue {
+    @apply text-pins-lightBlue-primary;
+  }
+
+  &.darkBlue {
+    @apply text-pins-darkBlue-primary;
+  }
+
+  &.black {
+    @apply text-black-primary;
+  }
 
   &:hover {
     @apply underline;

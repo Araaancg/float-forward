@@ -119,7 +119,7 @@ export default function Sidebar({
                 </Button>
               </li>
               <li>
-                <Avatar imageSrc={user?.image!} />
+                <Avatar imageSrc={user?.profilePicture!} />
                 {isExpanded && (
                   <span className="text-base text-black-primary font-normal">
                     {user?.name?.slice(0, 20)}

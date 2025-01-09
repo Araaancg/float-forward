@@ -1,8 +1,7 @@
 import { Request, Response } from 'express'
 import { Service } from 'typedi'
+import { catchAsync } from '../../common/helpers/catch-async'
 import { UserService } from '../services/user.service'
-import { catchAsync } from '../../common/helpers/utils/catchasync'
-import { GeneralTypes } from '../../common/types/general'
 
 @Service()
 export class UserController {
@@ -17,27 +16,27 @@ export class UserController {
     res.send(result)
   })
 
-  create = catchAsync(async (req: GeneralTypes.IRequest, res: Response) => {
-    const result = await this.userService.create(
-      req.body
-    )
-    res.send(result)
-  })
+//   create = catchAsync(async (req: any, res: Response) => {
+//     const result = await this.userService.create(
+//       req.body
+//     )
+//     res.send(result)
+//   })
 
-  update = catchAsync(async (req: GeneralTypes.IRequest, res: Response) => {
-    const result = await this.userService.update(
-      req.token.sub,
-      req.body,
-    )
+//   update = catchAsync(async (req: any, res: Response) => {
+//     const result = await this.userService.update(
+//       req.token.sub,
+//       req.body,
+//     )
     
-    res.send(result)
-  })
+//     res.send(result)
+//   })
 
-  delete = catchAsync(async (req: GeneralTypes.IRequest, res: Response) => {
-    const result = await this.userService.delete(
-      req.token.sub,
-    )
+//   delete = catchAsync(async (req: any, res: Response) => {
+//     const result = await this.userService.delete(
+//       req.token.sub,
+//     )
     
-    res.send(result)
-  })
+//     res.send(result)
+//   })
 }

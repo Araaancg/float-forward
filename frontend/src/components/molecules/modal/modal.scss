@@ -1,0 +1,10 @@
+.modal {
+    @apply fixed left-0 top-0 z-50 h-full w-full items-center justify-center ;
+    background-color: rgba(0, 0, 0, .5);
+    backdrop-filter: blur(8px);
+
+    &-container {
+        @apply w-10/12 sm:w-1/2 sm:h-1/2 text-black-primary p-6 overflow-y-auto 
+        bg-white-secondary rounded-lg;
+    }
+}

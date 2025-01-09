@@ -1,0 +1,9 @@
+.breadcrumbs {
+    @apply flex justify-center w-fit gap-4 text-black-primary;
+  &-home {
+    @apply text-green-primary;
+  }
+  &-single {
+    @apply hover:underline;
+  }
+}

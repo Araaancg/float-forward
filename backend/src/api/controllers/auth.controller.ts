@@ -1,70 +1,74 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Service } from 'typedi'
-import httpStatus from 'http-status'
-import { AuthService } from '../services/auth/auth.service'
-import { catchAsync } from '../../common/helpers/utils/catchasync'
-import { ApiError } from '../../common/helpers/middlewares'
+import { Service } from "typedi";
+import httpStatus from "http-status";
+import { catchAsync } from "../../common/helpers/catch-async";
+import { ApiError } from "../../common/middlewares/error-handler";
+import { AuthService } from "../services/auth.service";
 
 @Service()
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-  ) { }
+  constructor(private authService: AuthService) {}
+
+  register = catchAsync(async (req, res) => {
+    const { email, name, password, confirmPassword } = req.body;
+
+    const result = await this.authService.register({
+      email,
+      name,
+      confirmPassword,
+      password,
+    });
+
+    return res.status(httpStatus.CREATED).json(result);
+  });
 
   login = catchAsync(async (req, res) => {
-    const { email, provider, access_token } = req.body
+    const { provider, email, name, picture, token, password } = req.body;
+
+    console.log("provider", provider);
 
     switch (provider) {
-      case 'passwordless':
-        const result = await this.authService.loginPasswordless(email)
-        return res.status(200).send(result)
-      case 'other':
-        throw new ApiError(httpStatus.NOT_IMPLEMENTED, 'Provider not found')
-    }
-  })
-
-  signup = catchAsync(async (req, res) => {
-    const { email, name } = req.body
-
-      
-        const result = await this.authService.signupPasswordless({
+      case "credentials":
+        const returnCredentials = await this.authService.loginCredentials({
           email,
-          name
-        })
-        return res.status(200).send(result)
-    
-  })
+          password,
+        });
+        return res.status(httpStatus.CREATED).json(returnCredentials);
+
+      case "google":
+        const returnGoogle = await this.authService.loginGoogle({
+          email,
+          name,
+          picture,
+          token,
+        });
+        return res.status(httpStatus.CREATED).json(returnGoogle);
+
+      default:
+        throw new ApiError(httpStatus.NOT_IMPLEMENTED, "Provider not found");
+    }
+  });
+
+  refresh = catchAsync(async (req, res) => {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      throw new ApiError(httpStatus.CONFLICT, "Refresh Token not provided");
+    }
+
+    const result = await this.authService.refresh(refreshToken);
+    return res.status(200).json(result);
+  });
 
   verifyEmail = catchAsync(async (req, res) => {
-    const { access_token } = req.body
-    const tokens = await this.authService.verifyEmail(access_token)
+    const { emailToken } = req.body;
 
-    return res.status(200).send(tokens)
-  })
+    if (!emailToken) {
+      throw new ApiError(httpStatus.CONFLICT, "Email token not provided");
+    }
 
-  logout = catchAsync(async (req, res) => {
-    const { refreshToken } = req.body
+    const result = await this.authService.verifyEmail(emailToken);
+    return res.status(200).json(result);
+  });
 
-    await this.authService.logout(refreshToken)
-
-    return res.status(httpStatus.NO_CONTENT).send()
-  })
-
-  refreshTokens = catchAsync(async (req, res) => {
-    const { refreshToken } = req.body
-    const tokens = <
-      {
-        access: {
-          token: string
-          expires: string
-        }
-        refresh: {
-          token: string
-          expires: string
-        }
-      }
-      >await this.authService.refreshAuth({ refreshToken })
-
-    return res.send({ ...tokens })
-  })
+  logout = catchAsync(async (req, res) => {});
 }

@@ -1,0 +1,41 @@
+button.button,
+a.button {
+  @apply text-center no-underline flex justify-center 
+  items-center gap-2 rounded-md
+  cursor-pointer;
+
+  &.lg {
+    @apply py-2 px-4 text-base;
+  }
+}
+
+button.button.primary,
+a.button.button.primary {
+  @apply bg-green-opacity90 text-white-secondary font-semibold;
+
+  &:hover {
+    @apply bg-green-primary;
+  }
+
+  &:disabled {
+    @apply bg-disabled-button cursor-not-allowed;
+  }
+}
+
+button.button.secondary,
+a.button.button.secondary {
+  @apply bg-transparent border-2 border-solid border-green-primary;
+
+  &:hover {
+    @apply bg-green-opacity50 ;
+  }
+}
+
+button.button.no-color,
+a.button.button.no-color {
+  @apply text-black-primary bg-transparent p-0;
+
+  &:hover {
+    @apply underline;
+  }
+}

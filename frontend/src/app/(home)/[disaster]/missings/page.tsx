@@ -1,44 +1,17 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
+import React, { useEffect, useState } from "react";
 import { disasterMock } from "@/mocks/mock";
+import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
 import Tabs from "@/components/atoms/tabs/Tabs";
-import "./offer-help.scss";
+import "./missings.scss";
+import ReportMissingForm from "@/components/organisms/forms/ReportMissingForm/ReportMissingForm";
+import Modal from "@/components/molecules/modal/Modal";
 import ExclamationMarkIcon from "@/components/atoms/icons/ExclamationMarkIcon";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
-import Modal from "@/components/molecules/modal/Modal";
-import OfferOwnHelpForm from "@/components/organisms/forms/OfferHelpForm/OfferHelpForm";
 
-const whatHelp = [
-  {
-    title: "Collection point",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    title: "Medical health point",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    title: "Offer non-medical services",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    title: "Medical services",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-];
-
-export default function OfferHelpView() {
-  const options = [
-    "Help somebody directly",
-    "Offer my own help",
-    "Pitch in from home",
-  ];
+export default function MissingsView() {
+  const options = ["Missings map", "Report missing person or pet"];
 
   // Read the current tab from URLSearchParams
   const getTabFromUrl = () => {
@@ -59,7 +32,7 @@ export default function OfferHelpView() {
   const [showOwnHelpModal, setShowOwnHelpModal] = useState<boolean>(false);
 
   return (
-    <div className="offerHelpView">
+    <div className="missingsView">
       <Breadcrumbs
         links={[
           {
@@ -67,8 +40,8 @@ export default function OfferHelpView() {
             url: `/${disasterMock[0].slug}`,
           },
           {
-            placeholder: "Offer help",
-            url: "offer-help",
+            placeholder: "Missing persons or pets",
+            url: "missings",
           },
         ]}
         className="max-w-[800px]"
@@ -83,13 +56,11 @@ export default function OfferHelpView() {
         options={options}
         selectedTab={currentTab}
         onClick={(index: number) => setCurrentTab(index)}
-        className="max-w-[800px] w-full"
       />
-
-      {currentTab.toString() === "1" && (
+      {currentTab === 1 && (
         <>
           <h2 className="flex gap-3 justify-start items-center text-2xl	">
-            Offer my own help
+            Report missing person or pet
             <Button
               variant="no-color"
               onClick={() => setShowOwnHelpModal(!showOwnHelpModal)}
@@ -104,17 +75,10 @@ export default function OfferHelpView() {
             title="What help can you offer?"
             className="flex flex-col gap-6 max-w-xl	"
           >
-            {whatHelp.map((item: { title: string; description: string }, index: number) => (
-              <div key={index} className="w-full">
-                <p>{item.title}</p>
-                <hr className="border border-solid border-green-primary w-full max-w-[800px]" />
-
-                <p className="text-sm">{item.description}</p>
-              </div>
-            ))}
+            Some explanation here
           </Modal>
 
-          <OfferOwnHelpForm/>
+          <ReportMissingForm />
         </>
       )}
     </div>

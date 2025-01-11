@@ -26,7 +26,7 @@ export default function Home() {
   // }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center gap-12">
+    <div className="flex flex-col justify-center items-center gap-12  p-4">
       <div className="max-w-4xl	">
         <h1 className="my-4 text-center text-4xl	">Recent events</h1>
         <p className="text-center">

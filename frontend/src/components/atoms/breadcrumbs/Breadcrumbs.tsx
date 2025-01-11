@@ -22,7 +22,7 @@ export default function Breadcrumbs({ links, className, ...props }: BreadcrumbsP
       <span> / </span>
       {links.map((link, i) => (
         <div key={`breadcrumbsLink-${i}`}>
-          <Link href={link.url} className="breadcrumbs-single">
+          <Link href={link.url} className="breadcrumbs-single text-wrap">
             {link.placeholder}
           </Link>
           {i !== links.length - 1 && <span className="ml-4"> / </span>}

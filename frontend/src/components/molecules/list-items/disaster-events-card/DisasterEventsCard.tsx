@@ -12,7 +12,7 @@ export default function DisasterEventsCard({ info }: { info: IDisasters }) {
           <span>{info.city}, {info.country}</span>
         </div>
         <h2 className="text-3xl">{info.title}</h2>
-        <p className="text-right">{info.description}</p>
+        <p className="text-left sm:text-right">{info.description}</p>
         <Button isFullWidth isLink linkProps={{href: `/${info.slug}`}}>See more</Button>
       </div>
       <div className="decard-image">
@@ -20,7 +20,7 @@ export default function DisasterEventsCard({ info }: { info: IDisasters }) {
           src={info.images[0].href}
           alt={info.images[0].alt}
           fill
-          className="object-cover rounded-r-md"
+          className="object-cover rounded-t-md xm:rounded-r-md"
         />
       </div>
     </div>

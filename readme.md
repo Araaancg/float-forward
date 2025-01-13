@@ -6,9 +6,6 @@
 2. [Getting Started](#getting-started)
 3. [Project Structure](#project-structure)
 4. [Documentation](#documentation)
-   - [Architecture & Technologies](#architecture--technologies)
-   - [Database Schema](#database-schema)
-   - [API Documentation](#api-documentation)
 5. [Deployment](#deployment)
 
 ## Introduction

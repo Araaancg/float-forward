@@ -7,7 +7,7 @@ import Avatar from "@/components/atoms/avatar/Avatar";
 import MapPinWithBaseIcon from "@/components/atoms/icons/MapPinWithBaseIcon";
 import Button from "@/components/atoms/button/Button";
 import DoubleCaretIcon from "@/components/atoms/icons/DoubleCaretIcon";
-import { IUser } from "@/interfaces";
+import { IUser } from "@/types/interfaces";
 import "./sidebar.scss";
 
 interface ISidebar {
@@ -43,7 +43,7 @@ export default function Sidebar({
                 </Button>
               </div>
               <div>
-                <Button variant="no-color" isLink>
+                <Button variant="no-color" isLink linkProps={{href: "/"}}>
                   {isExpanded ? (
                     <Image
                       src="/logo-horizontal.png"
@@ -119,7 +119,7 @@ export default function Sidebar({
                 </Button>
               </li>
               <li>
-                <Avatar imageSrc={user?.image!} />
+                <Avatar imageSrc={user?.profilePicture!} />
                 {isExpanded && (
                   <span className="text-base text-black-primary font-normal">
                     {user?.name?.slice(0, 20)}

@@ -1,27 +1,37 @@
-"use client"
-import React, { useState, useEffect, useRef } from "react"
-import "./tabs.scss"
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import "./tabs.scss";
+import useTabParams from "@/utils/hooks/useTabsParams";
 
 interface ITabs {
-  options: string[]
-  selectedTab: number
-  onClick: (index: number) => void,
-  className?: string
+  options: string[];
+  paramKey?: string; // The key to use in the URL for the tab
+  className?: string;
+  onTabChange?: (tabIndex: number) => void;  // Optional callback to send the selected tab to parent
 }
 
-export default function Tabs({ options, selectedTab, onClick, className }: ITabs) {
-  const [indicatorStyle, setIndicatorStyle] = useState({})
-  const tabRefs = useRef<HTMLDivElement[]>([])
+export default function Tabs({ options, paramKey = "tab", className, onTabChange }: ITabs) {
+  const { selectedTab, onTabClick } = useTabParams(paramKey); // Use the custom hook
+
+  const [indicatorStyle, setIndicatorStyle] = useState({});
+  const tabRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
-    const currentTab = tabRefs.current[selectedTab]
+    const currentTab = tabRefs.current[selectedTab];
     if (currentTab) {
       setIndicatorStyle({
         width: currentTab.offsetWidth,
         left: currentTab.offsetLeft,
-      })
+      });
     }
-  }, [selectedTab])
+  }, [selectedTab]);
+
+  // Notify parent when tab changes
+  useEffect(() => {
+    if (onTabChange) {
+      onTabChange(selectedTab);
+    }
+  }, [selectedTab, onTabChange]);
 
   return (
     <div className={`tabs ${className}`}>
@@ -30,9 +40,9 @@ export default function Tabs({ options, selectedTab, onClick, className }: ITabs
           <div
             key={index}
             ref={(el) => {
-              tabRefs.current[index] = el as HTMLDivElement
+              tabRefs.current[index] = el as HTMLDivElement;
             }}
-            onClick={() => onClick(index)}
+            onClick={() => onTabClick(index)} // Use the tab click handler from the custom hook
             className={`tab ${selectedTab === index ? "active" : ""}`}
           >
             <span>{option}</span>
@@ -41,5 +51,5 @@ export default function Tabs({ options, selectedTab, onClick, className }: ITabs
         <div className="tabs-indicator" style={indicatorStyle} />
       </div>
     </div>
-  )
+  );
 }

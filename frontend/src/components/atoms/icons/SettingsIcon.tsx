@@ -1,5 +1,5 @@
 "use client";
-import { IIcon } from "@/interfaces";
+import { IIcon } from "./icon-interface";
 import { JSX } from "react";
 
 const SettingsIcon = ({

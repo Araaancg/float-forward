@@ -1,37 +1,37 @@
-import { IPin, TActionTypes } from "@/interfaces";
 import XMarkIcon from "@/components/atoms/icons/XMarkIcon";
 import Button from "@/components/atoms/button/Button";
-import "./pin-card.scss";
 import theme from "@/theme";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import MailIcon from "@/components/atoms/icons/MailIcon";
 import UserIcon from "@/components/atoms/icons/UserIcon";
-import Image from "next/image";
+import SeeMoreP from "@/components/atoms/see-more-p/SeeMoreP";
+import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
+import { PinTypes, pinTypesCrossColor } from "@/types/enums";
+import { IPin } from "@/types/structures";
+import handleMapsRedirect from "@/utils/functions/handleMapsRedirect";
+import "./pin-card.scss";
 
-type PinColorType = keyof typeof theme.extend.colors.pins;
-
-const pinTypesCrossColor: Record<TActionTypes, PinColorType> = {
-  "Help Request": "yellow",
-  "Collection Point": "lightBlue",
-  "Medical Point": "red",
-  "Missings": "black",
-  "Help Offer": "green",
-  "Information Point": "darkBlue",
-};
-
-export default function PinCard({ data, onClose }: { data: IPin, onClose: () => void }) {
-  const [showInfo, setShowInfo] = useState<boolean>(false);
-
+export default function PinCard({
+  data,
+  onClose,
+}: {
+  data: IPin;
+  onClose: () => void;
+}) {
   const pinColor = useMemo(
-    () => pinTypesCrossColor[data.type.title as TActionTypes],
+    () => pinTypesCrossColor[data.type.title as PinTypes],
     [data.type.title]
   );
+
+  const onPinClick = (pin: IPin) => {
+    handleMapsRedirect(pin.latitude, pin.longitude);
+  };
 
   return (
     <div className="pinInfo">
       <div
         className={`pinInfo-card ${
-          pinTypesCrossColor[data.type.title as TActionTypes]
+          pinTypesCrossColor[data.type.title as PinTypes]
         }`}
       >
         <section className="pinInfo-card-header">
@@ -47,18 +47,7 @@ export default function PinCard({ data, onClose }: { data: IPin, onClose: () => 
           {data.additionalInfo && (
             <>
               <h4 className="subtitle">Additional Information</h4>
-              <p>
-                {showInfo
-                  ? data.additionalInfo
-                  : data.additionalInfo.slice(0, 150)}
-                <Button
-                  onClick={() => setShowInfo(!showInfo)}
-                  variant="no-color"
-                  color={pinColor}
-                >
-                  {showInfo ? "See less" : "See more"}
-                </Button>
-              </p>
+              <SeeMoreP text={data.additionalInfo} />
             </>
           )}
         </section>
@@ -67,11 +56,13 @@ export default function PinCard({ data, onClose }: { data: IPin, onClose: () => 
           <h4 className="subtitle">Address</h4>
           <p>{data.address}</p>
           <div className="relative w-full h-60 mt-4">
-            <Image
-              src="/map-small.png"
-              alt="google map"
-              fill
-              className="object-cover"
+            <MapReadPins
+              givenPins={[data]}
+              onPinClick={onPinClick}
+              className="w-full h-full"
+              defaultCenter={{ lat: data.latitude, lng: data.longitude }}
+              customPinColor="red"
+              disableDefaultUI={true}
             />
           </div>
         </section>

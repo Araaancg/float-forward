@@ -1,7 +1,9 @@
 "use client";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+import { APIProvider } from "@vis.gl/react-google-maps";
+import GENERAL_VARIABLES from "@/general";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +23,12 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
       </head>
       <body className={`${inter.className} relative`}>
-        <SessionProvider>{children}</SessionProvider>
+        <APIProvider
+          apiKey={GENERAL_VARIABLES.googleApiKey!}
+          onLoad={() => console.log("Maps API has loaded.")}
+        >
+          <SessionProvider>{children}</SessionProvider>
+        </APIProvider>
       </body>
     </html>
   );

@@ -3,6 +3,9 @@ import TextField from "@/components/molecules/inputs/text-field/TextField";
 import { useForm } from "react-hook-form";
 import Button from "@/components/atoms/button/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
+import TextArea from "@/components/molecules/inputs/textarea/TextArea";
+import MapLocationPicker from "../../maps/map-location-picker/MapLocationPicker";
+import { useState } from "react";
 import { schema } from "./requets-help-form";
 
 export default function RequestHelpForm() {
@@ -16,7 +19,32 @@ export default function RequestHelpForm() {
     resolver: yupResolver(schema),
   });
 
+  const [selectedPlace, setSelectedPlace] = useState<{
+    latitude: number;
+    longitude: number;
+    address: string;
+  } | null>();
+
+  const handlePlaceSelect = (place: {
+    address?: string;
+    lat?: number;
+    lng?: number;
+  }) => {
+    console.log("Selected place:", place);
+    setSelectedPlace({
+      latitude: place?.lat!,
+      longitude: place?.lng!,
+      address: place?.address!
+    });
+    // Do something with the selected place data
+    // e.g., update form state, make API calls, etc.
+  };
+
   const sendData = async (data: any) => {
+    data["latitude"] = selectedPlace?.latitude
+    data["longitude"] = selectedPlace?.longitude
+    data["address"] = selectedPlace?.address
+    data["type"] = selectedPlace?.address
     console.log(data);
     // const res = await fetch("/api/auth/login", {
     //   method: "POST",
@@ -34,29 +62,30 @@ export default function RequestHelpForm() {
       <TextField
         register={register}
         errors={errors}
-        name="email"
-        type="email"
-        placeholder="Your email"
-        label="Email"
+        name="title"
+        type="text"
+        placeholder="Collection Point on High Street"
+        label="Title"
       />
-      <TextField
+      <TextArea
         register={register}
         errors={errors}
-        name="email"
-        type="email"
-        placeholder="Your email"
-        label="Email"
+        name="description"
+        type="text"
+        placeholder="Near the old supermarket there is a collection point... We need x materials"
+        label="Description"
       />
-      <TextField
+      <MapLocationPicker onLocationSelect={handlePlaceSelect} label="Select a location"/>
+      <TextArea
         register={register}
         errors={errors}
-        name="email"
-        type="email"
-        placeholder="Your email"
-        label="Email"
+        name="additionalInformation"
+        type="text"
+        placeholder="Any additional information needed"
+        label="Additional Information"
       />
       <Button isFullWidth disabled={!isValid} type="submit">
-        Submit help pin
+        Submit missings pin
       </Button>
     </form>
   );

@@ -1,35 +1,28 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { disasterMock } from "@/mocks/mock";
+import React, { useState } from "react";
+import { disasterMock } from "@/mocks/disasters";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
 import Tabs from "@/components/atoms/tabs/Tabs";
-import "./missings.scss";
 import ReportMissingForm from "@/components/organisms/forms/ReportMissingForm/ReportMissingForm";
 import Modal from "@/components/molecules/modal/Modal";
 import ExclamationMarkIcon from "@/components/atoms/icons/ExclamationMarkIcon";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
+import { pinListMock } from "@/mocks/pins";
+import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
+import PinCard from "@/components/molecules/list-items/pin-card/PinCard";
+import usePinManagement from "@/utils/hooks/usePinManagement";
+import "./missings.scss";
 
 export default function MissingsView() {
-  const options = ["Missings map", "Report missing person or pet"];
+  // get from backend the pins type = missing
+  const [missingsPins, setMissingsPins] = useState(pinListMock);
 
-  // Read the current tab from URLSearchParams
-  const getTabFromUrl = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tabIndex = urlParams.get("section");
-    return tabIndex ? parseInt(tabIndex, 10) : 0; // Default to 0 if not present
-  };
-
-  const [currentTab, setCurrentTab] = useState<number>(getTabFromUrl());
-
-  // Update the URL when the selected tab changes
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set("section", currentTab.toString());
-    window.history.replaceState(null, "", "?" + urlParams.toString());
-  }, [currentTab]);
+  const [currentTab, setCurrentTab] = useState<number>(0);
 
   const [showOwnHelpModal, setShowOwnHelpModal] = useState<boolean>(false);
+
+  const { selectedPin, onPinClick, removePinParam } = usePinManagement();
 
   return (
     <div className="missingsView">
@@ -47,16 +40,27 @@ export default function MissingsView() {
         className="max-w-[800px]"
       />
 
-      <h1 className="text-4xl">Offer Help</h1>
-      <p className="text-center">
+      <h1 className="text-4xl text-center">Report missing person or pet</h1>
+      <p className="text-center max-w-[800px]">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.
       </p>
       <Tabs
-        options={options}
-        selectedTab={currentTab}
-        onClick={(index: number) => setCurrentTab(index)}
+        options={["Missings map", "Report missing person or pet"]}
+        onTabChange={(index: number) => setCurrentTab(index)}
       />
+      {currentTab === 0 && (
+        <>
+          <MapReadPins
+            givenPins={missingsPins}
+            className="w-full h-96 max-w-[800px]"
+            onPinClick={onPinClick}
+            defaultCenter={disasterMock[0].location}
+          />
+        </>
+      )}
+      {/* PIN CARD - conditionally rendered based on URL parameter */}
+      {selectedPin && <PinCard data={selectedPin} onClose={removePinParam} />}
       {currentTab === 1 && (
         <>
           <h2 className="flex gap-3 justify-start items-center text-2xl	">

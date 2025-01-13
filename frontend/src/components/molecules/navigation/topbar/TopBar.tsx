@@ -3,8 +3,8 @@ import Image from "next/image";
 import Button from "@/components/atoms/button/Button";
 import MenuBurgerIcon from "@/components/atoms/icons/MenuHamburgerIcon";
 import Menu from "../menu/Menu";
-import { IUser } from "@/interfaces";
 import "./topbar.scss";
+import { IUser } from "@/types/structures";
 
 export default function Topbar({
   isSidebarOpen,

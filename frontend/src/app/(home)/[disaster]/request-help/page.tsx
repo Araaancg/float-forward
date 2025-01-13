@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { disasterMock } from "@/mocks/mock";
+import { disasterMock } from "@/mocks/disasters";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
 import Modal from "@/components/molecules/modal/Modal";
 import ExclamationMarkIcon from "@/components/atoms/icons/ExclamationMarkIcon";
@@ -29,7 +29,7 @@ export default function RequestHelpView() {
       />
 
       <h1 className="text-4xl flex gap-3 justify-start items-center">
-        Offer Help{" "}
+        Request Help{" "}
         <Button
           variant="no-color"
           onClick={() => setShowOwnHelpModal(!showOwnHelpModal)}
@@ -37,7 +37,7 @@ export default function RequestHelpView() {
           <ExclamationMarkIcon color={theme.extend.colors.green.primary} />
         </Button>
       </h1>
-      <p className="text-center">
+      <p className="text-center max-w-[800px]">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.
       </p>

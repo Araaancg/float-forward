@@ -1,14 +1,19 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
-import { disasterMock } from "@/mocks/mock";
+import { disasterMock } from "@/mocks/disasters";
 import Tabs from "@/components/atoms/tabs/Tabs";
-import "./offer-help.scss";
 import ExclamationMarkIcon from "@/components/atoms/icons/ExclamationMarkIcon";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
 import Modal from "@/components/molecules/modal/Modal";
 import OfferOwnHelpForm from "@/components/organisms/forms/OfferHelpForm/OfferHelpForm";
+import { pinListMock } from "@/mocks/pins";
+import { IPin } from "@/types/structures";
+import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
+import "./offer-help.scss";
+import usePinManagement from "@/utils/hooks/usePinManagement";
+import PinCard from "@/components/molecules/list-items/pin-card/PinCard";
 
 const whatHelp = [
   {
@@ -34,29 +39,13 @@ const whatHelp = [
 ];
 
 export default function OfferHelpView() {
-  const options = [
-    "Help somebody directly",
-    "Offer my own help",
-    "Pitch in from home",
-  ];
-
-  // Read the current tab from URLSearchParams
-  const getTabFromUrl = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tabIndex = urlParams.get("section");
-    return tabIndex ? parseInt(tabIndex, 10) : 0; // Default to 0 if not present
-  };
-
-  const [currentTab, setCurrentTab] = useState<number>(getTabFromUrl());
-
-  // Update the URL when the selected tab changes
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set("section", currentTab.toString());
-    window.history.replaceState(null, "", "?" + urlParams.toString());
-  }, [currentTab]);
+  const [currentTab, setCurrentTab] = useState<number>(0);
 
   const [showOwnHelpModal, setShowOwnHelpModal] = useState<boolean>(false);
+
+  const [requestsPins, setRequestsPins] = useState<IPin[]>(pinListMock)
+
+  const { selectedPin, onPinClick, removePinParam } = usePinManagement();
 
   return (
     <div className="offerHelpView">
@@ -75,18 +64,41 @@ export default function OfferHelpView() {
       />
 
       <h1 className="text-4xl">Offer Help</h1>
-      <p className="text-center">
+      <p className="text-center max-w-[800px]">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.
       </p>
       <Tabs
-        options={options}
-        selectedTab={currentTab}
-        onClick={(index: number) => setCurrentTab(index)}
+        options={[
+          "Help somebody directly",
+          "Offer my own help",
+          "Pitch in from home",
+        ]}
+        paramKey="tab"
+        onTabChange={(index: number) => setCurrentTab(index)}
         className="max-w-[800px] w-full"
       />
 
-      {currentTab.toString() === "1" && (
+      {/* {currentTab === 0 && (
+        <>
+          {pinListMock.map((item: IPin, index) => (
+            <HelpRequestItem key={index} data={item}/>
+          ))}
+        </>
+      )} */}
+      {currentTab === 0 && (
+        <>
+          <MapReadPins
+            givenPins={requestsPins}
+            className="w-full h-96 max-w-[800px]"
+            onPinClick={onPinClick}
+            defaultCenter={disasterMock[0].location}
+          />
+        </>
+      )}
+      {selectedPin && <PinCard data={selectedPin} onClose={removePinParam} />}
+
+      {currentTab === 1 && (
         <>
           <h2 className="flex gap-3 justify-start items-center text-2xl	">
             Offer my own help
@@ -104,17 +116,19 @@ export default function OfferHelpView() {
             title="What help can you offer?"
             className="flex flex-col gap-6 max-w-xl	"
           >
-            {whatHelp.map((item: { title: string; description: string }, index: number) => (
-              <div key={index} className="w-full">
-                <p>{item.title}</p>
-                <hr className="border border-solid border-green-primary w-full max-w-[800px]" />
+            {whatHelp.map(
+              (item: { title: string; description: string }, index: number) => (
+                <div key={index} className="w-full">
+                  <p>{item.title}</p>
+                  <hr className="border border-solid border-green-primary w-full max-w-[800px]" />
 
-                <p className="text-sm">{item.description}</p>
-              </div>
-            ))}
+                  <p className="text-sm">{item.description}</p>
+                </div>
+              )
+            )}
           </Modal>
 
-          <OfferOwnHelpForm/>
+          <OfferOwnHelpForm />
         </>
       )}
     </div>

@@ -1,42 +1,51 @@
 import PriorityIcon from "@/components/atoms/icons/PriorityIcon";
-import HouseIcon from "@/components/atoms/icons/HouseIcon";
-import Image from "next/image";
+import { IPin } from "@/types/structures";
+import SeeMoreP from "@/components/atoms/see-more-p/SeeMoreP";
 import "./help-request-item.scss";
+import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
+import handleMapsRedirect from "@/utils/functions/handleMapsRedirect";
 
-interface IHelpRequest {
-  helpData?: {
-    title: string;
-    description: string;
-    priority: "H" | "M" | "L";
-    address: string;
+export default function HelpRequestItem({ data }: { data: IPin }) {
+
+  const onPinClick = (pin: IPin) => {
+    handleMapsRedirect(pin.latitude, pin.longitude);
   };
-}
 
-export default function HelpRequestItem({ helpData }: IHelpRequest) {
   return (
     <div className="hritem">
-      <div className="hritem-info">
+      <div className="hritem-info w-1/2">
         <div>
-          <h4 className="text-base font-normal">Help's title</h4>
-          <p className="text-xs font-normal">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua...
-          </p>
+          <h4 className="text-base font-normal mb-4">{data.title}</h4>
+          <SeeMoreP
+            text={data.description}
+            size="sm"
+            className="text-sm"
+            buttonClassName="text-sm"
+          />
         </div>
-        <div className="flex gap-3 text-[8px]">
+        <div className="flex gap-3 text-[10px]">
           <span className="flex justify-center items-center gap-2">
-            <PriorityIcon size={16}/>
-            High priority
+            <PriorityIcon size={16} />
+            {data.priority}
           </span>
-          <span className="flex justify-center items-center gap-2">
-            <HouseIcon size={16}/>
+          {/* <span className="flex justify-center items-center gap-2">
+            <HouseIcon size={16} />
             Locality
-          </span>
+          </span> */}
         </div>
       </div>
-      <div className="hritem-map">
-        <Image src="/map-small.png" alt="google map" width={112} height={99} />
-        <span className="text-[8px]">Headington Rd Headington Oxford OX3 0BP</span>
+      <div className="hritem-map w-1/2 h-64	">
+        <div className="w-full h-full">
+          <MapReadPins
+            givenPins={[data]}
+            onPinClick={onPinClick}
+            className="w-full h-full"
+            defaultCenter={{ lat: data.latitude, lng: data.longitude }}
+            customPinColor="red"
+            disableDefaultUI={true}
+          />
+        </div>
+        <span className="text-[12px]">{data.address}</span>
       </div>
     </div>
   );

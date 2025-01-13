@@ -1,6 +1,6 @@
 "use client";
-import { IIcon } from "@/interfaces";
 import { JSX } from "react";
+import { IIcon } from "./icon-interface";
 
 const HouseIcon = ({
   size = 24,

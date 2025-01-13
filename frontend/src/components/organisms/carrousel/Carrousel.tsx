@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import DisasterEventsCard from "@/components/molecules/list-items/disaster-events-card/DisasterEventsCard";
-import { IDisasters } from "@/interfaces";
+import { IDisasters } from "@/types/interfaces";
 import "./carrousel.scss";
 
 export default function Carrousel({ info }: { info: IDisasters[] }) {

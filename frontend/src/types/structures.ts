@@ -1,9 +1,5 @@
-export interface IIcon {
-  size?: number;
-  color?: string;
-  id?: string;
-  className?: string;
-}
+import {PinTypes, PriorityTypes } from "./enums";
+import { ICoordinates } from "./interfaces";
 
 export interface IUser {
   _id: string;
@@ -27,6 +23,7 @@ export interface IDisasters {
   images: IImages[];
   additionalInformation: IAddiontionalInformation[];
   pins: IPin[];
+  location: ICoordinates
 }
 
 export interface IAddiontionalInformation {
@@ -39,14 +36,6 @@ export interface IAddiontionalInformation {
   disasterId: string;
 }
 
-export type TActionTypes =
-  | "Help Request"
-  | "Collection Point"
-  | "Medical Point"
-  | "Missings"
-  | "Help Offer"
-  | "Information Point";
-
 export interface IPin {
   _id: string;
   type: ITypeInformation;
@@ -58,6 +47,7 @@ export interface IPin {
   address: string;
   user: IUser;
   disasterId: string;
+  priority?: PriorityTypes
 }
 
 export interface ITypeInformation {
@@ -68,7 +58,7 @@ export interface ITypeInformation {
 
 export interface IPinType {
   _id: string;
-  title: TActionTypes;
+  title: PinTypes;
   description?: string;
 }
 

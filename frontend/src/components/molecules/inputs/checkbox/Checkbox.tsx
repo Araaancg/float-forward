@@ -8,6 +8,7 @@ interface ICheckbox
   name: string;
   register: UseFormRegister<FieldValues>;
 }
+
 export default function Checkbox({
   label,
   name,

@@ -17,7 +17,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         isLoggedIn={status === "authenticated"}
         user={session?.user}
       />
-      <div className={`sidebar-${expandSidebar ? "expanded" : "collapsed"}`}>
+      <div className={`sidebar-${expandSidebar ? "expanded" : "collapsed"} h-screen overflow-y-auto`}>
         <Topbar isSidebarOpen={expandSidebar} isLoggedIn={status === "authenticated"}/>
         {children}
       </div>

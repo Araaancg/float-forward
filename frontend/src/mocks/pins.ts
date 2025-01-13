@@ -1,11 +1,12 @@
-import { IPin } from "@/interfaces";
+import { PinTypes, PriorityTypes } from "@/types/enums";
+import { IPin } from "@/types/structures";
 
 export const pinListMock: IPin[] = [
   {
-    _id: "12312",
+    _id: "0",
     type: {
       _id: "1",
-      title: "Missings",
+      title: PinTypes.MISSINGS,
       description: "",
     },
     title: "We need things",
@@ -13,8 +14,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 70.08454024836512,
-    longitude: 167.12734421123267,
+    latitude: -33.8567844,
+    longitude: 151.213108,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -23,12 +24,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "1",
     type: {
       _id: "2",
-      title: "Information Point",
+      title: PinTypes.HELP_REQUEST,
       description: "",
     },
     title: "We need things",
@@ -36,8 +38,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 29.01261061237929,
-    longitude: -112.27631023397462,
+    latitude: -33.8472767,
+    longitude: 151.2188164,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -46,12 +48,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "2",
     type: {
       _id: "3",
-      title: "Help Offer",
+      title: PinTypes.HELP_OFFER,
       description: "",
     },
     title: "We need things",
@@ -59,8 +62,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -69.5601043495286,
-    longitude: 111.39700057786493,
+    latitude: -33.8209738,
+    longitude: 151.2563253,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -69,12 +72,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "3",
     type: {
       _id: "5",
-      title: "Medical Point",
+      title: PinTypes.MEDICAL_POINT,
       description: "",
     },
     title: "We need things",
@@ -82,8 +86,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -50.14184318054255,
-    longitude: -172.8644584658443,
+    latitude: -33.8690081,
+    longitude: 151.2052393,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -92,12 +96,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "4",
     type: {
       _id: "1",
-      title: "Missings",
+      title: PinTypes.MISSINGS,
       description: "",
     },
     title: "We need things",
@@ -105,8 +110,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -62.20632292489753,
-    longitude: 100.81348553855626,
+    latitude: -33.8587568,
+    longitude: 151.2058246,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -115,12 +120,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "5",
     type: {
       _id: "4",
-      title: "Collection Point",
+      title: PinTypes.COLLECTION_POINT,
       description: "",
     },
     title: "We need things",
@@ -128,8 +134,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -23.64706129245635,
-    longitude: -135.7439854409807,
+    latitude: -33.858761,
+    longitude: 151.2055688,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -138,12 +144,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "6",
     type: {
       _id: "5",
-      title: "Medical Point",
+      title: PinTypes.MEDICAL_POINT,
       description: "",
     },
     title: "We need things",
@@ -151,8 +158,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 4.692541425619494,
-    longitude: 156.1269852457661,
+    latitude: -33.852228,
+    longitude: 151.2038374,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -161,12 +168,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "7",
     type: {
       _id: "2",
-      title: "Information Point",
+      title: PinTypes.INFORMATION_POINT,
       description: "",
     },
     title: "We need things",
@@ -174,8 +182,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 68.52047247170664,
-    longitude: -153.2933931704146,
+    latitude: -33.8737375,
+    longitude: 151.222569,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -184,12 +192,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "8",
     type: {
       _id: "3",
-      title: "Help Offer",
+      title: PinTypes.HELP_OFFER,
       description: "",
     },
     title: "We need things",
@@ -197,8 +206,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -16.22351766320677,
-    longitude: -175.0964230162624,
+    latitude: -33.864167,
+    longitude: 151.216387,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -207,12 +216,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "9",
     type: {
       _id: "1",
-      title: "Missings",
+      title: PinTypes.MISSINGS,
       description: "",
     },
     title: "We need things",
@@ -220,8 +230,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 4.690893444109665,
-    longitude: 124.15684547626915,
+    latitude: -33.8636005,
+    longitude: 151.2092542,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -230,12 +240,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "10",
     type: {
       _id: "3",
-      title: "Help Offer",
+      title: PinTypes.HELP_OFFER,
       description: "",
     },
     title: "We need things",
@@ -243,8 +254,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -18.10023429697173,
-    longitude: 150.7847161982847,
+    latitude: -33.869395,
+    longitude: 151.198648,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -253,12 +264,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "11",
     type: {
       _id: "4",
-      title: "Collection Point",
+      title: PinTypes.COLLECTION_POINT,
       description: "",
     },
     title: "We need things",
@@ -266,8 +278,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 42.69534426221263,
-    longitude: 113.16275368000899,
+    latitude: -33.8665445,
+    longitude: 151.1989808,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -276,12 +288,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "12",
     type: {
       _id: "5",
-      title: "Medical Point",
+      title: PinTypes.MEDICAL_POINT,
       description: "",
     },
     title: "We need things",
@@ -289,8 +302,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 14.10508308810763,
-    longitude: -177.5401191148729,
+    latitude: -33.869627,
+    longitude: 151.202146,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -299,12 +312,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "13",
     type: {
       _id: "2",
-      title: "Information Point",
+      title: PinTypes.INFORMATION_POINT,
       description: "",
     },
     title: "We need things",
@@ -312,8 +326,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 58.71445499995854,
-    longitude: -17.12729520052232,
+    latitude: -33.87488,
+    longitude: 151.1987113,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -322,12 +336,13 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
   {
-    _id: "12312",
+    _id: "14",
     type: {
       _id: "1",
-      title: "Missings",
+      title: PinTypes.MISSINGS,
       description: "",
     },
     title: "We need things",
@@ -335,8 +350,8 @@ export const pinListMock: IPin[] = [
       "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
     additionalInfo:
       "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 57.31453448020131,
-    longitude: -126.20451324000148,
+    latitude: -33.8605523,
+    longitude: 151.1972205,
     address: "Headington Rd, Headington, Oxford OX3 0BP",
     user: {
       _id: "sdfasdf",
@@ -345,235 +360,6 @@ export const pinListMock: IPin[] = [
       profilePicture: null,
     },
     disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "3",
-      title: "Help Offer",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 46.65779180837449,
-    longitude: 165.2576100515236,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "4",
-      title: "Collection Point",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -18.69583954057151,
-    longitude: 162.0212727874622,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "5",
-      title: "Medical Point",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 79.45135708841373,
-    longitude: 10.60095811576434,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "2",
-      title: "Information Point",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -84.88146067331486,
-    longitude: 175.0439964360535,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "1",
-      title: "Missings",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 29.02205914508632,
-    longitude: -117.4658485751861,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "3",
-      title: "Help Offer",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 46.65779180837449,
-    longitude: 165.2576100515236,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "4",
-      title: "Collection Point",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -18.69583954057151,
-    longitude: 162.0212727874622,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "5",
-      title: "Medical Point",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 79.45135708841373,
-    longitude: 10.60095811576434,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "2",
-      title: "Information Point",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: -84.88146067331486,
-    longitude: 175.0439964360535,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
-  },
-  {
-    _id: "12312",
-    type: {
-      _id: "1",
-      title: "Missings",
-      description: "",
-    },
-    title: "We need things",
-    description:
-      "The old, weathered clock ticked incessantly, each chime a melancholic echo in the dusty attic. A forgotten photograph lay nestled amongst cobwebs, a sepia-toned portrait whispering tales of a bygone era. Dust motes danced in the single shaft of sunlight piercing the gloom, illuminating a tarnished silver locket. A sudden gust of wind rattled the windowpane, momentarily dispelling the oppressive silence.",
-    additionalInfo:
-      "The rusty swingset creaked ominously in the fading light, a lone sentinel in the overgrown backyard. A mischievous squirrel chattered from a nearby oak, its bushy tail twitching with agitation. The air hung heavy with the scent of petrichor, the earth releasing its earthy fragrance after a recent downpour. A lone ladybug, its crimson shell gleaming like a miniature jewel, crawled along a weathered brick path. A symphony of crickets chirped in the distance, their incessant chorus a lullaby to the twilight. A forgotten kite, its vibrant colors faded and tattered, lay tangled in the branches of a weeping willow. A lone dandelion, its seed head a delicate sphere of fluff, swayed gently in the breeze. A weathered rocking chair sat abandoned on the porch, its paint peeling in the relentless summer sun. A mischievous breeze rustled through the leaves of the ancient maple tree, casting dancing shadows on the crumbling stone patio. A lone hummingbird, its wings a blur of iridescent green, hovered near a cluster of honeysuckle, its long, slender beak probing for nectar. A discarded toy truck, its wheels rusted and immobile, lay half-buried in the soft earth. A lone robin, its breast a vibrant crimson, perched on a fence post, its melodious song echoing through the still air.",
-    latitude: 29.02205914508632,
-    longitude: -117.4658485751861,
-    address: "Headington Rd, Headington, Oxford OX3 0BP",
-    user: {
-      _id: "sdfasdf",
-      name: "Arancha Carpintero Guardiola",
-      email: "carpinteroaranchag@gmail.com",
-      profilePicture: null,
-    },
-    disasterId: "string",
+    priority: PriorityTypes.HIGH,
   },
 ];

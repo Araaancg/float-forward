@@ -6,7 +6,7 @@ import NotificationIcon from "@/components/atoms/icons/NotificationIcon";
 import SettingsIcon from "@/components/atoms/icons/SettingsIcon";
 import UserIcon from "@/components/atoms/icons/UserIcon";
 import "./menu.scss";
-import { IUser } from "@/interfaces";
+import { IUser } from "@/types/interfaces";
 
 interface IMenu {
   showMenu: boolean;

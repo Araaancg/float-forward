@@ -8,8 +8,8 @@ export interface IUser {
   profilePicture?: string | null;
   authProvider?: "google" | "email";
   password?: string;
-  accessToken?: string;
-  refreshToken?: string;
+  // accessToken?: string;
+  // refreshToken?: string;
 }
 
 export interface IDisasters {

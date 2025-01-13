@@ -29,8 +29,8 @@
         "user":  {
                 "_id": MongoDB ObjectID,
                 "email": string,
-                "fullName": string,
-                "profileImage": string |  null,
+                "name": string,
+                "profilePicture": string |  null,
                 "password": null,
                 "authProvider": "google" | "credentials",
                 "createdAt": Date,
@@ -110,8 +110,8 @@
         "user":  {
                 "_id": MongoDB ObjectID,
                 "email": string,
-                "fullName": string,
-                "profileImage": string |  null,
+                "name": string,
+                "profilePicture": string |  null,
                 "password": null,
                 "authProvider": "google" | "credentials",
                 "createdAt": Date,

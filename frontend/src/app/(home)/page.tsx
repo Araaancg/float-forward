@@ -2,11 +2,12 @@
 import React from "react";
 import Carrousel from "@/components/organisms/carrousel/Carrousel";
 import { disasterMock } from "@/mocks/disasters";
+import { useSession } from "next-auth/react";
 import "./home.scss";
 
 export default function Home() {
-  // const session = useSession();
-  // console.log("session", session);
+  const { data: session } = useSession()
+  console.log("session", session);
 
   return (
     <div className="flex flex-col justify-center items-center gap-12  p-4">

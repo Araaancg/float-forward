@@ -24,8 +24,6 @@ export class AuthController {
   login = catchAsync(async (req, res) => {
     const { provider, email, name, picture, token, password } = req.body;
 
-    console.log("provider", provider);
-
     switch (provider) {
       case "credentials":
         const returnCredentials = await this.authService.loginCredentials({
@@ -50,11 +48,13 @@ export class AuthController {
 
   refresh = catchAsync(async (req, res) => {
     const { refreshToken } = req.body;
-
+    console.log("REFRESH TOKEN", refreshToken)
+    
     if (!refreshToken) {
       throw new ApiError(httpStatus.CONFLICT, "Refresh Token not provided");
     }
-
+    
+    console.log("going to service...")
     const result = await this.authService.refresh(refreshToken);
     return res.status(200).json(result);
   });

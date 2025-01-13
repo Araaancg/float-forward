@@ -63,6 +63,7 @@ export class TokenService {
 
     try {
       payload = jwt.verify(token, JSON_WEB_TOKENS.PRIVATE_KEY!);
+      console.log("payload", payload)
     } catch (error) {
       throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid token");
     }

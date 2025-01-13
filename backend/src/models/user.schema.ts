@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 export const UserSchema = new mongoose.Schema<any>(
   {
     email: { type: String, required: true, unique: true },
-    fullName: { type: String, required: true, unique: false },
+    name: { type: String, required: true, unique: false },
     // lastName: { type: String, required: true, unique: false },
-    profileImage: { type: String, required: false, default: null },
+    profilePicture: { type: String, required: false, default: null },
     password: { type: String, required: false, default: null },
     authProvider: { type: String, required: true },
     googleId: { type: String, required: false }

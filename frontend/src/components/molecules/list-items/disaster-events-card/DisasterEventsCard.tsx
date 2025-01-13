@@ -1,7 +1,7 @@
 import Button from "@/components/atoms/button/Button";
-import "./disaster-events-card.scss";
 import Image from "next/image";
-import { IDisasters } from "@/types/interfaces";
+import { IDisasters } from "@/types/structures";
+import "./disaster-events-card.scss";
 
 export default function DisasterEventsCard({ info }: { info: IDisasters }) {
   return (
@@ -20,7 +20,7 @@ export default function DisasterEventsCard({ info }: { info: IDisasters }) {
           src={info.images[0].href}
           alt={info.images[0].alt}
           fill
-          className="object-cover rounded-t-md sm:rounded-t-none sm:rounded-r-md"
+          className="object-cover rounded-t-md sm:rounded-l-none sm:rounded-r-md"
         />
       </div>
     </div>

@@ -49,7 +49,7 @@ export class AuthService {
 
     const user = await this.userService.create({
       email,
-      fullName: name,
+      name,
       password: encryptedPassword,
       authProvider: "credentials",
     });
@@ -76,7 +76,6 @@ export class AuthService {
     email: string;
     password: string;
   }) {
-    console.log("GOT TO LOGIN CREDENTIALS");
     const user = await this.userService.getByEmail(email);
     if (!user) {
       throw new ApiError(
@@ -84,8 +83,6 @@ export class AuthService {
         "User not found, please register instead"
       );
     }
-
-    console.log("user", user);
 
     const equalPasswords = await this.encryptionManager.comparePasswords(
       password,
@@ -105,8 +102,8 @@ export class AuthService {
       user: {
         _id: user._id,
         email: user.email,
-        fullName: user.fullName,
-        profileImage: user.profileImage,
+        name: user.name,
+        profilePicture: user.profilePicture,
         authProvider: user.authProvider,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
@@ -148,7 +145,6 @@ export class AuthService {
       email = payload.email;
       name = payload.name || name;
       picture = payload.picture || picture;
-      console.log("Google Token verified!!");
     } catch (error: any) {
       throw new ApiError(
         httpStatus.CONFLICT,
@@ -161,12 +157,11 @@ export class AuthService {
       // create new user in db
       user = await this.userService.create({
         email,
-        fullName: name,
+        name,
         authProvider: "google",
-        profileImage: picture,
+        profilePicture: picture,
       });
     }
-    console.log("user", user);
 
     const tokens = await this.tokenService.generateAuthTokens(user);
 
@@ -198,7 +193,9 @@ export class AuthService {
 
   async refresh(refreshToken: string) {
     try {
+      console.log("verifying token...")
       const payload = await this.tokenService.verifyToken(refreshToken, "refresh")
+      console.log("token verified, generating new tokens...")
       const tokens = await this.tokenService.generateAuthTokens(payload.token)
       return {
         success: true,

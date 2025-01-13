@@ -14,8 +14,20 @@ import { IDisasters, IPin } from "@/types/structures";
 import { PinTypes } from "@/types/enums";
 import usePinManagement from "@/utils/hooks/usePinManagement";
 import "./disaster.scss";
+import { useAuth } from "@/utils/hooks/useAuth";
 
 export default function DisasterView() {
+  const { isLoading, session } = useAuth({
+    required: true,
+    onError: (error) => {
+      // console.error('Auth error:', error)
+    }
+  })
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   const pathname = usePathname().split("/");
   const slug = pathname[1];
 

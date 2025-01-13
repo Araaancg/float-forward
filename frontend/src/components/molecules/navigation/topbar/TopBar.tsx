@@ -5,6 +5,7 @@ import MenuBurgerIcon from "@/components/atoms/icons/MenuHamburgerIcon";
 import Menu from "../menu/Menu";
 import "./topbar.scss";
 import { IUser } from "@/types/structures";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Topbar({
   isSidebarOpen,
@@ -13,9 +14,10 @@ export default function Topbar({
 }: {
   isSidebarOpen: boolean;
   isLoggedIn: boolean;
-  user?: IUser
+  user?: IUser;
 }) {
   const [showMenu, setShowMenu] = useState<boolean>(false);
+  const { data: session } = useSession();
   return (
     <div className="topbar">
       {/* MOBILE */}
@@ -58,6 +60,13 @@ export default function Topbar({
             Help
           </Button>
         </li>
+        {session && (
+          <li>
+            <Button variant="no-color" color="black" onClick={() => signOut()}>
+              Log out
+            </Button>
+          </li>
+        )}
       </ul>
     </div>
   );

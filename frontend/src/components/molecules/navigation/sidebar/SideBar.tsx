@@ -7,7 +7,7 @@ import Avatar from "@/components/atoms/avatar/Avatar";
 import MapPinWithBaseIcon from "@/components/atoms/icons/MapPinWithBaseIcon";
 import Button from "@/components/atoms/button/Button";
 import DoubleCaretIcon from "@/components/atoms/icons/DoubleCaretIcon";
-import { IUser } from "@/types/interfaces";
+import { IUser } from "@/types/structures";
 import "./sidebar.scss";
 
 interface ISidebar {
@@ -36,14 +36,14 @@ export default function Sidebar({
                   isExpanded ? "justify-end" : "justify-center"
                 }`}
               >
-                <Button variant="no-color" onClick={toggleExpansion}>
+                <Button variant="no-color" color="black" onClick={toggleExpansion}>
                   <DoubleCaretIcon
                     orientation={isExpanded ? "left" : "right"}
                   />
                 </Button>
               </div>
               <div>
-                <Button variant="no-color" isLink linkProps={{href: "/"}}>
+                <Button variant="no-color" color="black" isLink linkProps={{href: "/"}}>
                   {isExpanded ? (
                     <Image
                       src="/logo-horizontal.png"
@@ -71,25 +71,25 @@ export default function Sidebar({
               }`}
             >
               <li>
-                <Button isLink variant="no-color">
+                <Button isLink variant="no-color" color="black">
                   <ChatIcon size={32} />
                   {isExpanded && "Chat"}
                 </Button>
               </li>
               <li>
-                <Button isLink variant="no-color">
+                <Button isLink variant="no-color" color="black">
                   <MapPinWithBaseIcon size={32} />
                   {isExpanded && "My pins"}
                 </Button>
               </li>
               <li>
-                <Button isLink variant="no-color">
+                <Button isLink variant="no-color" color="black">
                   <ChatIcon size={32} />
                   {isExpanded && "My requests"}
                 </Button>
               </li>
               <li>
-                <Button isLink variant="no-color">
+                <Button isLink variant="no-color" color="black">
                   <ChatIcon size={32} />
                   {isExpanded && "I am a first responder"}
                 </Button>
@@ -107,13 +107,13 @@ export default function Sidebar({
               }`}
             >
               <li className={isExpanded ? "pl-2.5" : ""}>
-                <Button variant="no-color" isLink>
+                <Button variant="no-color" color="black" isLink>
                   <NotificationIcon size={32} />
                   {isExpanded && "Notifications"}
                 </Button>
               </li>
               <li className={isExpanded ? "pl-2.5" : ""}>
-                <Button variant="no-color" isLink>
+                <Button variant="no-color" color="black" isLink>
                   <SettingsIcon size={32} />
                   {isExpanded && "Settings"}
                 </Button>
@@ -134,7 +134,7 @@ export default function Sidebar({
       ) : (
         <div className="w-full flex flex-col gap-10">
           <div>
-            <Button variant="no-color" isLink>
+            <Button variant="no-color" color="black" isLink>
               {isExpanded ? (
                 <Image
                   src="/logo-horizontal.png"

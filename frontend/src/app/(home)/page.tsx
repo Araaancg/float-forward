@@ -1,12 +1,39 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Carrousel from "@/components/organisms/carrousel/Carrousel";
-import { disasterMock } from "@/mocks/disasters";
+import { useSession } from "next-auth/react";
+import { IDisasters } from "@/types/structures";
+import { useApi } from "@/utils/hooks/useApi";
 import "./home.scss";
 
 export default function Home() {
-  // const session = useSession();
-  // console.log("session", session);
+  const { data: session } = useSession();
+  console.log("session", session);
+  const { callApi, loading, error } = useApi();
+
+  const [disasters, setDisasters] = useState<IDisasters[]>([]);
+  useEffect(() => {
+    const fetchDisasters = async () => {
+      const response = await callApi("/api/disasters", {
+        method: "GET",
+      });
+
+      if (response.success && response.data) {
+        console.log("response", response);
+        setDisasters(response.data);
+      }
+    };
+
+    fetchDisasters();
+  }, []);
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
 
   return (
     <div className="flex flex-col justify-center items-center gap-12  p-4">
@@ -18,7 +45,7 @@ export default function Home() {
           may require support.
         </p>
       </div>
-      <Carrousel info={disasterMock} />
+      {disasters && !loading && !error && <Carrousel info={disasters} />}
     </div>
   );
 }

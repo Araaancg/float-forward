@@ -3,9 +3,9 @@ import { Schema } from "mongoose";
 export interface IUser {
   _id?: string | Schema.Types.ObjectId;
   email: string;
-  fullName: string;
+  name: string;
   // lastName: string;
-  profileImage?: string;
+  profilePicture?: string;
   isEmailVerified: boolean;
   password?: string;
   googleId: string,

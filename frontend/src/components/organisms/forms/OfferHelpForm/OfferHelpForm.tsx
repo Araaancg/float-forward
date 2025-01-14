@@ -7,8 +7,16 @@ import { schema } from "./offer-help-schema";
 import TextArea from "@/components/molecules/inputs/textarea/TextArea";
 import MapLocationPicker from "../../maps/map-location-picker/MapLocationPicker";
 import { useState } from "react";
+import { IDisasters } from "@/types/structures";
+import { useApi } from "@/utils/hooks/useApi";
+import { PinTypes } from "@/types/enums";
 
-export default function OfferOwnHelpForm() {
+export default function OfferOwnHelpForm({
+  disaster,
+}: {
+  disaster: IDisasters;
+}) {
+  const { callApi, loading, error } = useApi();
   const {
     register,
     reset,
@@ -34,28 +42,32 @@ export default function OfferOwnHelpForm() {
     setSelectedPlace({
       latitude: place?.lat!,
       longitude: place?.lng!,
-      address: place?.address!
+      address: place?.address!,
     });
     // Do something with the selected place data
     // e.g., update form state, make API calls, etc.
   };
 
   const sendData = async (data: any) => {
-    data["latitude"] = selectedPlace?.latitude
-    data["longitude"] = selectedPlace?.longitude
-    data["address"] = selectedPlace?.address
-    data["type"] = selectedPlace?.address
+    data["coordinates"] = {
+      lat: selectedPlace?.latitude,
+      lng: selectedPlace?.longitude,
+    };
+    data["address"] = selectedPlace?.address;
+    data["disaster"] = disaster._id;
+    data["type"] = PinTypes.HELP_OFFER;
     console.log(data);
-    // const res = await fetch("/api/auth/login", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    // });
-    // const response = await res.json();
-    // reset();
+
+    const response = await callApi(`/api/pins`, {
+      method: "POST",
+      requiresAuth: true,
+      body: data,
+    });
+    console.log("pin created res", response);
+    reset();
   };
 
-
-  return (
+  return disaster ? (
     <form
       className="w-full flex flex-col gap-4 max-w-[800px]"
       onSubmit={handleSubmit(sendData)}
@@ -76,7 +88,11 @@ export default function OfferOwnHelpForm() {
         placeholder="Near the old supermarket there is a collection point... We need x materials"
         label="Description"
       />
-      <MapLocationPicker onLocationSelect={handlePlaceSelect} label="Select a location"/>
+      <MapLocationPicker
+        onLocationSelect={handlePlaceSelect}
+        label="Select a location"
+        defaultCenter={disaster.coordinates}
+      />
       <TextArea
         register={register}
         errors={errors}
@@ -89,5 +105,7 @@ export default function OfferOwnHelpForm() {
         Submit help pin
       </Button>
     </form>
+  ) : (
+    <div>loading...</div>
   );
 }

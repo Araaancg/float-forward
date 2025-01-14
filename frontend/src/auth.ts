@@ -1,33 +1,51 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
 import GENERAL_VARIABLES from "./general";
-import TokenManager from "./storage/tokenManager";
+import { JWT } from "next-auth/jwt";
+import { IUser } from "./types/structures";
+import refreshAccessToken from "./utils/functions/refreshAccessToken";
+import { IToken } from "./types/interfaces";
 
 declare module "next-auth" {
   interface Session {
-    error?: string;
-    success?: boolean;
-    accessToken?: string;
-    refreshToken?: string;
+    access: IToken;
+    refresh: IToken;
+    success: boolean;
+    error: string | null;
+    user: {
+      _id: string;
+      name: string;
+      email: string;
+      profilePicture: string;
+    }
   }
+}
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  profilePicture: string;
+  access: IToken;
+  refresh: IToken;
 }
 
 export const authOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID!,
-      clientSecret: process.env.GOOGLE_SECRET!,
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
     }),
-    Credentials({
+    CredentialsProvider({
       id: "credentials",
       name: "Credentials",
       credentials: {
         email: { type: "email" },
         password: { type: "password" },
-        name: { type: "text" }, // Optional for registration
-        confirmPassword: { type: "password" }, // Optional for registration
-        isRegistering: { type: "boolean" }, // To differentiate between login and register
+        name: { type: "text" },
+        confirmPassword: { type: "password" },
+        isRegistering: { type: "boolean" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -60,40 +78,59 @@ export const authOptions = {
           );
 
           const data = await response.json();
+          console.log("authorize data", data)
 
           if (!data.success) {
             throw new Error(data.message || "Authentication failed");
           }
 
-          // Store tokens in the TokenManager
-          TokenManager.setTokens(data.access.token, data.refresh.token);
-
-          // Return the user object and tokens
+          // Return user data and tokens
           return {
-            _id: data.user._id,
+            user: data.user,
+            id: data.user._id,
             email: data.user.email,
-            name: data.user.fullName,
-            profilePicture: data.user.profileImage,
-            accessToken: data.access.token,
-            refreshToken: data.refresh.token,
+            name: data.user.name,
+            profilePicture: data.user.profilePicture,
+            access: data.access,
+            refresh: data.refresh,
           };
-        } catch (error: any) {
-          throw new Error(error.message || "Authentication failed");
+        } catch (error) {
+          if (error instanceof Error) {
+            throw new Error(error.message);
+          }
+          throw new Error("Authentication failed");
         }
       },
     }),
   ],
+  // pages: {
+  //   signIn: '/auth/signin',
+  //   error: '/auth/error',
+  // },
   callbacks: {
-    async jwt({ token, user, account, trigger }: any) {
-      if (trigger === "signIn") {
+    async jwt({
+      token,
+      user,
+      account,
+      trigger,
+    }: {
+      token: JWT;
+      user?: any;
+      account?: any;
+      trigger?: "signIn" | "signUp" | "update";
+    }) {
+      // Initial sign in
+      if (trigger === "signIn" && user) {
         if (account?.provider === "credentials") {
-          // For credentials login/register, use the tokens from authorize
+          console.log("Accoutn provider credentials", user)
+          console.log("\n\nAccoutn provider credentials", token)
           return {
             ...token,
-            accessToken: user.accessToken,
-            refreshToken: user.refreshToken,
-            error: null,
+            access: user.access,
+            refresh: user.refresh,
+            user: user.user,
             success: true,
+            error: null,
           };
         } else if (account?.provider === "google") {
           try {
@@ -114,15 +151,21 @@ export const authOptions = {
 
             const data = await response.json();
 
-            // Store tokens in the TokenManager
-            TokenManager.setTokens(data.access.token, data.refresh.token);
+            if (!data.success) {
+              return {
+                ...token,
+                error: "Authentication failed",
+                success: false,
+              };
+            }
 
             return {
               ...token,
-              accessToken: data.access.token,
-              refreshToken: data.refresh.token,
-              error: data.success ? null : "Authentication failed",
-              success: data.success,
+              access: data.access,
+              refresh: data.refresh,
+              user: data.user,
+              success: true,
+              error: null,
             };
           } catch (error) {
             return {
@@ -133,19 +176,34 @@ export const authOptions = {
           }
         }
       }
-      return token;
+
+      // Return previous token if the access token has not expired
+      if (new Date((token.access as IToken)?.expires) > new Date()) {
+        return token;
+      }
+
+      // Access token has expired, refresh it
+      return refreshAccessToken(token);
     },
 
-    async session({ session, token }: any) {
+    async session({ session, token }: { session: any; token: JWT }) {
+      console.log("\n\ntoken\n\n", token)
       return {
-        ...session,
-        error: token.error,
-        success: token.success,
-        accessToken: token.accessToken,
-        refreshToken: token.refreshToken,
+        access: (token.access as IToken),
+        refresh: (token.refresh as IToken),
+        expires: (token.access as IToken).expires,
+        success: token.success ?? false,
+        error: token.error ?? null,
+        user: {
+          _id: (token.user as IUser)._id,
+          name: (token.user as IUser).name,
+          email: (token.user as IUser).email,
+          profilePicture: (token.user as IUser).profilePicture,
+        },
       };
     },
   },
+  secret: process.env.NEXTAUTH_SECRET
 };
 
 export const { auth, handlers, signIn, signOut } = NextAuth(authOptions);

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { disasterMock } from "@/mocks/disasters";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
 import Modal from "@/components/molecules/modal/Modal";
@@ -7,10 +7,41 @@ import ExclamationMarkIcon from "@/components/atoms/icons/ExclamationMarkIcon";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
 import RequestHelpForm from "@/components/organisms/forms/RequestHelpForm/RequestHelpForm";
+import { useAuth } from "@/utils/hooks/useAuth";
+import { useApi } from "@/utils/hooks/useApi";
+import { IDisasters, IPin } from "@/types/structures";
+import { usePathname } from "next/navigation";
 import "./request-help.scss";
 
 export default function RequestHelpView() {
   const [showOwnHelpModal, setShowOwnHelpModal] = useState<boolean>(false);
+
+  const { isLoading, session } = useAuth({
+    required: true,
+    onError: (error) => {
+      // console.error('Auth error:', error)
+    },
+  });
+
+  const { callApi, loading, error } = useApi();
+  const [disaster, setDisaster] = useState<IDisasters>();
+
+  const pathname = usePathname().split("/");
+  const slug = pathname[1];
+  useEffect(() => {
+    const fetchDisasters = async () => {
+      const response = await callApi(`/api/disasters?slug=${slug}`, {
+        method: "GET",
+      });
+
+      if (response.success && response.data) {
+        console.log("response", response);
+        setDisaster(response.data[0]);
+      }
+    };
+
+    fetchDisasters();
+  }, []);
 
   return (
     <div className="requestHelpView">
@@ -50,8 +81,7 @@ export default function RequestHelpView() {
       >
         Some explanation here
       </Modal>
-
-      <RequestHelpForm />
+      {disaster && <RequestHelpForm disaster={disaster!} />}
     </div>
   );
 }

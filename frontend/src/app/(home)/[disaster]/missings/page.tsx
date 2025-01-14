@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { disasterMock } from "@/mocks/disasters";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
 import Tabs from "@/components/atoms/tabs/Tabs";
@@ -8,23 +8,49 @@ import Modal from "@/components/molecules/modal/Modal";
 import ExclamationMarkIcon from "@/components/atoms/icons/ExclamationMarkIcon";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
-import { pinListMock } from "@/mocks/pins";
 import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
 import PinCard from "@/components/molecules/list-items/pin-card/PinCard";
 import usePinManagement from "@/utils/hooks/usePinManagement";
+import { IDisasters, IPin } from "@/types/structures";
+import { useApi } from "@/utils/hooks/useApi";
+import { usePathname } from "next/navigation";
 import "./missings.scss";
 
 export default function MissingsView() {
-  // get from backend the pins type = missing
-  const [missingsPins, setMissingsPins] = useState(pinListMock);
-
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const [disaster, setDisaster] = useState<IDisasters>();
+  const { callApi, loading, error } = useApi();
+  const pathname = usePathname().split("/");
+  const slug = pathname[1];
+
+  useEffect(() => {
+    const fetchDisasters = async () => {
+      const response = await callApi(`/api/disasters?slug=${slug}`, {
+        method: "GET",
+      });
+
+      if (response.success && response.data) {
+        console.log("response", response);
+        setDisaster(response.data[0]);
+      }
+    };
+
+    fetchDisasters();
+  }, []);
+
+  const missingsPins = useMemo(() => {
+    if (disaster && disaster?.pins) {
+      const pins = disaster.pins;
+      return disaster.pins.filter(
+        (pin: IPin) => pin.type.title === "Missings"
+      );
+    } else return [];
+  }, [disaster]);
 
   const [showOwnHelpModal, setShowOwnHelpModal] = useState<boolean>(false);
+  const { selectedPin, onPinClick, removePinParam } = usePinManagement(missingsPins);
 
-  const { selectedPin, onPinClick, removePinParam } = usePinManagement();
-
-  return (
+  return disaster ? (
     <div className="missingsView">
       <Breadcrumbs
         links={[
@@ -55,7 +81,7 @@ export default function MissingsView() {
             givenPins={missingsPins}
             className="w-full h-96 max-w-[800px]"
             onPinClick={onPinClick}
-            defaultCenter={disasterMock[0].location}
+            defaultCenter={disaster?.coordinates}
           />
         </>
       )}
@@ -82,9 +108,9 @@ export default function MissingsView() {
             Some explanation here
           </Modal>
 
-          <ReportMissingForm />
+          <ReportMissingForm disaster={disaster}/>
         </>
       )}
     </div>
-  );
+  ):(<div>Loading...</div>);
 }

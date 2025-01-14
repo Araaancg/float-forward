@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import DisasterEventsCard from "@/components/molecules/list-items/disaster-events-card/DisasterEventsCard";
-import { IDisasters } from "@/types/interfaces";
 import "./carrousel.scss";
+import { IDisasters } from "@/types/structures";
 
 export default function Carrousel({ info }: { info: IDisasters[] }) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -34,7 +34,6 @@ export default function Carrousel({ info }: { info: IDisasters[] }) {
 
     if (slideInterval.current) clearInterval(slideInterval.current);
   };
-
   return (
     <div className="carrousel">
       <DisasterEventsCard info={info[currentIndex]} />

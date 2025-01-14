@@ -12,7 +12,7 @@ const userRoutes = () => {
   router
     .route("/")
     .get(
-      auth(JSON_WEB_TOKENS.PUBLIC_KEY!),
+      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
       userController.get
     );
@@ -20,25 +20,25 @@ const userRoutes = () => {
   router
     .route("/")
     .post(
-      auth(JSON_WEB_TOKENS.PUBLIC_KEY!),
+      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      // userController.create
+      userController.create
     );
 
   router
     .route("/")
     .put(
-      auth(JSON_WEB_TOKENS.PUBLIC_KEY!),
+      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      // userController.update
+      userController.update
     );
 
   router
     .route("/")
     .delete(
-      auth(JSON_WEB_TOKENS.PUBLIC_KEY!),
+      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      // userController.delete
+      userController.delete
     );
 
   return router;

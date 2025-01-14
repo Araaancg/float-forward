@@ -1,19 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
-import { disasterMock } from "@/mocks/disasters";
 import Tabs from "@/components/atoms/tabs/Tabs";
 import ExclamationMarkIcon from "@/components/atoms/icons/ExclamationMarkIcon";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
 import Modal from "@/components/molecules/modal/Modal";
 import OfferOwnHelpForm from "@/components/organisms/forms/OfferHelpForm/OfferHelpForm";
-import { pinListMock } from "@/mocks/pins";
-import { IPin } from "@/types/structures";
+import { IDisasters, IPin } from "@/types/structures";
 import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
-import "./offer-help.scss";
 import usePinManagement from "@/utils/hooks/usePinManagement";
 import PinCard from "@/components/molecules/list-items/pin-card/PinCard";
+import { useApi } from "@/utils/hooks/useApi";
+import { usePathname } from "next/navigation";
+import "./offer-help.scss";
 
 const whatHelp = [
   {
@@ -40,24 +40,50 @@ const whatHelp = [
 
 export default function OfferHelpView() {
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const [disaster, setDisaster] = useState<IDisasters>();
+  const { callApi, loading, error } = useApi();
+  const pathname = usePathname().split("/");
+  const slug = pathname[1];
 
+  useEffect(() => {
+    const fetchDisasters = async () => {
+      const response = await callApi(`/api/disasters?slug=${slug}`, {
+        method: "GET",
+      });
+
+      if (response.success && response.data) {
+        console.log("response", response);
+        setDisaster(response.data[0]);
+      }
+    };
+
+    fetchDisasters();
+  }, []);
+
+  const requestsPins = useMemo(() => {
+    if (disaster && disaster?.pins) {
+      const pins = disaster.pins;
+      return disaster.pins.filter(
+        (pin: IPin) => pin.type.title === "Help Request"
+      );
+    } else return [];
+  }, [disaster]);
+
+  const { selectedPin, onPinClick, removePinParam } =
+    usePinManagement(requestsPins);
   const [showOwnHelpModal, setShowOwnHelpModal] = useState<boolean>(false);
 
-  const [requestsPins, setRequestsPins] = useState<IPin[]>(pinListMock)
-
-  const { selectedPin, onPinClick, removePinParam } = usePinManagement();
-
-  return (
+  return disaster ? (
     <div className="offerHelpView">
       <Breadcrumbs
         links={[
           {
-            placeholder: disasterMock[0].title,
-            url: `/${disasterMock[0].slug}`,
+            placeholder: disaster?.title,
+            url: `/${disaster?.slug}`,
           },
           {
             placeholder: "Offer help",
-            url: "offer-help",
+            url: `/${disaster?.slug}/offer-help`,
           },
         ]}
         className="max-w-[800px]"
@@ -92,7 +118,7 @@ export default function OfferHelpView() {
             givenPins={requestsPins}
             className="w-full h-96 max-w-[800px]"
             onPinClick={onPinClick}
-            defaultCenter={disasterMock[0].location}
+            defaultCenter={disaster?.coordinates}
           />
         </>
       )}
@@ -128,9 +154,11 @@ export default function OfferHelpView() {
             )}
           </Modal>
 
-          <OfferOwnHelpForm />
+          <OfferOwnHelpForm disaster={disaster} />
         </>
       )}
     </div>
+  ) : (
+    <div>loading...</div>
   );
 }

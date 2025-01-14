@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import GENERAL_VARIABLES from "@/general";
+import { FeedbackProvider } from "@/context/feedbackContext";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,7 +28,9 @@ export default function RootLayout({
           apiKey={GENERAL_VARIABLES.googleApiKey!}
           onLoad={() => console.log("Maps API has loaded.")}
         >
-          <SessionProvider>{children}</SessionProvider>
+          <FeedbackProvider>
+            <SessionProvider>{children}</SessionProvider>
+          </FeedbackProvider>
         </APIProvider>
       </body>
     </html>

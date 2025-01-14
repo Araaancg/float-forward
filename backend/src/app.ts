@@ -26,7 +26,7 @@ export const init = async () => {
 
   // Example status route for health-check
   app.get("/status", async (req, res) => {
-    res.status(200).send({ status: true });
+    res.status(200).send({ status: "Active and ready to receive requests, LET'S GO!" });
   });
 
   // API routes
@@ -34,7 +34,7 @@ export const init = async () => {
 
   // Catch-all 404 handler
   app.use((req: Request, res: Response, next: NextFunction) => {
-    next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
+    next(new ApiError(httpStatus.NOT_FOUND, "Route not found"));
   });
 
   // Error handling middleware

@@ -8,3 +8,14 @@ export interface ILocation {
   lng: number;
   address?: string;
 }
+
+export interface IToken {
+  token: string;
+  expires: string;
+}
+
+export interface IToast {
+  showToast: boolean;
+  variant: 'success' | 'error';
+  content: { title: string; description: string };
+}

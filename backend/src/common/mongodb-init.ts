@@ -4,6 +4,10 @@ import Container from 'typedi';
 import { MONGODB_URI } from './config';
 import { UserSchema } from '../models/user.schema';
 import { SessionSchema } from '../models/session.schema';
+import { DisasterSchema } from '../models/disaster.schema';
+import { ImagesSchema } from '../models/images.schema';
+import { PinSchema } from '../models/pin.schema';
+import { PinTypesSchema } from '../models/pinType.schema';
 
 export class DatabaseConnection {
   private static connection: mongoose.Connection | null = null;
@@ -29,6 +33,10 @@ export class DatabaseConnection {
     
     Container.set('User', connection.model('User', UserSchema));
     Container.set('Session', connection.model('Session', SessionSchema));
+    Container.set('Disaster', connection.model('Disaster', DisasterSchema));
+    Container.set('Images', connection.model('Images', ImagesSchema));
+    Container.set('Pin', connection.model('Pin', PinSchema));
+    Container.set('PinTypes', connection.model('PinTypes', PinTypesSchema));
   }
 }
 

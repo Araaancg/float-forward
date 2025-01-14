@@ -23,7 +23,7 @@ export interface IDisasters {
   images: IImages[];
   additionalInformation: IAddiontionalInformation[];
   pins: IPin[];
-  location: ICoordinates
+  coordinates: ICoordinates,
 }
 
 export interface IAddiontionalInformation {
@@ -42,8 +42,7 @@ export interface IPin {
   title: string;
   description: string;
   additionalInfo?: string;
-  latitude: number;
-  longitude: number;
+  coordinates: ICoordinates,
   address: string;
   user: IUser;
   disasterId: string;

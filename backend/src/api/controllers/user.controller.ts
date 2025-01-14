@@ -1,42 +1,32 @@
-import { Request, Response } from 'express'
-import { Service } from 'typedi'
-import { catchAsync } from '../../common/helpers/catch-async'
-import { UserService } from '../services/user.service'
+import { Request, Response } from "express";
+import { Service } from "typedi";
+import { catchAsync } from "../../common/helpers/catch-async";
+import { UserService } from "../services/user.service";
 
 @Service()
 export class UserController {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   get = catchAsync(async (req: Request, res: Response) => {
-    
-    const { limit = 10, skip = 0, ...body } = req.query
+    const { limit = 10, skip = 0, ...body } = req.query;
+    const result = await this.userService.get(body, { limit, skip });
+    res.send(result);
+  });
 
-    const result = await this.userService.get(body, { limit, skip })
+  create = catchAsync(async (req: any, res: Response) => {
+    const result = await this.userService.create(req.body);
+    res.send(result);
+  });
 
-    res.send(result)
-  })
+  update = catchAsync(async (req: any, res: Response) => {
+    const result = await this.userService.update(req.token.sub, req.body);
 
-//   create = catchAsync(async (req: any, res: Response) => {
-//     const result = await this.userService.create(
-//       req.body
-//     )
-//     res.send(result)
-//   })
+    res.send({ sucess: true, user: result });
+  });
 
-//   update = catchAsync(async (req: any, res: Response) => {
-//     const result = await this.userService.update(
-//       req.token.sub,
-//       req.body,
-//     )
-    
-//     res.send(result)
-//   })
+  delete = catchAsync(async (req: any, res: Response) => {
+    const result = await this.userService.delete(req.token.sub);
 
-//   delete = catchAsync(async (req: any, res: Response) => {
-//     const result = await this.userService.delete(
-//       req.token.sub,
-//     )
-    
-//     res.send(result)
-//   })
+    res.send(result);
+  });
 }

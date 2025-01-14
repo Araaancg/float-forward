@@ -62,10 +62,11 @@
         font-size: 32px;
       }
       &-description {
-        @apply text-base my-8;
+        @apply text-base mt-8;
       }
       &-addInfo {
         font-size: 32px;
+        margin-bottom: 32px;
       }
     }
 

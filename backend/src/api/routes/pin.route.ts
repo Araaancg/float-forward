@@ -1,47 +1,47 @@
 import { Router } from "express";
 import Container from "typedi";
-import { UserController } from "../controllers/user.controller";
 import { auth } from "../../common/middlewares/auth-handler";
 import { JSON_WEB_TOKENS } from "../../common/config";
+import { PinController } from "../controllers/pin.controller";
 // import { validate } from "../../common/validations/validate";
 // import { schemas } from "../../common/validations";
 
-const userRoutes = () => {
+const pinRoutes = () => {
   const router = Router();
-  const userController: UserController = Container.get(UserController);
+  const pinController: PinController = Container.get(PinController);
   router
     .route("/")
     .get(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      userController.get
+      pinController.get
     );
-
+    
   router
     .route("/")
     .post(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      userController.create
+      pinController.create
     );
 
   router
-    .route("/")
+    .route("/:id")
     .put(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      userController.update
+      pinController.update
     );
 
   router
-    .route("/")
+    .route("/:id")
     .delete(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      userController.delete
+      pinController.delete
     );
 
   return router;
 };
 
-export default userRoutes;
+export default pinRoutes;

@@ -8,20 +8,26 @@ export default function DisasterEventsCard({ info }: { info: IDisasters }) {
     <div className="decard">
       <div className="decard-info">
         <div className="text-sm text-grey">
-          <span className="mr-4">{info.date}</span>
-          <span>{info.city}, {info.country}</span>
+          <span className="mr-4">{info?.date}</span>
+          <span>
+            {info?.city}, {info?.country}
+          </span>
         </div>
-        <h2 className="text-3xl">{info.title}</h2>
-        <p className="text-left sm:text-right">{info.description}</p>
-        <Button isFullWidth isLink linkProps={{href: `/${info.slug}`}}>See more</Button>
+        <h2 className="text-3xl">{info?.title}</h2>
+        <p className="text-left sm:text-right">{info?.description}</p>
+        <Button isFullWidth isLink linkProps={{ href: `/${info?.slug}` }}>
+          See more
+        </Button>
       </div>
       <div className="decard-image">
-        <Image
-          src={info.images[0].href}
-          alt={info.images[0].alt}
-          fill
-          className="object-cover rounded-t-md sm:rounded-l-none sm:rounded-r-md"
-        />
+        {info?.images[0]?.href && info?.images[0]?.alt && (
+          <Image
+            src={info?.images[0]?.href}
+            alt={info?.images[0]?.alt}
+            fill
+            className="object-cover rounded-t-md sm:rounded-l-none sm:rounded-r-md"
+          />
+        )}
       </div>
     </div>
   );

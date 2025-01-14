@@ -1,20 +1,20 @@
 import { Router } from "express";
 import Container from "typedi";
-import { UserController } from "../controllers/user.controller";
 import { auth } from "../../common/middlewares/auth-handler";
 import { JSON_WEB_TOKENS } from "../../common/config";
+import { DisasterController } from "../controllers/disaster.controller";
 // import { validate } from "../../common/validations/validate";
 // import { schemas } from "../../common/validations";
 
-const userRoutes = () => {
+const disasterRoutes = () => {
   const router = Router();
-  const userController: UserController = Container.get(UserController);
+  const disasterController: DisasterController = Container.get(DisasterController);
   router
     .route("/")
     .get(
-      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
+      // auth(JSON_WEB_TOKENS.PUBLIC_KEY), // user can see disasters without being authenticated
       // validate(schemas),
-      userController.get
+      disasterController.get
     );
 
   router
@@ -22,26 +22,26 @@ const userRoutes = () => {
     .post(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      userController.create
+      disasterController.create
     );
 
   router
-    .route("/")
+    .route("/:id")
     .put(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      userController.update
+      disasterController.update
     );
 
   router
-    .route("/")
+    .route("/:id")
     .delete(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
       // validate(schemas),
-      userController.delete
+      disasterController.delete
     );
 
   return router;
 };
 
-export default userRoutes;
+export default disasterRoutes;

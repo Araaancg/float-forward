@@ -7,14 +7,14 @@ import getUserLocation from "@/utils/functions/getUserLocation";
 import "./map-location-picker.scss";
 
 interface IMapLocationPicker {
-  defaultLocation?: ILocation;
+  defaultCenter?: ICoordinates;
   onLocationSelect?: (location: ILocation) => void;
   label?: string;
   className?: string;
 }
 
 const MapLocationPicker = ({
-  defaultLocation = { lat: -33.860664, lng: 151.208138 },
+  defaultCenter,
   onLocationSelect,
   label,
   className,
@@ -65,16 +65,17 @@ const MapLocationPicker = ({
     [onLocationSelect]
   );
 
-  const [userLocation, setUserLocation] =
-    useState<ICoordinates>(defaultLocation);
-
-  useEffect(() => {
-    getUserLocation().then((response) => {
-      if (response) {
-        setUserLocation(response);
+  const [userLocation, setUserLocation] = useState<ICoordinates | undefined>();
+  
+    useEffect(() => {
+      if (!defaultCenter) {
+        getUserLocation().then((response) => {
+          if (response) {
+            setUserLocation(response);
+          }
+        });
       }
-    });
-  }, [getUserLocation]);
+    }, [getUserLocation]);
 
   return (
     <div className={`w-full ${className}`}>
@@ -99,7 +100,7 @@ const MapLocationPicker = ({
 
       <Map
         defaultZoom={13}
-        defaultCenter={userLocation}
+        defaultCenter={defaultCenter || userLocation}
         mapId="YOUR_MAP_ID"
         onClick={handleMapClick}
         className="w-full h-96"

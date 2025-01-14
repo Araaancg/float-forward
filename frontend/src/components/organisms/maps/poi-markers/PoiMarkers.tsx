@@ -1,4 +1,5 @@
 import MapPinIcon from "@/components/atoms/icons/MapPinIcon";
+import theme from "@/theme";
 import { PinTypes, pinTypesCrossColor } from "@/types/enums";
 import { IPin } from "@/types/structures";
 import { Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
@@ -10,17 +11,19 @@ function filterPinsByCoordinates(
   lat: number,
   lng: number
 ): IPin | undefined {
-  return pins.find((pin) => pin.latitude === lat && pin.longitude === lng);
+  return pins.find(
+    (pin) => pin.coordinates.lat === lat && pin.coordinates.lng === lng
+  );
 }
 
 const PoiMarkers = ({
   pois,
   onPinClick,
-  customPinColor
+  customPinColor,
 }: {
   pois: IPin[];
   onPinClick: (pin: IPin) => void;
-  customPinColor?: string
+  customPinColor?: string;
 }) => {
   const map = useMap();
   const [markers, setMarkers] = useState<{ [key: string]: Marker }>({});
@@ -33,7 +36,7 @@ const PoiMarkers = ({
       ev.latLng.toJSON().lat,
       ev.latLng.toJSON().lng
     );
-    console.log("marker clicked:", marker);
+    // console.log("marker clicked:", marker);
     if (marker) onPinClick(marker);
     map.panTo(ev.latLng);
   }, []);
@@ -66,19 +69,24 @@ const PoiMarkers = ({
       }
     });
   };
+  console.log("pois", pois);
 
   return (
     <>
       {pois.map((poi: IPin) => (
         <AdvancedMarker
           key={poi._id}
-          position={{ lat: poi.latitude, lng: poi.longitude }}
+          position={{ lat: poi.coordinates.lat, lng: poi.coordinates.lng }}
           ref={(marker) => setMarkerRef(marker, poi._id)}
           clickable={true}
           onClick={handleClick}
         >
           <MapPinIcon
-            color={customPinColor || pinTypesCrossColor[poi.type.title as PinTypes]}
+            color={
+              customPinColor ||
+              pinTypesCrossColor[poi.type.title as PinTypes] ||
+              theme.extend.colors.black.primary
+            }
             size={28}
             filled
           />

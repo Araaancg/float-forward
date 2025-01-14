@@ -16,8 +16,8 @@ export const ENV = process.env.NODE_ENV
 
 // JWT
 export const JSON_WEB_TOKENS = {
-  PUBLIC_KEY: process.env.JWT_PUBLIC_KEY?.replace(/\\n/g, '\n'),
-  PRIVATE_KEY: process.env.JWT_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  PUBLIC_KEY: process.env.JWT_PUBLIC_KEY?.replace(/\\n/g, '\n')!,
+  PRIVATE_KEY: process.env.JWT_PRIVATE_KEY?.replace(/\\n/g, '\n')!,
   accessExpirationMinutes: process.env.JWT_ACCESS_EXPIRATION_MINUTES,
   refreshExpirationDays: process.env.JWT_REFRESH_EXPIRATION_DAYS,
   resetPasswordExpirationMinutes: process.env.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,

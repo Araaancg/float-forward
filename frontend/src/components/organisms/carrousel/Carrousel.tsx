@@ -34,7 +34,6 @@ export default function Carrousel({ info }: { info: IDisasters[] }) {
 
     if (slideInterval.current) clearInterval(slideInterval.current);
   };
-
   return (
     <div className="carrousel">
       <DisasterEventsCard info={info[currentIndex]} />

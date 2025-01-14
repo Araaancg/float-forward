@@ -24,6 +24,7 @@ export const SessionSchema = new mongoose.Schema<any>(
       type: Boolean,
       default: false,
     },
+    deletedAt: { type: Date, default: null },
   },
   {
     timestamps: true,

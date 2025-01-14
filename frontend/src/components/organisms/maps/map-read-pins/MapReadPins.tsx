@@ -24,7 +24,7 @@ const MapReadPins = ({
   ...props
 }: IMapReadPins) => {
   const [userLocation, setUserLocation] = useState<ICoordinates | undefined>();
-
+  console.log("givenPins", givenPins)
   useEffect(() => {
     if (!defaultCenter) {
       getUserLocation().then((response) => {

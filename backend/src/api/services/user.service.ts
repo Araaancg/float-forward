@@ -20,63 +20,64 @@ export class UserService {
   }
 
   async getByEmail(email: string) {
-    const user = await this.userModel.find({email})
-    return user[0]
+    const user = await this.userModel.find({ email });
+    return user[0];
   }
 
-  async create(user: Partial<IUser>): Promise<any> {  
-    const { email } = user
-    // Check user email is not taken - first and last names can be taken
+  async create(user: Partial<IUser>): Promise<any> {
+    const { email } = user;
+    // Check user email is not taken
     if (await this.userModel.isEmailTaken(email)) {
       throw new ApiError(
         httpStatus.CONFLICT,
         "This email is already in use, please login instead"
       );
     }
-    const userCreated = await this.userModel.create([user])
-    return userCreated[0]
+    const userCreated = await this.userModel.create([user]);
+    return userCreated[0];
   }
 
-  // async update(_id: Types.ObjectId, user: Partial<IUser>): Promise<unknown> {
-  //   return async () => {
-  //     const { email } = user;
+  async update(_id: Types.ObjectId, user: Partial<IUser>): Promise<unknown> {
+    try {
+      const _user = (await this.get({ _id }, {}))[0];
 
-  //     const _user = (await this.get({ _id }, {}))[0];
+      if (!_user) {
+        throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+      }
 
-  //     if (!_user) {
-  //       throw new ApiError(httpStatus.NOT_FOUND, "User not found");
-  //     }
+      if (await this.userModel.isEmailTaken()) {
+        throw new ApiError(
+          httpStatus.CONFLICT,
+          "This email is already in use, please use another one instead"
+        );
+      }
 
-  //     // if (await this.userModel.isEmailTaken()) {
-  //     //   throw new ApiError(
-  //     //     httpStatus.CONFLICT,
-  //     //     "This email is already in use, please use another one instead"
-  //     //   );
-  //     // }
+      // Assign the updated data and save it
+      Object.assign(_user, user);
+      const updatedUser = await _user.save();
+      return updatedUser;
+      
+    } catch (e) {
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "There was an error updating user"
+      );
+    }
+  }
 
-  //     // Assign the updated data and save it
-  //     Object.assign(_user, user);
-  //     await _user.save();
+  async delete(_id: Types.ObjectId): Promise<unknown> {
+    return async () => {
+      const _chat = (await this.get({ _id }, {}))[0];
 
-  //     return _user;
-  //   };
-  // }
+      // Check chat exists.
+      if (!_chat) {
+        throw new ApiError(httpStatus.NOT_FOUND, "CHAT NOT FOUND");
+      }
 
-  //   async delete(
-  //     _id: Types.ObjectId
-  //   ): Promise<unknown> {
-  //       return async () => {
-  //         const _chat = (await this.get({ _id }, {}))[0]
+      // Delete the document.
+      await _chat.deleteOne();
 
-  //         // Check chat exists.
-  //         if (!_chat) {
-  //           throw new ApiError(httpStatus.NOT_FOUND, 'CHAT NOT FOUND')
-  //         }
-
-  //         // Delete the document.
-  //         await _chat.deleteOne()
-
-  //         return _chat
-  //       }
-  //   }
+      return _chat;
+    };
+  }
 }

@@ -24,7 +24,7 @@ export default function PinCard({
   );
 
   const onPinClick = (pin: IPin) => {
-    handleMapsRedirect(pin.latitude, pin.longitude);
+    handleMapsRedirect(pin.coordinates.lat, pin.coordinates.lng);
   };
 
   return (
@@ -60,7 +60,7 @@ export default function PinCard({
               givenPins={[data]}
               onPinClick={onPinClick}
               className="w-full h-full"
-              defaultCenter={{ lat: data.latitude, lng: data.longitude }}
+              defaultCenter={{ lat: data.coordinates.lat, lng: data.coordinates.lng }}
               customPinColor="red"
               disableDefaultUI={true}
             />

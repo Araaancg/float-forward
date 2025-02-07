@@ -9,6 +9,7 @@ import Button from "@/components/atoms/button/Button";
 import DoubleCaretIcon from "@/components/atoms/icons/DoubleCaretIcon";
 import { IUser } from "@/types/structures";
 import "./sidebar.scss";
+import HealthcareIcon from "@/components/atoms/icons/HealthcareIcon";
 
 interface ISidebar {
   isExpanded: boolean;
@@ -36,14 +37,24 @@ export default function Sidebar({
                   isExpanded ? "justify-end" : "justify-center"
                 }`}
               >
-                <Button variant="no-color" color="black" onClick={toggleExpansion}>
+                <Button
+                  variant="no-color"
+                  color="black"
+                  onClick={toggleExpansion}
+                >
                   <DoubleCaretIcon
+                    size={28}
                     orientation={isExpanded ? "left" : "right"}
                   />
                 </Button>
               </div>
               <div>
-                <Button variant="no-color" color="black" isLink linkProps={{href: "/"}}>
+                <Button
+                  variant="no-color"
+                  color="black"
+                  isLink
+                  linkProps={{ href: "/" }}
+                >
                   {isExpanded ? (
                     <Image
                       src="/logo-horizontal.png"
@@ -71,7 +82,12 @@ export default function Sidebar({
               }`}
             >
               <li>
-                <Button isLink variant="no-color" color="black">
+                <Button
+                  isLink
+                  variant="no-color"
+                  color="black"
+                  linkProps={{ href: "/chat" }}
+                >
                   <ChatIcon size={32} />
                   {isExpanded && "Chat"}
                 </Button>
@@ -84,13 +100,7 @@ export default function Sidebar({
               </li>
               <li>
                 <Button isLink variant="no-color" color="black">
-                  <ChatIcon size={32} />
-                  {isExpanded && "My requests"}
-                </Button>
-              </li>
-              <li>
-                <Button isLink variant="no-color" color="black">
-                  <ChatIcon size={32} />
+                  <HealthcareIcon size={32} />
                   {isExpanded && "I am a first responder"}
                 </Button>
               </li>

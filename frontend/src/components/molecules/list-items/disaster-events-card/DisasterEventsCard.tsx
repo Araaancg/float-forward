@@ -8,7 +8,7 @@ export default function DisasterEventsCard({ info }: { info: IDisasters }) {
     <div className="decard">
       <div className="decard-info">
         <div className="text-sm text-grey">
-          <span className="mr-4">{info?.date}</span>
+          <span className="mr-4">{info?.date?.toString().split("T")[0].split("-").reverse().join("-")}</span>
           <span>
             {info?.city}, {info?.country}
           </span>

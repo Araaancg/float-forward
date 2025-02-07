@@ -24,6 +24,7 @@
     "nodemailer": "^6.9.16",
     "nodemon": "^3.1.9",
     "reflect-metadata": "^0.2.2",
+    "socket.io": "^4.8.1",
     "ts-node": "^10.9.2",
     "typedi": "^0.10.0",
     "typescript": "^5.7.2",

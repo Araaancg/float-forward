@@ -1,14 +1,14 @@
 import PriorityIcon from "@/components/atoms/icons/PriorityIcon";
 import { IPin } from "@/types/structures";
 import SeeMoreP from "@/components/atoms/see-more-p/SeeMoreP";
-import "./help-request-item.scss";
 import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
 import handleMapsRedirect from "@/utils/functions/handleMapsRedirect";
+import "./help-request-item.scss";
 
 export default function HelpRequestItem({ data }: { data: IPin }) {
 
   const onPinClick = (pin: IPin) => {
-    handleMapsRedirect(pin.latitude, pin.longitude);
+    handleMapsRedirect(pin.coordinates.lat, pin.coordinates.lng);
   };
 
   return (
@@ -40,7 +40,7 @@ export default function HelpRequestItem({ data }: { data: IPin }) {
             givenPins={[data]}
             onPinClick={onPinClick}
             className="w-full h-full"
-            defaultCenter={{ lat: data.latitude, lng: data.longitude }}
+            defaultCenter={{ lat: data.coordinates.lat, lng: data.coordinates.lng }}
             customPinColor="red"
             disableDefaultUI={true}
           />

@@ -1,4 +1,4 @@
-import { MessageStatus, PinTypes, PriorityTypes } from "./enums";
+import { ChatStatus, MessageStatus, PinTypes, PriorityTypes } from "./enums";
 import { ICoordinates } from "./interfaces";
 
 export interface IUser {
@@ -81,7 +81,7 @@ export interface IChat {
   updatedAt: string;
   pin: IPin;
   messages?: IMessage[]
-  status: string
+  status: ChatStatus
 }
 
 export interface IMessage {

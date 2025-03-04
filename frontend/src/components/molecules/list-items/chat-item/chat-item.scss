@@ -1,5 +1,11 @@
 .chatItem {
-  @apply px-4 py-3 flex flex-col gap-3 cursor-pointer;
+  @apply w-full px-4 py-3 flex flex-col 
+  gap-3 cursor-pointer bg-white-full;
+  &.selected {
+    @media (min-width: 720px) {
+      background-color: rgba(155, 197, 61, 0.58);
+    }
+  }
   &-pinType {
     @apply px-2 py-0.5 text-white-full w-fit
     text-sm;
@@ -25,7 +31,10 @@
       }
     }
   }
-  &-content {
-    @apply flex flex-row gap-2;
+  &-body {
+    @apply w-full flex flex-row gap-2 justify-start items-center;
+    &-content {
+      @apply flex flex-col gap-1 w-11/12;
+    }
   }
 }

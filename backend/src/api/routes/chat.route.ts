@@ -2,7 +2,6 @@ import { Router } from "express";
 import Container from "typedi";
 import { auth } from "../../common/middlewares/auth-handler";
 import { JSON_WEB_TOKENS } from "../../common/config";
-import { PinController } from "../controllers/pin.controller";
 import { ChatController } from "../controllers/chat.controller";
 // import { validate } from "../../common/validations/validate";
 // import { schemas } from "../../common/validations";

@@ -17,11 +17,11 @@
       }
   
       &.invalid {
-        @apply border-2 border-solid border-error;
+        @apply border border-solid border-error;
       }
   
       &:focus-within {
-        @apply border-2 border-solid border-black-primary ;
+        @apply border border-solid border-black-primary ;
       }
   
       & > input[type="text"],

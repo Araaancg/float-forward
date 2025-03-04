@@ -27,6 +27,7 @@ const theme = {
         lightBlue: { primary: "#4EA5FF", opacity: "#4EA5FFCC" },
         darkBlue: { primary: "#1976D2", opacity: "#1976D2CC" },
       },
+      chat: { background: "#EDEDED" },
     },
     screens: {
       xxs: "370px", // smaller mobile

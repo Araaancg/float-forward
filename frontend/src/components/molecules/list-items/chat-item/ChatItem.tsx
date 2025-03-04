@@ -1,52 +1,41 @@
 import { IChat, IUser } from "@/types/structures";
 import Avatar from "@/components/atoms/avatar/Avatar";
 import timeAgo from "@/utils/functions/timeAgo";
-import { PinTypes, pinTypesCrossColor } from "@/types/enums";
-import { useMemo } from "react";
 import "./chat-item.scss";
+import getPinColor from "@/utils/functions/getPinColor";
 
-export default function ChatItem({ data, me }: { data: IChat; me?: IUser }) {
-  const receiver = data?.participants.filter(
-    (item: { user: IUser; role: "seeker" | "volunteer"; lastRead: string }) =>
-      item.user._id === me?._id
-  )[0];
-
-  const pinColor = useMemo(
-      () => pinTypesCrossColor[data.pin.type.title as PinTypes],
-      [data.pin.type.title]
-    );
-  // const pinColor = "black";
-
+export default function ChatItem({
+  data,
+  me,
+  selected,
+  onClick,
+}: {
+  data: IChat;
+  selected: boolean;
+  onClick: (chat: IChat) => void;
+  me?: IUser;
+}) {
+  const receiver = data.participants.filter((el) => el.user._id !== me?._id)[0];
   return (
-    <div className="chatItem">
-      <span className={`chatItem-pinType color-${pinColor}`}>
-        {data?.pin.type.title}
+    <div
+      className={`chatItem ${selected && "selected"}`}
+      onClick={() => onClick(data)}
+    >
+      <span className={`chatItem-pinType color-${getPinColor(data.pin)}`}>
+        {data.pin.type.title}
       </span>
-      <div className="chatItem-content">
-        <Avatar imageSrc={receiver?.user.profilePicture!} />
-        <div className="flex flex-col border-b border-solid border-green-primary w-full">
-          <div className="flex flex-row gap-4 justify-start items-center">
-            <h3 className="text-base font-medium">
-              {receiver?.user.name?.slice(0, 20)}
-              {receiver?.user?.name!.length > 20 && "..."}
-            </h3>
-
-            {data.messages ? (
-              <p className="text-sm">
-                {timeAgo(data?.messages[0].createdAt.toString())}
-              </p>
-            ) : (
-              <p className="text-sm">Loading...</p>
+      <div className="chatItem-body">
+        <Avatar size={38}/>
+        <div className="chatItem-body-content">
+          <div className="flex justify-between items-center">
+            {receiver && <h3>{receiver?.user?.name}</h3>}
+            {data.updatedAt && (
+              <span className="text-sm">{timeAgo(data.updatedAt)}</span>
             )}
           </div>
-          {data.messages ? (
-            <p className="text-sm">
-              {data?.messages[0].content.slice(0, 20)}{" "}
-              {data?.messages[0].content.length > 20 && "..."}
-            </p>
-          ) : (
-            <p className="text-sm">Loading...</p>
-          )}
+          <span className="text-xs">
+            {data?.messages && data?.messages[0].content}
+          </span>
         </div>
       </div>
     </div>

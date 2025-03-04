@@ -13,13 +13,12 @@ export const MessageSchema = new mongoose.Schema<any>(
       required: true,
     },
     content: {
-      type: Schema.Types.ObjectId,
-      ref: "Pin",
+      type: String,
       required: true,
     },
     status: {
         type: String,
-        enum: ['sent', 'delivered', 'read', 'failed']
+        enum: ['sent', 'received', 'read', 'failed']
 
     },
     deletedAt: { type: Date, default: null },

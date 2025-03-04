@@ -1,0 +1,8 @@
+avatar se achata cuando - que mantenga el aspect ratio
+todos los bugs del login
+siempre que devuelva el user - no devolver la password
+scroll de los mensajes que esté bien
+
+TO DO:
+- poner mensajes cuando no haya cosas del back (por ej, que el usuario no tenga ni un chat)
+- poner pagination en todo - mayor eficiencia y esas cosas

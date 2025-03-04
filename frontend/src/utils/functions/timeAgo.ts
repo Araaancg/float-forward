@@ -13,31 +13,39 @@ export default function timeAgo(dateString: string): string {
     second: 1,
   };
 
+  // If the difference is more than 3 days, return the date in mm-dd-yyyy format
+  if (seconds > intervals.day * 3) {
+    const month = date.getMonth() + 1; // getMonth() is zero-based, so add 1
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}-${year}`;
+  }
+
   for (const interval in intervals) {
     const secondsInInterval = intervals[interval as keyof typeof intervals];
     const count = Math.floor(seconds / secondsInInterval);
 
     if (count >= 1) {
       if (interval === "year") {
-        return count === 1 ? "last year" : `${count} years ago`;
+        return count === 1 ? "Last Year" : `${count} years ago`;
       }
       if (interval === "month") {
-        return count === 1 ? "last month" : `${count} months ago`;
+        return count === 1 ? "Last Month" : `${count} months ago`;
       }
       if (interval === "week") {
-        return count === 1 ? "last week" : `${count} weeks ago`;
+        return count === 1 ? "Last Week" : `${count} weeks ago`;
       }
       if (interval === "day") {
-        return count === 1 ? "yesterday" : `${count} days ago`;
+        return count === 1 ? "Yesterday" : `${count} days ago`;
       }
       if (interval === "hour") {
-        return count === 1 ? "an hour ago" : `${count} hours ago`;
+        return count === 1 ? "An Hour Ago" : `${count} hours ago`;
       }
       if (interval === "minute") {
-        return count === 1 ? "a minute ago" : `${count} minutes ago`;
+        return count === 1 ? "A Minute Ago" : `${count} minutes ago`;
       }
       if (interval === "second") {
-        return count === 1 ? "a second ago" : `${count} seconds ago`;
+        return count === 1 ? "A Second Ago" : `${count} seconds ago`;
       }
     }
   }

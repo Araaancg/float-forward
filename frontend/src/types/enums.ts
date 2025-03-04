@@ -26,7 +26,12 @@ export const pinTypesCrossColor: Record<PinTypes, keyof typeof theme.extend.colo
 
 export enum MessageStatus {
   SENT = "sent",
-  DELIVERED = "delivered",
+  RECEIVED = "received",
   READ = "read",
   FAILED = "failed"
+}
+
+export enum ChatStatus {
+  ACTIVE = "active",
+  ARCHIVED = "archived"
 }

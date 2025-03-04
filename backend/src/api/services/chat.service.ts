@@ -26,7 +26,6 @@ export class ChatService {
       chats.map(async (chat: any) => {
         const messages = await this.messageService.get({ chatId: chat._id });
 
-        // Convert Mongoose document to plain object to avoid modification issues
         const chatObj = chat.toObject();
         return {
           ...chatObj,

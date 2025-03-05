@@ -1,8 +1,16 @@
 avatar se achata cuando - que mantenga el aspect ratio
 todos los bugs del login
 siempre que devuelva el user - no devolver la password
-scroll de los mensajes que esté bien
+scroll de los mensajes que esté bien, al revés
+login, hay tantas cosas que arreglar que madre mia julio
+
+pensar la lógica de los url params en el chat. Que es lo que realmente necesito
 
 TO DO:
 - poner mensajes cuando no haya cosas del back (por ej, que el usuario no tenga ni un chat)
 - poner pagination en todo - mayor eficiencia y esas cosas
+- sekeleton loader
+- all the error handling in the backend, uff
+- put logout button in mobile
+- if modal scrolls, let the button to close be fixed
+- save the state of the sidebar in the localhost to handle refreshing

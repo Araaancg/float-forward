@@ -45,7 +45,7 @@ export interface IPin {
   coordinates: ICoordinates;
   address: string;
   user: IUser;
-  disasterId: string;
+  disaster: IDisasters;
   priority?: PriorityTypes;
 }
 

@@ -7,15 +7,22 @@ import { ChatService } from "../services/chat.service";
 export class ChatController {
   constructor(private chatService: ChatService) {}
 
-  get = catchAsync(async (req: Request, res: Response) => {
+  get = catchAsync(async (req: any, res: Response) => {
     const { limit = 10, skip = 0, ...body } = req.query;
-    const result = await this.chatService.get(body, { limit, skip });
-    console.log("GET CHATS", result)
+    const token = req.token;
+    console.log("GETTING CHATS...", body, token)
+    const result = await this.chatService.get(body, { limit, skip }, token.sub.toString());
+    console.log("GET CHATS", result);
     res.send(result);
   });
 
   create = catchAsync(async (req: any, res: Response) => {
-    const result = await this.chatService.create(req.body);
+    const body = req.body;
+    const token = req.token;
+    console.log("CREATE CHAT", body)
+    console.log("GET TOKEN", token)
+    body.sender = token.sub
+    const result = await this.chatService.create(body);
     res.send(result);
   });
 

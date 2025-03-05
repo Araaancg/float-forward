@@ -1,8 +1,7 @@
 import Container, { Service } from "typedi";
 import { ApiError } from "../../common/middlewares/error-handler";
 import httpStatus from "http-status";
-import { Types } from "mongoose";
-import { IPinType } from "../../common/types/pin.type";
+import { IMessage } from "../../common/types/chat.type";
 
 @Service()
 export class MessageService {
@@ -20,17 +19,18 @@ export class MessageService {
     return await this.messageModel.find(query, {}, options);
   }
 
-//   async create(disaster: Partial<IPinType>): Promise<any> {
-//     try {
-//       const disasterCreated = await this.messageModel.create(disaster);
-//       return disasterCreated;
-//     } catch (e: any) {
-//       throw new ApiError(
-//         httpStatus.INTERNAL_SERVER_ERROR,
-//         "There was an error creating the pin type"
-//       );
-//     }
-//   }
+  async create(message: Partial<IMessage>): Promise<any> {
+    try {
+      console.log(message)
+      const messageCreated = await this.messageModel.create([message]);
+      return messageCreated
+    } catch (e: any) {
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "There was an error creating the message"
+      );
+    }
+  }
 
 //   async update(
 //     _id: Types.ObjectId,

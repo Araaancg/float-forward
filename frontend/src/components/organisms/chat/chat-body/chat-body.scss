@@ -1,0 +1,19 @@
+.chatBody {
+  @apply flex flex-col-reverse justify-start items-center gap-4 py-4 overflow-y-auto;
+  height: calc(100% - 56px - 74px);
+
+  &-pinInfo {
+    @apply flex flex-col gap-3 items-center 
+    w-3/4 bg-white-full rounded-xl p-6;
+    &-header {
+        @apply flex justify-between items-center w-full;
+    }
+  }
+
+  &-messages {
+    @apply w-11/12;
+    &-content {
+        @apply text-base flex flex-col gap-2;
+    }
+  }
+}

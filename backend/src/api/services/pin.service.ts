@@ -16,12 +16,23 @@ export class PinService {
     filter?: { [key: string]: any },
     options?: { [key: string]: any }
   ): Promise<any> {
-    return await this.pinModel.find(filter, {}, options).populate("type").populate("user");
+    try {
+      console.log("GETTING PIN...", filter)
+      return await this.pinModel
+        .find(filter, {}, options)
+        .populate("type")
+        .populate("user");
+    } catch (e) {
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "There was an error retrieving the pin(s)"
+      );
+    }
   }
 
   async create(pin: Partial<IPin>): Promise<any> {
     try {
-      console.log(pin)
+      console.log(pin);
       const pinCreated = await this.pinModel.create(pin);
       return pinCreated;
     } catch (e: any) {
@@ -52,7 +63,7 @@ export class PinService {
 
   async delete(_id: Types.ObjectId): Promise<any> {
     try {
-      console.log("id", _id)  
+      console.log("id", _id);
       const pin = (await this.get({ _id }, {}))[0];
       if (!pin) {
         throw new ApiError(httpStatus.NOT_FOUND, "Pin not found");

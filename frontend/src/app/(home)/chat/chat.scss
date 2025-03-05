@@ -9,18 +9,6 @@
     }
     &-chat {
       @apply w-2/3 h-full bg-chat-background;
-      &-header {
-        @apply bg-white-full w-full flex justify-between items-center py-4 px-6;
-      }
-      &-body {
-        @apply flex flex-col justify-start items-center gap-4 py-4 overflow-y-auto;
-        height: calc(100% - 56px - 74px);
-
-        &-pinInfo {
-          @apply flex flex-col gap-3 items-center 
-          w-3/4 bg-white-full rounded-xl p-6;
-        }
-      }
     }
   }
 
@@ -33,18 +21,6 @@
     }
     &-chat {
         @apply w-full h-full bg-chat-background;
-        &-header {
-          @apply bg-white-full w-full flex justify-between items-center py-4 px-6;
-        }
-        &-body {
-          @apply flex flex-col justify-start items-center gap-4 py-4 overflow-y-auto;
-          height: calc(100% - 56px - 74px);
-  
-          &-pinInfo {
-            @apply flex flex-col gap-3 items-center 
-            w-3/4 bg-white-full rounded-xl p-6;
-          }
-        }
       }
   }
 }

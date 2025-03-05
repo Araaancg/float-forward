@@ -21,16 +21,16 @@ export default function ChatItem({
       className={`chatItem ${selected && "selected"}`}
       onClick={() => onClick(data)}
     >
-      <span className={`chatItem-pinType color-${getPinColor(data.pin)}`}>
+      <span className={`chatItem-pinType color-${getPinColor(data?.pin)}`}>
         {data.pin.type.title}
       </span>
       <div className="chatItem-body">
         <Avatar size={38}/>
         <div className="chatItem-body-content">
           <div className="flex justify-between items-center">
-            {receiver && <h3>{receiver?.user?.name}</h3>}
+            {receiver && <h3>{receiver?.user?.name?.slice(0, 15)}...</h3>}
             {data.updatedAt && (
-              <span className="text-sm">{timeAgo(data.updatedAt)}</span>
+              <span className="text-xs">{timeAgo(data.updatedAt)}</span>
             )}
           </div>
           <span className="text-xs">

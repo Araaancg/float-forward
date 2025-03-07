@@ -125,7 +125,7 @@ export class ChatService {
           success: true,
           data: { ...chatCreated.toObject(), messages: messageCreated },
         };
-      } else {
+      } else { // CASE SCENARIO 2: chat exists
         // chat already exists so we just have to create the message
         // either way we retrieve the chat so we can return it too
         console.log(chatId);
@@ -150,7 +150,6 @@ export class ChatService {
         };
       }
 
-      return { sucess: true };
     } catch (e: any) {
       throw new ApiError(
         httpStatus.INTERNAL_SERVER_ERROR,

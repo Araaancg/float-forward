@@ -7,14 +7,13 @@ import { useAuth } from "@/utils/hooks/useAuth";
 import ChatItem from "@/components/molecules/list-items/chat-item/ChatItem";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
-import { useForm } from "react-hook-form";
 import ArrowIcon from "@/components/atoms/icons/ArrowIcon";
 import ChatHeader from "@/components/organisms/chat/chat-header/ChatHeader";
 import ChatBody from "@/components/organisms/chat/chat-body/ChatBody";
 import ChatInput from "@/components/organisms/chat/chat-input/ChatInput";
 import { useApi } from "@/utils/hooks/useApi";
-import "./chat.scss";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import "./chat.scss";
 
 export default function ChatView() {
   const { isLoading, session } = useAuth({

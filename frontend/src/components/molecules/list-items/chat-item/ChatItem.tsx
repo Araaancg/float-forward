@@ -6,9 +6,9 @@ import getPinColor from "@/utils/functions/getPinColor";
 
 export default function ChatItem({
   data,
-  me,
   selected,
   onClick,
+  me,
 }: {
   data: IChat;
   selected: boolean;

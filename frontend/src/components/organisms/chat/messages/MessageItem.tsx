@@ -1,7 +1,7 @@
 import timeAgo from "@/utils/functions/timeAgo";
 import { IMessage } from "@/types/structures";
-import "./message-item.scss";
 import Avatar from "@/components/atoms/avatar/Avatar";
+import "./message-item.scss";
 
 export default function MessageItem({
   message,

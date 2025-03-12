@@ -17,7 +17,6 @@ export class PinService {
     options?: { [key: string]: any }
   ): Promise<any> {
     try {
-      console.log("GETTING PIN...", filter)
       return await this.pinModel
         .find(filter, {}, options)
         .populate("type")

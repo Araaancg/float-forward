@@ -4,6 +4,7 @@ import httpStatus from "http-status";
 import { Types } from "mongoose";
 import { IDisaster } from "../../common/types/disaster.type";
 import { PinService } from "./pin.service";
+import actionLog from "../../common/helpers/actionLog";
 
 @Service()
 export class DisasterService {
@@ -18,14 +19,17 @@ export class DisasterService {
     options?: { [key: string]: any }
   ): Promise<any> {
     const query = { ...filter, deletedAt: null };
+    actionLog("PROC", "Getting images from disaster...")
     let disasters = await this.disasterModel
-      .find(query, {}, options)
-      .populate("images");
-
+    .find(query, {}, options)
+    .populate("images");
+    actionLog("INFO", "Images from disaster retrieved successfully")
+    
+    actionLog("PROC", "Getting pins from disaster...")
     const disastersWithPins = await Promise.all(
       disasters.map(async (disaster: any) => {
         const pins = await this.pinService.get({ disaster: disaster._id });
-
+        
         // Convert Mongoose document to plain object to avoid modification issues
         const disasterObj = disaster.toObject();
         return {
@@ -34,6 +38,7 @@ export class DisasterService {
         };
       })
     );
+    actionLog("INFO", "Pins from disaster retrieved successfully")
     return disastersWithPins;
   }
 

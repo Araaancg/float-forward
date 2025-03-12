@@ -5,15 +5,17 @@ import MapPinWithBaseIcon from "@/components/atoms/icons/MapPinWithBaseIcon";
 import NotificationIcon from "@/components/atoms/icons/NotificationIcon";
 import SettingsIcon from "@/components/atoms/icons/SettingsIcon";
 import UserIcon from "@/components/atoms/icons/UserIcon";
-import "./menu.scss";
 import { IUser } from "@/types/structures";
 import HealthcareIcon from "@/components/atoms/icons/HealthcareIcon";
+import "./menu.scss";
 
 interface IMenu {
   showMenu: boolean;
   toggleMenu: () => void;
   isLoggedIn: boolean;
   user?: IUser;
+  session?: any;
+  signOut?: () => void;
 }
 
 export default function Menu({
@@ -21,6 +23,8 @@ export default function Menu({
   toggleMenu,
   isLoggedIn,
   user,
+  session,
+  signOut,
 }: IMenu) {
   return (
     <Modal
@@ -34,7 +38,12 @@ export default function Menu({
           {/* FIRST LINKS */}
           <ul className="menu-links">
             <li>
-              <Button isLink variant="no-color" color="black">
+              <Button
+                isLink
+                variant="no-color"
+                color="black"
+                linkProps={{ href: "/chat" }}
+              >
                 <ChatIcon size={28} />
                 Chat
               </Button>
@@ -93,6 +102,17 @@ export default function Menu({
                 Help
               </Button>
             </li>
+            {session && (
+              <li>
+                <Button
+                  variant="no-color"
+                  color="black"
+                  onClick={signOut && (() => signOut())}
+                >
+                  Log out
+                </Button>
+              </li>
+            )}
           </ul>
         </>
       ) : (

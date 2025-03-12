@@ -5,21 +5,19 @@ import XMarkIcon from "@/components/atoms/icons/XMarkIcon";
 import ExclamationMarkIcon from "@/components/atoms/icons/ExclamationMarkIcon";
 import theme from "@/theme";
 import CheckCircleIcon from "@/components/atoms/icons/CheckCircleIcon";
-import "./Toast.scss";
+import "./toast.scss";
 
-export default function Toast ({
+export default function Toast({
   variant,
   content,
   showToast,
   onClose,
 }: {
-  variant: "success" | "error" ;
+  variant: "success" | "error";
   content: { title: string; description: string };
   showToast: boolean;
   onClose?: () => void;
 }) {
-
-
   const [isVisible, setIsVisible] = useState(showToast);
 
   const handleClose = useCallback(() => {
@@ -28,7 +26,7 @@ export default function Toast ({
       onClose();
     }
   }, [onClose]);
-
+  
   useEffect(() => {
     if (showToast) {
       setIsVisible(true);
@@ -41,7 +39,11 @@ export default function Toast ({
   }, [handleClose, showToast]);
 
   return (
-    <div className={`toast z-50 max-w-xl items-center gap-4 rounded-3xl p-4 ${variant} ${isVisible ? "show" : "not-show"}`}>
+    <div
+      className={`toast z-50 max-w-xl items-center gap-3 rounded-3xl p-4 ${variant} ${
+        isVisible ? "show" : "not-show"
+      }`}
+    >
       {variant === "success" && (
         <CheckCircleIcon color={theme.extend.colors.green.primary} />
       )}
@@ -53,13 +55,16 @@ export default function Toast ({
         <p className="body-s">{content.description}</p>
       </div>
 
-      <Button
-        type="button"
-        variant="no-color"
-        onClick={handleClose}
-      >
-        <XMarkIcon />
+      <Button type="button" variant="no-color" onClick={handleClose}>
+        <XMarkIcon
+          color={
+            variant === "error"
+              ? theme.extend.colors.error
+              : theme.extend.colors.green.primary
+          }
+          size={16}
+        />
       </Button>
     </div>
   );
-};
+}

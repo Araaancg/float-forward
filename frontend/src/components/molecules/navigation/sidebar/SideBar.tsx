@@ -8,8 +8,8 @@ import MapPinWithBaseIcon from "@/components/atoms/icons/MapPinWithBaseIcon";
 import Button from "@/components/atoms/button/Button";
 import DoubleCaretIcon from "@/components/atoms/icons/DoubleCaretIcon";
 import { IUser } from "@/types/structures";
-import "./sidebar.scss";
 import HealthcareIcon from "@/components/atoms/icons/HealthcareIcon";
+import "./sidebar.scss";
 
 interface ISidebar {
   isExpanded: boolean;

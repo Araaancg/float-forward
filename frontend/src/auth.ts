@@ -6,6 +6,7 @@ import { JWT } from "next-auth/jwt";
 import { IUser } from "./types/structures";
 import refreshAccessToken from "./utils/functions/refreshAccessToken";
 import { IToken } from "./types/interfaces";
+import actionLog from "./utils/functions/actionLog";
 
 declare module "next-auth" {
   interface Session {
@@ -18,17 +19,8 @@ declare module "next-auth" {
       name: string;
       email: string;
       profilePicture: string;
-    }
+    };
   }
-}
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  profilePicture: string;
-  access: IToken;
-  refresh: IToken;
 }
 
 export const authOptions = {
@@ -49,7 +41,13 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password required");
+          actionLog("ERROR", "Email and password required");
+          throw new Error(
+            JSON.stringify({
+              status: 400,
+              message: "Email and password required",
+            })
+          );
         }
 
         try {
@@ -78,7 +76,7 @@ export const authOptions = {
           );
 
           const data = await response.json();
-          console.log("authorize data", data)
+          // console.log("authorize data", data)
 
           if (!data.success) {
             throw new Error(data.message || "Authentication failed");
@@ -122,8 +120,7 @@ export const authOptions = {
       // Initial sign in
       if (trigger === "signIn" && user) {
         if (account?.provider === "credentials") {
-          console.log("Accoutn provider credentials", user)
-          console.log("\n\nAccoutn provider credentials", token)
+          actionLog("SIGN IN", "Loggin in with credentials...");
           return {
             ...token,
             access: user.access,
@@ -187,10 +184,9 @@ export const authOptions = {
     },
 
     async session({ session, token }: { session: any; token: JWT }) {
-      console.log("\n\ntoken\n\n", token)
       return {
-        access: (token.access as IToken),
-        refresh: (token.refresh as IToken),
+        access: token.access as IToken,
+        refresh: token.refresh as IToken,
         expires: (token.access as IToken).expires,
         success: token.success ?? false,
         error: token.error ?? null,
@@ -203,7 +199,7 @@ export const authOptions = {
       };
     },
   },
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 export const { auth, handlers, signIn, signOut } = NextAuth(authOptions);

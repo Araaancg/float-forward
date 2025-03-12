@@ -2,6 +2,7 @@ import { Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import { ApiError } from "./error-handler";
 import jwt from "jsonwebtoken";
+import actionLog from "../helpers/actionLog";
 
 /**
  * Get token from request header
@@ -15,7 +16,9 @@ const getTokenFromHeader = (req: any): string => {
     (req.headers.authorization &&
       req.headers.authorization.split(" ")[0] === "Bearer")
   ) {
-    return req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization.split(" ")[1]
+    actionLog("INFO", `Token retrieved from header successfully: ${token.slice(0,20)}...`)
+    return token;
   }
 
   return "";
@@ -28,14 +31,18 @@ const getTokenFromHeader = (req: any): string => {
  */
 export const auth = (publicKey: string) =>
   (req: any, res: Response, next: NextFunction): void => {
+    console.log("\n")
+    actionLog("PROC", "Verifying token in the backend to access API")
     const token = getTokenFromHeader(req);
     jwt.verify(token, publicKey, function (err, decoded) {
       if (err) {
+        actionLog("ERROR", `Token could not be verified: ${err}`)
         return next(
           new ApiError(httpStatus.UNAUTHORIZED, err.message || "Unauthorized")
         );
       }
       req.token = decoded;
+      actionLog("INFO", "Token verified succesfully")
       next();
     });
   };

@@ -1,9 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
-import { chatMock } from "@/mocks/chat";
-import { IChat } from "@/types/structures";
-import { useAuth } from "@/utils/hooks/useAuth";
+import { IChat, IPin } from "@/types/structures";
 import ChatItem from "@/components/molecules/list-items/chat-item/ChatItem";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
@@ -11,29 +9,26 @@ import ArrowIcon from "@/components/atoms/icons/ArrowIcon";
 import ChatHeader from "@/components/organisms/chat/chat-header/ChatHeader";
 import ChatBody from "@/components/organisms/chat/chat-body/ChatBody";
 import ChatInput from "@/components/organisms/chat/chat-input/ChatInput";
+import { useRouter, useSearchParams } from "next/navigation";
+import Loader from "@/components/atoms/loader/Loader";
+import { useData } from "@/utils/hooks/useData";
+import { useAuth } from "@/utils/hooks/useAuth";
 import { useApi } from "@/utils/hooks/useApi";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import "./chat.scss";
 
-export default function ChatView() {
-  const { isLoading, session } = useAuth({
-    required: true,
-    onError: (error) => {
-      // console.error('Auth error:', error)
-    },
-  });
-  console.log("session", session);
+// http://localhost:3000/chat?pin=6793c20e4ef2222c5e127105&receiver=6793c1ab4ef2222c5e1270e2
 
+export default function ChatView() {
+  const { sessionLoading, session } = useAuth();
   const me = session?.user;
 
   const searchParams = useSearchParams();
   const router = useRouter();
-  const pathname = usePathname();
 
   const [view, setView] = useState<"list" | "chat">("list");
-  const [chats, setChats] = useState<IChat[]>(chatMock);
-  const { callApi, loading, error } = useApi();
   const [selectedChat, setSelectedChat] = useState<IChat>();
+  const [pin, setPin] = useState<IPin>()
+  const { callApi } = useApi(session);
 
   const selectedUser = useMemo(() => {
     return selectedChat?.participants.filter(
@@ -42,23 +37,8 @@ export default function ChatView() {
   }, [selectedChat]);
 
   const toggleMobileView = () =>
+    // this is just for mobile
     setView((prev) => (prev === "list" ? "chat" : "list"));
-
-  // const clearChatParam = () => {
-  //   // Create new search params
-  //   const params = new URLSearchParams(searchParams);
-
-  //   // Delete the 'chat' parameter
-  //   params.delete('chatId');
-
-  //   // If there are no more params, push just the pathname
-  //   // Otherwise, push pathname with remaining params
-  //   if (params.toString()) {
-  //     router.push(`${pathname}?${params.toString()}`);
-  //   } else {
-  //     router.push(pathname);
-  //   }
-  // };
 
   const onChatClick = (chat: IChat, isMobile: boolean) => {
     if (isMobile) toggleMobileView();
@@ -66,78 +46,106 @@ export default function ChatView() {
     // Set the selected chat
     setSelectedChat(chat);
 
-    // Update URL with new chat parameter
-    const params = new URLSearchParams(searchParams);
-    params.set("chatId", chat._id);
-
-    // Push new URL with updated chat parameter
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
-  useEffect(() => {
-    const fetchDisasters = async () => {
-      const response = await callApi(`/api/chat`, {
-        method: "GET",
-        requiresAuth: true,
-      });
-
-      console.log("response", response);
-      if (response.success && response.data) {
-        setChats(response.data);
-        const existingChatId = searchParams.get("chatId");
-        console.log("existingChatId", existingChatId);
-
-        if (existingChatId) {
-          const chatInUrl = response.data.find(
-            (el: IChat) => el._id === existingChatId
-          );
-          setSelectedChat(chatInUrl);
-        } else {
-          const firstChat = response.data[0];
-          setSelectedChat(firstChat);
-
-          const params = new URLSearchParams(searchParams);
-          params.set("chatId", firstChat._id);
-
-          router.push(`${pathname}?${params.toString()}`);
-        }
-      }
-    };
-
-    fetchDisasters();
-  }, [searchParams, pathname, router]);
-
-  const sendData = async (data: any) => {
-    data.chatId = selectedChat?._id;
-    data.pinId = selectedChat?.pin?._id;
-    data.receiver = selectedChat?.participants.filter(
+    const receiver = chat.participants.filter(
       (el) => el.user._id !== me?._id
     )[0].user._id;
-    console.log(data);
+    const pin = chat.pin._id;
+    // set them in the url
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("pin", pin);
+    params.set("receiver", receiver);
+
+    router.push(`/chat?pin=${pin}&receiver=${receiver}`, { scroll: false });
+  };
+
+  const {
+    data: chats,
+    loading,
+    error,
+  } = useData<IChat[]>(
+    "/api/chat",
+    {
+      method: "GET",
+      requiresAuth: true,
+    },
+    session
+  );
+
+  useEffect(() => {
+    if (chats && chats.length > 0) {
+      let receiver = searchParams.get("receiver");
+      let pin = searchParams.get("pin");
+
+      if (!pin || !receiver) {
+        // means there is no data in the url, we push it ourselves
+        receiver = chats[0].participants.filter(
+          (el) => el.user._id !== me?._id
+        )[0].user._id;
+        pin = chats[0].pin._id;
+        // set them in the url
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("pin", pin);
+        params.set("receiver", receiver);
+
+        router.push(`/chat?pin=${pin}&receiver=${receiver}`, {
+          scroll: false,
+        });
+      }
+
+      const selected = chats?.filter(
+        (el) =>
+          el.pin._id === pin &&
+          el.participants.filter((el) => el.user._id !== me?._id).length > 0
+      )[0]
+
+      setSelectedChat(selected);
+
+      // if there is no chat selected means the chat is new
+      // retrieve pin info:
+      if (!selected) {
+        console.log("CHAT DOES NOT EXIST")
+        const fetchSinglePin = async () => {
+          const response = await callApi(`/api/pins?_id=${pin}`, {
+            method: "GET",
+            requiresAuth: true,
+          });
+          console.log(response)
+          if (response.success && response.data) {
+            console.log("response", response);
+            setPin(response.data[0]);
+          }
+        };
+    
+        fetchSinglePin();
+      }
+    }
+  }, [chats, searchParams, router]);
+
+  const sendData = async (data: any) => {
+    data.message = "hola"
+    data.chatId = selectedChat?._id;
+    data.pinId = searchParams.get("pin");
+    data.receiver = searchParams.get("receiver");
+    console.log("message ->", data);
     const response = await callApi(`/api/chat`, {
       method: "POST",
       requiresAuth: true,
-      body: JSON.stringify(data), 
+      body: JSON.stringify(data),
     });
-
     console.log("response", response);
-    if (response.success && response.data) {
-      setChats(response.data);
-      setSelectedChat(
-        response.data.filter((el: IChat) => el._id === data.chatId)
-      );
-    }
-    //   {
-    //     "chatId": "67c77906ee02b39e842f8b74",
-    //     "pinId": "6786afe2325f25b757817c92",
-    //     "receiver": "67868c26d75d912271b357ef",
-    //     "message": "This is the first postman message"
-    // }
   };
+
+  if (sessionLoading || loading) {
+    return <Loader view="chat" />;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="chatView">
-      {/* Breadcrumbs */}
+      {/* Header of page */}
       {view === "list" && (
         <>
           <Breadcrumbs
@@ -153,77 +161,85 @@ export default function ChatView() {
           </div>
         </>
       )}
-
-      {/* Desktop View */}
-      <div className="chatView-boxDesktop">
-        {/* Chat List */}
-        <div className="chatView-boxDesktop-list">
-          {chats?.map((chat, index) => (
-            <div key={chat._id} className="w-full">
-              <ChatItem
-                data={chat}
-                me={me}
-                selected={chat._id === selectedChat?._id}
-                onClick={() => onChatClick(chat, false)}
-              />
-              {index !== chats.length - 1 && (
-                <hr className="border border-solid border-green-primary w-1/2 mx-auto" />
-              )}
+      {chats && chats?.length > 0 ? (
+        <>
+          {/* Desktop View */}
+          <div className="chatView-boxDesktop">
+            {/* Chat List */}
+            <div className="chatView-boxDesktop-list">
+              {chats?.map((chat, index) => (
+                <div key={chat._id} className="w-full">
+                  <ChatItem
+                    data={chat}
+                    me={me}
+                    selected={chat._id === selectedChat?._id}
+                    onClick={() => onChatClick(chat, false)}
+                  />
+                  {index !== chats.length - 1 && (
+                    <hr className="border border-solid border-green-primary w-1/2 mx-auto" />
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* Chat Box */}
-        <div className="chatView-boxDesktop-chat">
-          <ChatHeader
-            selectedUser={selectedUser}
-            pinUrl={`/${selectedChat?.pin?.disaster?.slug}?pin=${selectedChat?.pin?._id}`}
-          />
-          <ChatBody selectedChat={selectedChat} me={me} />
-          <ChatInput sendData={sendData} />
-        </div>
-      </div>
-
-      {/* Mobile View */}
-      <div className="chatView-boxMobile">
-        {view === "list" ? (
-          <div className="chatView-boxMobile-list">
-            {chats?.map((chat, index) => (
-              <div key={chat._id} className="w-full">
-                <ChatItem
-                  data={chat}
-                  me={me}
-                  selected={chat._id === selectedChat?._id}
-                  onClick={() => onChatClick(chat, true)}
-                />
-                {index !== chats.length - 1 && (
-                  <hr className="border border-solid border-green-primary w-1/2 mx-auto" />
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="h-full w-full flex flex-col gap-2">
-            <Button
-              isLink
-              variant="no-color"
-              color="black"
-              className="ml-4"
-              onClick={toggleMobileView}
-            >
-              <ArrowIcon size={24} color={theme.extend.colors.black.primary} />
-            </Button>
-            <div className="chatView-boxMobile-chat">
+            {/* Chat Box */}
+            <div className="chatView-boxDesktop-chat">
               <ChatHeader
                 selectedUser={selectedUser}
                 pinUrl={`/${selectedChat?.pin?.disaster?.slug}?pin=${selectedChat?.pin?._id}`}
               />
-              <ChatBody selectedChat={selectedChat} me={me} />
+              <ChatBody selectedChat={selectedChat!} me={me!} pin={pin}/>
               <ChatInput sendData={sendData} />
             </div>
           </div>
-        )}
-      </div>
+
+          {/* Mobile View */}
+          <div className="chatView-boxMobile">
+            {view === "list" ? (
+              <div className="chatView-boxMobile-list">
+                {chats?.map((chat, index) => (
+                  <div key={chat._id} className="w-full">
+                    <ChatItem
+                      data={chat}
+                      me={me}
+                      selected={chat._id === selectedChat?._id}
+                      onClick={() => onChatClick(chat, true)}
+                    />
+                    {index !== chats.length - 1 && (
+                      <hr className="border border-solid border-green-primary w-1/2 mx-auto" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="h-full w-full flex flex-col gap-2">
+                <Button
+                  isLink
+                  variant="no-color"
+                  color="black"
+                  className="ml-4"
+                  onClick={toggleMobileView}
+                >
+                  <ArrowIcon
+                    size={24}
+                    color={theme.extend.colors.black.primary}
+                  />
+                </Button>
+                <div className="chatView-boxMobile-chat">
+                  <ChatHeader
+                    selectedUser={selectedUser}
+                    pinUrl={`/${selectedChat?.pin?.disaster?.slug}?pin=${selectedChat?.pin?._id}`}
+                  />
+                  <ChatBody selectedChat={selectedChat!} me={me!} pin={pin}/>
+                  <ChatInput sendData={sendData} />
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <div>Seems like you don't have any chats yet</div>
+      )}
     </div>
   );
 }

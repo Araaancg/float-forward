@@ -16,7 +16,7 @@ const theme = {
         opacity50: "#9BC53D22",
         opacity90: "#9BC53DCC",
       },
-      error: "F02D3A",
+      error: "#F02D3A",
       info: "#4EA5FF",
       disabled: { input: "#DCDCDD", button: "#BCBABA" },
       pins: {

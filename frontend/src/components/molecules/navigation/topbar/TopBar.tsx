@@ -37,6 +37,8 @@ export default function Topbar({
         toggleMenu={() => setShowMenu(!showMenu)}
         isLoggedIn={isLoggedIn}
         user={user}
+        session={session}
+        signOut={signOut}
       />
 
       {/* DESKTOP */}

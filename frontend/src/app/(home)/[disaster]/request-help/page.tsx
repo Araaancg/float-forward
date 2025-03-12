@@ -16,7 +16,7 @@ import "./request-help.scss";
 export default function RequestHelpView() {
   const [showOwnHelpModal, setShowOwnHelpModal] = useState<boolean>(false);
 
-  const { isLoading, session } = useAuth({
+  const { sessionLoading, session } = useAuth({
     required: true,
     onError: (error) => {
       // console.error('Auth error:', error)

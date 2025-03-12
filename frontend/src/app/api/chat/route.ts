@@ -32,7 +32,6 @@ export async function GET(req: Request): Promise<NextResponse> {
         }
       );
       const response = await res.json();
-      console.log("RESPONSE CHAT ROUTE.TS CLIENT", response);
       return NextResponse.json(response);
     } else {
       console.warn("No valid token found. Access denied.");
@@ -47,7 +46,8 @@ export async function GET(req: Request): Promise<NextResponse> {
 export async function POST(req: Request): Promise<NextResponse> {
   const apiUrl = GENERAL_VARIABLES.apiUrl;
   const body = await req.json();
-  console.log("body", body);
+
+  console.log(body)
 
   try {
     const authorizationHeader = req.headers.get("Authorization");
@@ -64,24 +64,26 @@ export async function POST(req: Request): Promise<NextResponse> {
     }
 
     if (token) {
+      console.log("posting chats...")
       const res = await fetch(`${apiUrl}/chats`, {
         method: "POST",
         headers: {
-          Accept: "application/json",
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(body),
+        body,
       });
       const response = await res.json();
-      console.log("Server side res", response);
-      return NextResponse.json(response);
+      console.log("response", response)
+      return NextResponse.json(response, { status: res.status });
     } else {
-      console.warn("No valid token found. Access denied.");
-      return NextResponse.json({ success: false, message: "Unauthorized" });
+      return NextResponse.json({ error: "Unauthorized: Token could not be access in server side" }, { status: 401 });
     }
   } catch (error: any) {
     console.error(error);
-    return NextResponse.json({ success: false, message: error.message });
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500 }
+    );
   }
 }

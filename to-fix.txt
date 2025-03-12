@@ -7,7 +7,7 @@ TO DO:
         - contact
         - about us
     - mis pins
-        - poner un bot'on de resuelto de alguna forma
+        - poner un botón de resuelto de alguna forma
     - i am a first responder - pensar que leches quiero hacer con esto
     - disaster / volunteer / online help
     - cambiar un poco las páginas que listan los pins 
@@ -22,21 +22,21 @@ TO DO:
     - pins en los desastres
     - mis chats
     - mis pins
-    - todas las páginas de volunteer, help reques y missings
+    - todas las páginas de volunteer, help request y missings
 - poner el footer
 - poner paginación
 - skeleton loader
-- error handling en el backend, hay tantas cosas que arreglar que madre mia julio 
+- error handling en el backend, hay tantas cosas que arreglar que madre mía julio 
 - arreglar el login - primero ver que leches pasa 
 - hacer que si el modal hace scroll, le header se quede fijo
 - guardar el estado de la sidebar en el localhost para que al refrescar se gestione de ahí
 - custom hook que me gestione los url params, no solo para los pins pero también para los chats
 - backend user, que no devuelva nunca ni la password ni el provider 
-- componente avatar se achata, hacer qeu mantenga el aspect ratio
+- componente avatar se achata, hacer que mantenga el aspect ratio
 - chat
     - poner un iconito de número de los mensajes sin ver
     - poner el mismo icono dentro del chat de los chats sin abrir
-    - hacer de una vez el flujo entero en el front (cuando arrgle el login que vaya cuadro)
+    - hacer de una vez el flujo entero en el front (cuando arregle el login que vaya cuadro)
     - mirar porqué no funciona el pinColor 
 - crear un toast notification
 - 404 page
@@ -48,6 +48,7 @@ TO DO:
     - pines resueltos
     - puntos de colección
     - todo eso que se me ocurra
+- gestionar cuando la api no funcione
 
 MANAGING USE-EFFECTS
 - ver si puedo quitarlos
@@ -58,11 +59,7 @@ aparte de arreglar:
 - si el usuario se registra no con google - verificar el email - crear todo lo pertinente para que esto funcione
 
 PREGUNTAS SUPERVISOR (si es que la reu dura más de 5min)
-- que pasa si ha cambiado el calendario, como reflejarlo en el report?
-- las reuniones cuentan para nota?
 - en la rubrica te pone que si te has adherido al gantt que hiciste te dan más nota, es eso cierto?
-- quién es la segunda persona que va a estar en la presentación
-- como puedo compartir mi código, lo comparto por github? se lo debo compartir a todo el mundo?
 - puedo poner este proyecto en mi cv?
 
 DOCUEMENTACIÓN (anexos????)

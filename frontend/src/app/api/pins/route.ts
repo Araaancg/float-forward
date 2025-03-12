@@ -26,14 +26,14 @@ export async function GET(req: Request): Promise<NextResponse> {
         `${apiUrl}/pins${params.toString() ? "?" + params.toString() : ""}`,
         {
           headers: {
-            Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
       const response = await res.json();
-      return NextResponse.json(response);
+      console.log("RESPONSE", response)
+      return NextResponse.json(response, { status: res.status });
     } else {
       console.warn("No valid token found. Access denied.");
       return NextResponse.json({ success: false, message: "Unauthorized" });
@@ -46,8 +46,8 @@ export async function GET(req: Request): Promise<NextResponse> {
 
 export async function POST(req: Request): Promise<NextResponse> {
   const apiUrl = GENERAL_VARIABLES.apiUrl;
-  const body = await req.json()
-  console.log(body)
+  const body = await req.json();
+  console.log(body);
 
   try {
     const authorizationHeader = req.headers.get("Authorization");
@@ -73,10 +73,10 @@ export async function POST(req: Request): Promise<NextResponse> {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
       const response = await res.json();
-      console.log("Server side res", response)
+      console.log("Server side res", response);
       return NextResponse.json(response);
     } else {
       console.warn("No valid token found. Access denied.");

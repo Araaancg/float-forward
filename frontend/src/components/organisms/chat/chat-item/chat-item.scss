@@ -37,4 +37,9 @@
       @apply flex flex-col gap-1 w-11/12;
     }
   }
+
+  &-unreadMsgs {
+    @apply flex justify-center items-center rounded-full text-white-full
+     bg-green-primary text-xs  px-2 ;
+  }
 }

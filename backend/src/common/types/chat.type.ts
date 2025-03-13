@@ -1,4 +1,6 @@
+import { Types } from "mongoose";
 import { IPin } from "./pin.type";
+import { IUser } from "./user.types";
 
 export enum ChatParticipantRoles {
   SEEKER = "seeker",
@@ -17,19 +19,22 @@ export enum MessageStatus {
   FAILED = "failed",
 }
 
-interface IChatParticipants {
-  user: string,
+export interface IChatParticipants {
+  user: IUser,
   role: ChatParticipantRoles,
   lastRead: Date
 }
 
 export interface IChat {
+  _id: string,
   pin: IPin,
   participants: IChatParticipants[],
   status: ChatStatus,
+  messages: IMessage[]
 }
 
 export interface IMessage {
+  _id: string,
   chatId: string,
   sender: string,
   content: string,

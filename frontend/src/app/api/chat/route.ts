@@ -1,10 +1,11 @@
 import GENERAL_VARIABLES from "@/general";
+import { pusherServer } from "@/pusher";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request): Promise<NextResponse> {
   const url = new URL(req.url);
   const params = new URLSearchParams(url.search);
-
+  console.log("REQUESTING RESPONSE CHATs")
   const apiUrl = GENERAL_VARIABLES.apiUrl;
 
   try {
@@ -47,8 +48,6 @@ export async function POST(req: Request): Promise<NextResponse> {
   const apiUrl = GENERAL_VARIABLES.apiUrl;
   const body = await req.json();
 
-  console.log(body)
-
   try {
     const authorizationHeader = req.headers.get("Authorization");
     let token;
@@ -64,7 +63,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     }
 
     if (token) {
-      console.log("posting chats...")
+      console.log("posting chats...");
       const res = await fetch(`${apiUrl}/chats`, {
         method: "POST",
         headers: {
@@ -74,10 +73,27 @@ export async function POST(req: Request): Promise<NextResponse> {
         body,
       });
       const response = await res.json();
-      console.log("response", response)
+      console.log("response", response);
+
+      // Post messages:
+      const channel = `chat__${JSON.parse(body).chatId}`;
+      console.log("Triggering channel: ", channel);
+      await pusherServer.trigger(
+        channel,
+        "new_message",
+        response.data.messages.slice(-1)[0]
+      );
+      const receiver = JSON.parse(body).receiver
+      await pusherServer.trigger(
+        `user__${receiver}__unread_messages`,
+        'unread_message', response.data
+      );
       return NextResponse.json(response, { status: res.status });
     } else {
-      return NextResponse.json({ error: "Unauthorized: Token could not be access in server side" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized: Token could not be access in server side" },
+        { status: 401 }
+      );
     }
   } catch (error: any) {
     console.error(error);

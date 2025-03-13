@@ -1,10 +1,9 @@
-import { Schema } from "mongoose";
+import { Types } from "mongoose";
 
 export interface IUser {
-  _id?: string | Schema.Types.ObjectId;
+  _id?: Types.ObjectId;
   email: string;
   name: string;
-  // lastName: string;
   profilePicture?: string;
   isEmailVerified: boolean;
   password?: string;

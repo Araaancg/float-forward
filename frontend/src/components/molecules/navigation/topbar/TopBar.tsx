@@ -11,10 +11,15 @@ export default function Topbar({
   isSidebarOpen,
   isLoggedIn,
   user,
+  unreadMessages
 }: {
   isSidebarOpen: boolean;
   isLoggedIn: boolean;
   user?: IUser;
+  unreadMessages?: {
+    totalUnreadCount: number;
+    unreadMessagesByChat: { [key: string]: number };
+  };
 }) {
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const { data: session } = useSession();
@@ -39,6 +44,7 @@ export default function Topbar({
         user={user}
         session={session}
         signOut={signOut}
+        unreadMessages={unreadMessages}
       />
 
       {/* DESKTOP */}

@@ -31,7 +31,6 @@ export class PinService {
 
   async create(pin: Partial<IPin>): Promise<any> {
     try {
-      console.log(pin);
       const pinCreated = await this.pinModel.create(pin);
       return pinCreated;
     } catch (e: any) {
@@ -62,7 +61,6 @@ export class PinService {
 
   async delete(_id: Types.ObjectId): Promise<any> {
     try {
-      console.log("id", _id);
       const pin = (await this.get({ _id }, {}))[0];
       if (!pin) {
         throw new ApiError(httpStatus.NOT_FOUND, "Pin not found");

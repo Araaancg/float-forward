@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import ChatIcon from "@/components/atoms/icons/ChatIcon";
-import NotificationIcon from "@/components/atoms/icons/NotificationIcon";
 import SettingsIcon from "@/components/atoms/icons/SettingsIcon";
 import Avatar from "@/components/atoms/avatar/Avatar";
 import MapPinWithBaseIcon from "@/components/atoms/icons/MapPinWithBaseIcon";
@@ -16,6 +15,10 @@ interface ISidebar {
   toggleExpansion: () => void;
   isLoggedIn: boolean;
   user?: IUser;
+  unreadMessages?: {
+    totalUnreadCount: number;
+    unreadMessagesByChat: { [key: string]: number };
+  };
 }
 
 export default function Sidebar({
@@ -23,6 +26,7 @@ export default function Sidebar({
   toggleExpansion,
   isLoggedIn,
   user,
+  unreadMessages,
 }: ISidebar) {
   return (
     <aside className={`sidebar ${isExpanded ? "open" : "close"}`}>
@@ -81,7 +85,7 @@ export default function Sidebar({
                 isExpanded ? "items-start" : "items-center"
               }`}
             >
-              <li>
+              <li className="inline relative">
                 <Button
                   isLink
                   variant="no-color"
@@ -91,6 +95,12 @@ export default function Sidebar({
                   <ChatIcon size={32} />
                   {isExpanded && "Chat"}
                 </Button>
+                {
+                  unreadMessages?.totalUnreadCount! > 0 && (
+                    <span className="sidebar-unreadMsgs">
+                      {unreadMessages?.totalUnreadCount}
+                    </span>
+                  )}
               </li>
               <li>
                 <Button isLink variant="no-color" color="black">
@@ -116,12 +126,6 @@ export default function Sidebar({
                 isExpanded ? "items-start" : "items-center"
               }`}
             >
-              <li className={isExpanded ? "pl-2.5" : ""}>
-                <Button variant="no-color" color="black" isLink>
-                  <NotificationIcon size={32} />
-                  {isExpanded && "Notifications"}
-                </Button>
-              </li>
               <li className={isExpanded ? "pl-2.5" : ""}>
                 <Button variant="no-color" color="black" isLink>
                   <SettingsIcon size={32} />

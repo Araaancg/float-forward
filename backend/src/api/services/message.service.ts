@@ -2,6 +2,7 @@ import Container, { Service } from "typedi";
 import { ApiError } from "../../common/middlewares/error-handler";
 import httpStatus from "http-status";
 import { IMessage } from "../../common/types/chat.type";
+import { Types } from "mongoose";
 
 @Service()
 export class MessageService {
@@ -21,7 +22,7 @@ export class MessageService {
 
   async create(message: Partial<IMessage>): Promise<any> {
     try {
-      console.log(message)
+      // console.log(message)
       const messageCreated = await this.messageModel.create([message]);
       return messageCreated
     } catch (e: any) {
@@ -32,26 +33,26 @@ export class MessageService {
     }
   }
 
-//   async update(
-//     _id: Types.ObjectId,
-//     disaster: Partial<IPinType>
-//   ): Promise<any> {
-//     try {
-//       const _disaster = (await this.get({ _id }, {}))[0];
-//       if (!_disaster) {
-//         throw new ApiError(httpStatus.NOT_FOUND, "Pin Type not found");
-//       }
-//       // Assign the updated data and save it
-//       Object.assign(_disaster, disaster);
-//       const updatedDisaster = await _disaster.save();
-//       return updatedDisaster;
-//     } catch (e) {
-//       throw new ApiError(
-//         httpStatus.INTERNAL_SERVER_ERROR,
-//         "There was an error updating pin type"
-//       );
-//     }
-//   }
+  async update(
+    _id: string,
+    message: Partial<IMessage>
+  ): Promise<any> {
+    try {
+      const _message = (await this.get({ _id }, {}))[0];
+      if (!_message) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Message not found");
+      }
+      // Assign the updated data and save it
+      Object.assign(_message, message);
+      const updatedDisaster = await _message.save();
+      return updatedDisaster;
+    } catch (e) {
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "There was an error updating the message"
+      );
+    }
+  }
 
 //   async delete(_id: Types.ObjectId): Promise<any> {
 //     try {

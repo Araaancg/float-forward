@@ -7,12 +7,19 @@ import { useForm } from "react-hook-form";
 const ChatInput = ({ sendData }: any) => {
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const onSubmit = (data: any) => {
+    sendData(data)
+    reset()
+  }
+
   return (
     <form
-      onSubmit={handleSubmit(sendData)}
+      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-row justify-between items-center p-4 bg-white-full"
     >
       <TextField

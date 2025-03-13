@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
-import { IChat, IPin } from "@/types/structures";
-import ChatItem from "@/components/molecules/list-items/chat-item/ChatItem";
+import { IChat, IMessage, IPin } from "@/types/structures";
+import ChatItem from "@/components/organisms/chat/chat-item/ChatItem";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
 import ArrowIcon from "@/components/atoms/icons/ArrowIcon";
@@ -15,8 +15,7 @@ import { useData } from "@/utils/hooks/useData";
 import { useAuth } from "@/utils/hooks/useAuth";
 import { useApi } from "@/utils/hooks/useApi";
 import "./chat.scss";
-
-// http://localhost:3000/chat?pin=6793c20e4ef2222c5e127105&receiver=6793c1ab4ef2222c5e1270e2
+import { pusherClient } from "@/pusher";
 
 export default function ChatView() {
   const { sessionLoading, session } = useAuth();
@@ -25,10 +24,27 @@ export default function ChatView() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [view, setView] = useState<"list" | "chat">("list");
+  const [view, setView] = useState<"list" | "chat">("chat");
   const [selectedChat, setSelectedChat] = useState<IChat>();
-  const [pin, setPin] = useState<IPin>()
-  const { callApi } = useApi(session);
+  const [pin, setPin] = useState<IPin>();
+  const [chats, setChats] = useState<IChat[]>();
+  const { callApi, loading, error } = useApi(session);
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      const response = await callApi("/api/chat", {
+        method: "GET",
+        requiresAuth: true,
+      });
+
+      console.log("response", response);
+      if (response.success && response.data) {
+        setChats(response.data);
+      }
+    };
+
+    fetchChats();
+  }, []);
 
   const selectedUser = useMemo(() => {
     return selectedChat?.participants.filter(
@@ -40,7 +56,7 @@ export default function ChatView() {
     // this is just for mobile
     setView((prev) => (prev === "list" ? "chat" : "list"));
 
-  const onChatClick = (chat: IChat, isMobile: boolean) => {
+  const onChatClick = async (chat: IChat, isMobile: boolean) => {
     if (isMobile) toggleMobileView();
 
     // Set the selected chat
@@ -55,21 +71,29 @@ export default function ChatView() {
     params.set("pin", pin);
     params.set("receiver", receiver);
 
+    const response = await callApi(`/api/chat/read-messages`, {
+      method: "POST",
+      requiresAuth: true,
+      body: { chatId: chat._id },
+    });
+
+    console.log("response read messages", response);
+
     router.push(`/chat?pin=${pin}&receiver=${receiver}`, { scroll: false });
   };
 
-  const {
-    data: chats,
-    loading,
-    error,
-  } = useData<IChat[]>(
-    "/api/chat",
-    {
-      method: "GET",
-      requiresAuth: true,
-    },
-    session
-  );
+  // const {
+  //   data: chats,
+  //   loading,
+  //   error,
+  // } = useData<IChat[]>(
+  //   "/api/chat",
+  //   {
+  //     method: "GET",
+  //     requiresAuth: true,
+  //   },
+  //   session
+  // );
 
   useEffect(() => {
     if (chats && chats.length > 0) {
@@ -96,44 +120,100 @@ export default function ChatView() {
         (el) =>
           el.pin._id === pin &&
           el.participants.filter((el) => el.user._id !== me?._id).length > 0
-      )[0]
+      )[0];
 
       setSelectedChat(selected);
 
       // if there is no chat selected means the chat is new
       // retrieve pin info:
       if (!selected) {
-        console.log("CHAT DOES NOT EXIST")
         const fetchSinglePin = async () => {
           const response = await callApi(`/api/pins?_id=${pin}`, {
             method: "GET",
             requiresAuth: true,
           });
-          console.log(response)
           if (response.success && response.data) {
-            console.log("response", response);
             setPin(response.data[0]);
           }
         };
-    
+
         fetchSinglePin();
       }
     }
   }, [chats, searchParams, router]);
 
   const sendData = async (data: any) => {
-    data.message = "hola"
+    // data.message = "hola";
     data.chatId = selectedChat?._id;
     data.pinId = searchParams.get("pin");
     data.receiver = searchParams.get("receiver");
-    console.log("message ->", data);
+    // console.log("message ->", data);
     const response = await callApi(`/api/chat`, {
       method: "POST",
       requiresAuth: true,
       body: JSON.stringify(data),
     });
-    console.log("response", response);
+    // console.log("response", response);
   };
+
+  useEffect(() => {
+    if (!selectedChat?._id || !me?._id) return;
+    
+    const chatChannel = `chat__${selectedChat._id}`;
+    const unreadMessagesChannel = `user__${me._id}__unread_messages`;
+    
+    pusherClient.subscribe(chatChannel);
+    pusherClient.subscribe(unreadMessagesChannel);
+  
+    const newMessagesHandler = (message: IMessage) => {
+      // Update the selected chat with the new message
+      setSelectedChat((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          messages: [...prev?.messages!, message],
+        };
+      });
+    };
+  
+    const unreadMessagesHandler = (data: { chatId: string, unreadCount: number }) => {
+      // Update the unread count in our local chats copy
+      setChats((prevChats) => {
+        if (!prevChats) return prevChats;
+        
+        return prevChats.map(chat => {
+          if (chat._id === data.chatId) {
+            // Find the participant that represents the current user
+            const updatedParticipants = chat.participants.map(participant => {
+              if (participant.user._id === me._id) {
+                return {
+                  ...participant,
+                  unreadCount: data.unreadCount // Or increment the current count
+                };
+              }
+              return participant;
+            });
+            
+            return {
+              ...chat,
+              participants: updatedParticipants
+            };
+          }
+          return chat;
+        });
+      });
+    };
+  
+    pusherClient.bind("new_message", newMessagesHandler);
+    pusherClient.bind("unread_message", unreadMessagesHandler);
+  
+    return () => {
+      pusherClient.unsubscribe(chatChannel);
+      pusherClient.unsubscribe(unreadMessagesChannel);
+      pusherClient.unbind("new_message", newMessagesHandler);
+      pusherClient.unbind("unread_message", unreadMessagesHandler);
+    };
+  }, [selectedChat?._id, me?._id]);
 
   if (sessionLoading || loading) {
     return <Loader view="chat" />;
@@ -188,7 +268,7 @@ export default function ChatView() {
                 selectedUser={selectedUser}
                 pinUrl={`/${selectedChat?.pin?.disaster?.slug}?pin=${selectedChat?.pin?._id}`}
               />
-              <ChatBody selectedChat={selectedChat!} me={me!} pin={pin}/>
+              <ChatBody selectedChat={selectedChat!} me={me!} pin={pin} />
               <ChatInput sendData={sendData} />
             </div>
           </div>
@@ -230,7 +310,7 @@ export default function ChatView() {
                     selectedUser={selectedUser}
                     pinUrl={`/${selectedChat?.pin?.disaster?.slug}?pin=${selectedChat?.pin?._id}`}
                   />
-                  <ChatBody selectedChat={selectedChat!} me={me!} pin={pin}/>
+                  <ChatBody selectedChat={selectedChat!} me={me!} pin={pin} />
                   <ChatInput sendData={sendData} />
                 </div>
               </div>

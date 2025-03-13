@@ -6,9 +6,14 @@ import { PinService } from "./pin.service";
 import {
   ChatParticipantRoles,
   ChatStatus,
+  IChat,
+  IChatParticipants,
+  IMessage,
   MessageStatus,
 } from "../../common/types/chat.type";
 import actionLog from "../../common/helpers/actionLog";
+import { Types } from "mongoose";
+import { getIO } from "../../app";
 
 @Service()
 export class ChatService {
@@ -42,6 +47,12 @@ export class ChatService {
         path: "pin",
         populate: {
           path: "disaster",
+        },
+      })
+      .populate({
+        path: "pin",
+        populate: {
+          path: "type",
         },
       });
 
@@ -78,7 +89,7 @@ export class ChatService {
     message: string;
   }): Promise<any> {
     try {
-      console.log({ chatId, pinId, sender, receiver, message });
+      // console.log({ chatId, pinId, sender, receiver, message });
       // CASE SCENARIO 1: Chat does not exist
       if (!chatId) {
         actionLog("PROC", "Chat does not exist, creating chat...");
@@ -167,6 +178,158 @@ export class ChatService {
       throw new ApiError(
         httpStatus.INTERNAL_SERVER_ERROR,
         "There was an error when posting new messages"
+      );
+    }
+  }
+
+  async readMessages({
+    _id,
+    user,
+  }: {
+    _id: Types.ObjectId;
+    user: Types.ObjectId;
+  }): Promise<unknown> {
+    try {
+      const chat = (await this.get({ _id })).data[0];
+      if (!chat) {
+        actionLog("ERROR", "Chat provided was not found");
+        throw new ApiError(httpStatus.NOT_FOUND, "Chat provided was not found");
+      }
+
+      // confirm the user is a participant of this chat
+      const isParticpant =
+        chat.participants.filter(
+          (el: IChatParticipants) =>
+            (el.user._id?.toString() as string) === user.toString()
+        ).length > 0;
+      if (!isParticpant) {
+        actionLog("ERROR", "User provided is not a participant of this chat");
+        throw new ApiError(
+          httpStatus.UNAUTHORIZED,
+          "User is not authorized to update this chat."
+        );
+      }
+
+      actionLog("PROC", "Retrieving all messages from chat...");
+      const allMessages: IMessage[] = chat.messages;
+
+      const unreadMessages = allMessages.filter(
+        (el: IMessage) =>
+          el.status === "sent" &&
+          (el.sender.toString() as string) !== user.toString()
+      );
+
+      // update status of all messges to read
+      if (unreadMessages.length === 0) {
+        actionLog("INFO", "No unread messages found in this chat");
+        return { data: 0, success: true };
+      }
+
+      actionLog("PROC", "Updating messages status");
+      const updatePromises = unreadMessages.map(async (message) => {
+        // Await the update for each message
+        return await this.messageService.update(message._id, {
+          status: MessageStatus.READ,
+        });
+      });
+      const updateResults = await Promise.all(updatePromises);
+
+      actionLog(
+        "INFO",
+        `Updated ${updateResults.length} messages to 'read' status`
+      );
+
+      return {
+        data: updateResults.length,
+        success: true,
+      };
+    } catch (e) {
+      if (e instanceof ApiError) {
+        // rethrow the error if it is a custom error
+        throw e;
+      }
+      // else make it custom
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "There was an error updating messages"
+      );
+    }
+  }
+
+  private countUnreadMessagesPerChat = (chats: IChat[], userId?: string) => {
+    const unreadMessagesByChat: { [chatId: string]: number } = {};
+    let totalUnreadCount = 0;
+
+    chats.forEach((chat) => {
+      if (chat.messages) {
+        // Count unread messages (status = 'sent')
+        const unreadMessages = chat.messages.filter(
+          (message) =>
+            message.status === "sent" &&
+            (message.sender.toString() as string) !== userId
+        );
+
+        // Store count for the individual chat
+        unreadMessagesByChat[chat._id] = unreadMessages.length;
+
+        // Add to the total unread count
+        totalUnreadCount += unreadMessages.length;
+      }
+    });
+
+    // Return both the individual counts and the total count
+    return {
+      unreadMessagesByChat,
+      totalUnreadCount,
+    };
+  };
+
+  async getUnreadMessages({
+    userId,
+    chatId,
+  }: {
+    userId: Types.ObjectId;
+    chatId?: Types.ObjectId; // chatId is optional
+  }): Promise<unknown> {
+    try {
+      let unreadMessages;
+      let allChats: IChat[];
+      if (!chatId) {
+        // SCENARIO 1: No chat ID was provided - getting all unread messages
+        actionLog(
+          "INFO",
+          "No chatId was provided, getting all unread messages"
+        );
+        actionLog("PROC", "Retrieving all chats from user...");
+        allChats = (await this.get({}, {}, userId.toString())).data;
+        // console.log(allChats);
+      } else {
+        // SCENARIO 2: chat ID is provided - we just get unread messages from that chat
+        allChats = (await this.get({ _id: chatId })).data;
+      }
+
+      actionLog("PROC", "Counting all unreadMessages...");
+      unreadMessages = this.countUnreadMessagesPerChat(
+        allChats!,
+        userId.toString()
+      );
+      actionLog(
+        "INFO",
+        `Number of unread messages retrieved succesfully: ${unreadMessages.totalUnreadCount}`
+      );
+      return {
+        data: unreadMessages, // number of unread messages
+        success: true,
+      };
+    } catch (e) {
+      if (e instanceof ApiError) {
+        // rethrow the error if it is a custom error
+        throw e;
+      }
+      // else make it custom
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "There was an error getting unread messages"
       );
     }
   }

@@ -17,10 +17,7 @@ const ChatBody = ({
   me: IUser;
   pin?: IPin;
 }) => {
-  console.log("pin", pin)
-  console.log("selectedChat.pin", selectedChat?.pin)
   const pinToShow = useMemo(() => selectedChat ? selectedChat.pin : pin, [selectedChat, pin])
-  console.log(pinToShow)
   // The component is going to be reversed so that is kept scrolled down
   return (
     <div className="chatBody">

@@ -18,7 +18,8 @@ export const MessageSchema = new mongoose.Schema<any>(
     },
     status: {
         type: String,
-        enum: ['sent', 'received', 'read', 'failed']
+        enum: ['sent', 'received', 'read', 'failed'],
+        default: 'sent'
 
     },
     deletedAt: { type: Date, default: null },

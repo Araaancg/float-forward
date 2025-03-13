@@ -16,6 +16,10 @@ interface IMenu {
   user?: IUser;
   session?: any;
   signOut?: () => void;
+  unreadMessages?: {
+    totalUnreadCount: number;
+    unreadMessagesByChat: { [key: string]: number };
+  };
 }
 
 export default function Menu({
@@ -25,6 +29,7 @@ export default function Menu({
   user,
   session,
   signOut,
+  unreadMessages,
 }: IMenu) {
   return (
     <Modal
@@ -37,7 +42,7 @@ export default function Menu({
         <>
           {/* FIRST LINKS */}
           <ul className="menu-links">
-            <li>
+            <li className="inline relative">
               <Button
                 isLink
                 variant="no-color"
@@ -47,6 +52,12 @@ export default function Menu({
                 <ChatIcon size={28} />
                 Chat
               </Button>
+              {unreadMessages?.totalUnreadCount &&
+                unreadMessages?.totalUnreadCount > 0 && (
+                  <span className="menu-unreadMsgs">
+                    {unreadMessages?.totalUnreadCount}
+                  </span>
+                )}
             </li>
             <li>
               <Button isLink variant="no-color" color="black">
@@ -64,12 +75,6 @@ export default function Menu({
           {/* SECOND LINKS */}
           <hr className="border border-solid border-green-primary" />
           <ul className="menu-links">
-            <li>
-              <Button variant="no-color" color="black" isLink>
-                <NotificationIcon size={28} />
-                Notifications
-              </Button>
-            </li>
             <li>
               <Button variant="no-color" color="black" isLink>
                 <SettingsIcon size={28} />

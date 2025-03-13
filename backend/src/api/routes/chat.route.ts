@@ -25,6 +25,22 @@ const chatRoutes = () => {
       chatController.create
     );
 
+  router
+    .route("/read-messages")
+    .post(
+      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
+      // validate(schemas),
+      chatController.readMessages
+    );
+
+  router
+    .route("/unread-messages")
+    .get(
+      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
+      // validate(schemas),
+      chatController.getUnreadMessages
+    );
+
   // router
   //   .route("/:id")
   //   .put(

@@ -4,7 +4,7 @@ import { PinTypes, pinTypesCrossColor } from "@/types/enums";
 import { IPin } from "@/types/structures";
 import { Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
 import { AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 
 function filterPinsByCoordinates(
   pins: IPin[],
@@ -26,50 +26,46 @@ const PoiMarkers = ({
   customPinColor?: string;
 }) => {
   const map = useMap();
-  const [markers, setMarkers] = useState<{ [key: string]: Marker }>({});
-  const clusterer = useRef<MarkerClusterer | null>(null);
+  const markersRef = useRef<{ [key: string]: Marker }>({});
+  const clustererRef = useRef<MarkerClusterer | null>(null);
+  
+  // Initialize clusterer once when map is available
+  if (map && !clustererRef.current) {
+    clustererRef.current = new MarkerClusterer({ map });
+  }
+
   const handleClick = useCallback((ev: google.maps.MapMouseEvent) => {
-    if (!map) return;
-    if (!ev.latLng) return;
+    if (!map || !ev.latLng) return;
+    
     const marker = filterPinsByCoordinates(
       pois,
       ev.latLng.toJSON().lat,
       ev.latLng.toJSON().lng
     );
-    // console.log("marker clicked:", marker);
+    
     if (marker) onPinClick(marker);
     map.panTo(ev.latLng);
-  }, []);
+  }, [map, pois, onPinClick]);
 
-  // Initialize MarkerClusterer, if the map has changed
-  useEffect(() => {
-    if (!map) return;
-    if (!clusterer.current) {
-      clusterer.current = new MarkerClusterer({ map });
+  const setMarkerRef = useCallback((marker: Marker | null, key: string) => {
+    const currentMarker = markersRef.current[key];
+    
+    // Do nothing if the marker reference hasn't changed
+    if ((marker && currentMarker) || (!marker && !currentMarker)) return;
+    
+    // Update the markers ref and update the clusterer
+    if (marker) {
+      markersRef.current[key] = marker;
+    } else {
+      delete markersRef.current[key];
     }
-  }, [map]);
-
-  // Update markers, if the markers array has changed
-  useEffect(() => {
-    clusterer.current?.clearMarkers();
-    clusterer.current?.addMarkers(Object.values(markers));
-  }, [markers]);
-
-  const setMarkerRef = (marker: Marker | null, key: string) => {
-    if (marker && markers[key]) return;
-    if (!marker && !markers[key]) return;
-
-    setMarkers((prev) => {
-      if (marker) {
-        return { ...prev, [key]: marker };
-      } else {
-        const newMarkers = { ...prev };
-        delete newMarkers[key];
-        return newMarkers;
-      }
-    });
-  };
-  console.log("pois", pois);
+    
+    // Update the clusterer with the current markers
+    if (clustererRef.current) {
+      clustererRef.current.clearMarkers();
+      clustererRef.current.addMarkers(Object.values(markersRef.current));
+    }
+  }, []);
 
   return (
     <>

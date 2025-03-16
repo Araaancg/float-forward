@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/atoms/button/Button";
@@ -12,37 +12,27 @@ import { IDisasters, IPin } from "@/types/structures";
 import { PinTypes } from "@/types/enums";
 import usePinManagement from "@/utils/hooks/usePinManagement";
 import { useAuth } from "@/utils/hooks/useAuth";
-import { useApi } from "@/utils/hooks/useApi";
+import { useData } from "@/utils/hooks/useData";
+import Loader from "@/components/atoms/loader/Loader";
 import "./disaster.scss";
 
 export default function DisasterView() {
-  const { isLoading, session } = useAuth({
-    required: true,
-    onError: (error) => {
-      // console.error('Auth error:', error)
-    },
-  });
-
-  const { callApi, loading, error } = useApi();
-  const [disaster, setDisaster] = useState<IDisasters>();
+  const { sessionLoading, session } = useAuth();
 
   const pathname = usePathname().split("/");
   const slug = pathname[1];
 
-  useEffect(() => {
-    const fetchDisasters = async () => {
-      const response = await callApi(`/api/disasters?slug=${slug}`, {
-        method: "GET",
-      });
+  const {
+    data: disaster_,
+    loading,
+    error,
+  } = useData<IDisasters[]>(`/api/disasters?slug=${slug}`, {
+    method: "GET",
+  });
 
-      if (response.success && response.data) {
-        console.log("response", response);
-        setDisaster(response.data[0]);
-      }
-    };
-
-    fetchDisasters();
-  }, []);
+  const disaster: IDisasters | null = useMemo(() => {
+    return disaster_ && disaster_[0];
+  }, [disaster_]);
 
   const [activePins, setActivePins] = useState<Record<PinTypes, boolean>>({
     [PinTypes.HELP_REQUEST]: true,
@@ -55,17 +45,22 @@ export default function DisasterView() {
 
   const pinsToShow = useMemo(() => {
     if (disaster && disaster?.pins) {
-      console.log(disaster?.pins)
       return disaster.pins.filter(
         (pin: IPin) => activePins[pin.type.title as PinTypes]
       );
     } else return [];
   }, [activePins, disaster]);
 
-  const { selectedPin, onPinClick, removePinParam } = usePinManagement(disaster?.pins);
+  const { selectedPin, onPinClick, removePinParam } = usePinManagement(
+    disaster?.pins
+  );
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (sessionLoading || loading) {
+    return <Loader view="disaster"/>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>
   }
 
   return disaster ? (
@@ -138,7 +133,7 @@ export default function DisasterView() {
             onPinClick={onPinClick}
             defaultCenter={{
               lat: disaster?.coordinates?.lat,
-              lng: disaster?.coordinates.lng,
+              lng: disaster?.coordinates?.lng,
             }}
           />
           <PinFilters

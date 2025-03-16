@@ -79,7 +79,7 @@ export default function PinCard({
           </p>
         </section>
 
-        <Button isFullWidth color={pinColor}>
+        <Button isFullWidth color={pinColor} isLink linkProps={{href: `/chat?pin=${data._id}&receiver=${data.user._id}`}}>
           Send message
         </Button>
       </div>

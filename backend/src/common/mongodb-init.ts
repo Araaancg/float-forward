@@ -8,6 +8,8 @@ import { DisasterSchema } from '../models/disaster.schema';
 import { ImagesSchema } from '../models/images.schema';
 import { PinSchema } from '../models/pin.schema';
 import { PinTypesSchema } from '../models/pinType.schema';
+import { ChatSchema } from '../models/chat.schema';
+import { MessageSchema } from '../models/message.schema';
 
 export class DatabaseConnection {
   private static connection: mongoose.Connection | null = null;
@@ -37,6 +39,8 @@ export class DatabaseConnection {
     Container.set('Images', connection.model('Images', ImagesSchema));
     Container.set('Pin', connection.model('Pin', PinSchema));
     Container.set('PinTypes', connection.model('PinTypes', PinTypesSchema));
+    Container.set('Chat', connection.model('Chat', ChatSchema));
+    Container.set('Message', connection.model('Message', MessageSchema));
   }
 }
 

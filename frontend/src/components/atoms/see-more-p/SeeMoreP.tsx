@@ -14,7 +14,7 @@ export default function SeeMoreP({ text, size = "lg", className, ...props }: ISe
 
   return (
     <p className={`${size === "lg" ? "text-base":"text-sm"}`}>
-      {seeMoreInfo ? text : text.slice(0, 150)}
+      {seeMoreInfo ? text : text?.slice(0, 150)}
       <Button onClick={() => setSeeMoreInfo(!seeMoreInfo)} variant="no-color" size={size}>
         {seeMoreInfo ? "See less" : "See more"}
       </Button>

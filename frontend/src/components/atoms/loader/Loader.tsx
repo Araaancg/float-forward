@@ -1,5 +1,20 @@
+import AuthLoader from "./loader-views/AuthLoader";
+import ChatLoader from "./loader-views/ChatLoader";
+import DisasterLoader from "./loader-views/DisasterLoader";
+import HomeLoader from "./loader-views/HomeLoader";
 import "./loader.scss";
 
-export default function Loader() {
-  return <div></div>
+export default function Loader({ view }: { view: string }) {
+  switch (view) {
+    case "home":
+      return <HomeLoader />;
+    case "auth":
+      return <AuthLoader />;
+    case "disaster":
+      return <DisasterLoader />;
+    case "chat":
+      return <ChatLoader />;
+    default:
+      return <div>Loading...</div>;
+  }
 }

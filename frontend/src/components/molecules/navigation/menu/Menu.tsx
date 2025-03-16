@@ -5,17 +5,32 @@ import MapPinWithBaseIcon from "@/components/atoms/icons/MapPinWithBaseIcon";
 import NotificationIcon from "@/components/atoms/icons/NotificationIcon";
 import SettingsIcon from "@/components/atoms/icons/SettingsIcon";
 import UserIcon from "@/components/atoms/icons/UserIcon";
+import { IUser } from "@/types/structures";
+import HealthcareIcon from "@/components/atoms/icons/HealthcareIcon";
 import "./menu.scss";
-import { IUser } from "@/types/interfaces";
 
 interface IMenu {
   showMenu: boolean;
   toggleMenu: () => void;
   isLoggedIn: boolean;
   user?: IUser;
+  session?: any;
+  signOut?: () => void;
+  unreadMessages?: {
+    totalUnreadCount: number;
+    unreadMessagesByChat: { [key: string]: number };
+  };
 }
 
-export default function Menu({ showMenu, toggleMenu, isLoggedIn, user }: IMenu) {
+export default function Menu({
+  showMenu,
+  toggleMenu,
+  isLoggedIn,
+  user,
+  session,
+  signOut,
+  unreadMessages,
+}: IMenu) {
   return (
     <Modal
       onClose={toggleMenu}
@@ -27,27 +42,32 @@ export default function Menu({ showMenu, toggleMenu, isLoggedIn, user }: IMenu) 
         <>
           {/* FIRST LINKS */}
           <ul className="menu-links">
-            <li>
-              <Button isLink variant="no-color">
+            <li className="inline relative">
+              <Button
+                isLink
+                variant="no-color"
+                color="black"
+                linkProps={{ href: "/chat" }}
+              >
                 <ChatIcon size={28} />
                 Chat
               </Button>
+              {unreadMessages?.totalUnreadCount &&
+                unreadMessages?.totalUnreadCount > 0 && (
+                  <span className="menu-unreadMsgs">
+                    {unreadMessages?.totalUnreadCount}
+                  </span>
+                )}
             </li>
             <li>
-              <Button isLink variant="no-color">
+              <Button isLink variant="no-color" color="black">
                 <MapPinWithBaseIcon size={28} />
                 My pins
               </Button>
             </li>
             <li>
-              <Button isLink variant="no-color">
-                <ChatIcon size={28} />
-                My requests
-              </Button>
-            </li>
-            <li>
-              <Button isLink variant="no-color">
-                <ChatIcon size={28} />I am a first responder
+              <Button isLink variant="no-color" color="black">
+                <HealthcareIcon size={28} />I am a first responder
               </Button>
             </li>
           </ul>
@@ -56,19 +76,13 @@ export default function Menu({ showMenu, toggleMenu, isLoggedIn, user }: IMenu) 
           <hr className="border border-solid border-green-primary" />
           <ul className="menu-links">
             <li>
-              <Button variant="no-color" isLink>
-                <NotificationIcon size={28} />
-                Notifications
-              </Button>
-            </li>
-            <li>
-              <Button variant="no-color" isLink>
+              <Button variant="no-color" color="black" isLink>
                 <SettingsIcon size={28} />
                 Settings
               </Button>
             </li>
             <li>
-              <Button variant="no-color" isLink>
+              <Button variant="no-color" color="black" isLink>
                 <UserIcon size={28} />
                 Account
               </Button>
@@ -79,20 +93,31 @@ export default function Menu({ showMenu, toggleMenu, isLoggedIn, user }: IMenu) 
           <hr className="border border-solid border-green-primary" />
           <ul className="menu-links">
             <li>
-              <Button isLink variant="no-color">
+              <Button isLink variant="no-color" color="black">
                 About us
               </Button>
             </li>
             <li>
-              <Button isLink variant="no-color">
+              <Button isLink variant="no-color" color="black">
                 Contact
               </Button>
             </li>
             <li>
-              <Button isLink variant="no-color">
+              <Button isLink variant="no-color" color="black">
                 Help
               </Button>
             </li>
+            {session && (
+              <li>
+                <Button
+                  variant="no-color"
+                  color="black"
+                  onClick={signOut && (() => signOut())}
+                >
+                  Log out
+                </Button>
+              </li>
+            )}
           </ul>
         </>
       ) : (

@@ -22,7 +22,7 @@ export const disasterMock: IDisasters[] = [
     ],
     additionalInformation: [],
     pins: [],
-    location: { lat: -33.860664, lng: 151.208138 }
+    coordinates: { lat: -33.860664, lng: 151.208138 }
   },
   {
     _id: "1234",
@@ -45,6 +45,6 @@ export const disasterMock: IDisasters[] = [
     ],
     additionalInformation: [],
     pins: [],
-    location: { lat: -33.860664, lng: 151.208138 }
+    coordinates: { lat: -33.860664, lng: 151.208138 }
   },
 ];

@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 import ChatIcon from "@/components/atoms/icons/ChatIcon";
-import NotificationIcon from "@/components/atoms/icons/NotificationIcon";
 import SettingsIcon from "@/components/atoms/icons/SettingsIcon";
 import Avatar from "@/components/atoms/avatar/Avatar";
 import MapPinWithBaseIcon from "@/components/atoms/icons/MapPinWithBaseIcon";
 import Button from "@/components/atoms/button/Button";
 import DoubleCaretIcon from "@/components/atoms/icons/DoubleCaretIcon";
 import { IUser } from "@/types/structures";
+import HealthcareIcon from "@/components/atoms/icons/HealthcareIcon";
 import "./sidebar.scss";
 
 interface ISidebar {
@@ -15,6 +15,10 @@ interface ISidebar {
   toggleExpansion: () => void;
   isLoggedIn: boolean;
   user?: IUser;
+  unreadMessages?: {
+    totalUnreadCount: number;
+    unreadMessagesByChat: { [key: string]: number };
+  };
 }
 
 export default function Sidebar({
@@ -22,6 +26,7 @@ export default function Sidebar({
   toggleExpansion,
   isLoggedIn,
   user,
+  unreadMessages,
 }: ISidebar) {
   return (
     <aside className={`sidebar ${isExpanded ? "open" : "close"}`}>
@@ -36,14 +41,24 @@ export default function Sidebar({
                   isExpanded ? "justify-end" : "justify-center"
                 }`}
               >
-                <Button variant="no-color" color="black" onClick={toggleExpansion}>
+                <Button
+                  variant="no-color"
+                  color="black"
+                  onClick={toggleExpansion}
+                >
                   <DoubleCaretIcon
+                    size={28}
                     orientation={isExpanded ? "left" : "right"}
                   />
                 </Button>
               </div>
               <div>
-                <Button variant="no-color" color="black" isLink linkProps={{href: "/"}}>
+                <Button
+                  variant="no-color"
+                  color="black"
+                  isLink
+                  linkProps={{ href: "/" }}
+                >
                   {isExpanded ? (
                     <Image
                       src="/logo-horizontal.png"
@@ -70,11 +85,22 @@ export default function Sidebar({
                 isExpanded ? "items-start" : "items-center"
               }`}
             >
-              <li>
-                <Button isLink variant="no-color" color="black">
+              <li className="inline relative">
+                <Button
+                  isLink
+                  variant="no-color"
+                  color="black"
+                  linkProps={{ href: "/chat" }}
+                >
                   <ChatIcon size={32} />
                   {isExpanded && "Chat"}
                 </Button>
+                {
+                  unreadMessages?.totalUnreadCount! > 0 && (
+                    <span className="sidebar-unreadMsgs">
+                      {unreadMessages?.totalUnreadCount}
+                    </span>
+                  )}
               </li>
               <li>
                 <Button isLink variant="no-color" color="black">
@@ -84,13 +110,7 @@ export default function Sidebar({
               </li>
               <li>
                 <Button isLink variant="no-color" color="black">
-                  <ChatIcon size={32} />
-                  {isExpanded && "My requests"}
-                </Button>
-              </li>
-              <li>
-                <Button isLink variant="no-color" color="black">
-                  <ChatIcon size={32} />
+                  <HealthcareIcon size={32} />
                   {isExpanded && "I am a first responder"}
                 </Button>
               </li>
@@ -106,12 +126,6 @@ export default function Sidebar({
                 isExpanded ? "items-start" : "items-center"
               }`}
             >
-              <li className={isExpanded ? "pl-2.5" : ""}>
-                <Button variant="no-color" color="black" isLink>
-                  <NotificationIcon size={32} />
-                  {isExpanded && "Notifications"}
-                </Button>
-              </li>
               <li className={isExpanded ? "pl-2.5" : ""}>
                 <Button variant="no-color" color="black" isLink>
                   <SettingsIcon size={32} />

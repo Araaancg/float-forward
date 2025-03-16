@@ -11,9 +11,15 @@
   }
 }
 
-.menu-links {
+.menu {
+  &-links {
     @apply flex flex-col gap-6;
     & > li {
-        @apply flex gap-3;
+      @apply flex gap-3;
     }
+  }
+  &-unreadMsgs {
+    @apply rounded-full px-1.5 py-0.5 absolute top-4 left-4 
+    text-white-full bg-pins-yellow-primary text-xs;
+  }
 }

@@ -40,7 +40,7 @@ export function useAuth(options: UseAuthOptions = {}) {
   return {
     session,
     status,
-    isLoading: status === 'loading' || status === 'unauthenticated',
+    sessionLoading: status === 'loading' || status === 'unauthenticated',
     isAuthenticated: status === 'authenticated',
     isError: !!session?.error
   }

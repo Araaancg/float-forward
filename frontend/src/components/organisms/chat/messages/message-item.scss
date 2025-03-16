@@ -1,0 +1,6 @@
+.messageItem {
+    @apply p-3 bg-white-full rounded w-fit;
+    &-date {
+        @apply w-full flex justify-end items-center text-[10px];
+    }
+}

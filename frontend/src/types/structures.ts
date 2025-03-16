@@ -1,4 +1,4 @@
-import {PinTypes, PriorityTypes } from "./enums";
+import { ChatStatus, MessageStatus, PinTypes, PriorityTypes } from "./enums";
 import { ICoordinates } from "./interfaces";
 
 export interface IUser {
@@ -23,7 +23,7 @@ export interface IDisasters {
   images: IImages[];
   additionalInformation: IAddiontionalInformation[];
   pins: IPin[];
-  coordinates: ICoordinates,
+  coordinates: ICoordinates;
 }
 
 export interface IAddiontionalInformation {
@@ -42,11 +42,11 @@ export interface IPin {
   title: string;
   description: string;
   additionalInfo?: string;
-  coordinates: ICoordinates,
+  coordinates: ICoordinates;
   address: string;
   user: IUser;
-  disasterId: string;
-  priority?: PriorityTypes
+  disaster: IDisasters;
+  priority?: PriorityTypes;
 }
 
 export interface ITypeInformation {
@@ -68,4 +68,27 @@ export interface IImages {
   author?: string;
   sources?: string;
   link?: string;
+}
+
+export interface IChat {
+  _id: string;
+  participants: {
+    user: IUser;
+    role: "seeker" | "volunteer";
+    lastRead: string;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+  pin: IPin;
+  messages?: IMessage[]
+  status: ChatStatus
+}
+
+export interface IMessage {
+  _id: string,
+  chatId: string,
+  sender: string, // maybe only the id? we have the user object in the participants key in the chat
+  content: string,
+  status: MessageStatus
+  createdAt: string,
 }

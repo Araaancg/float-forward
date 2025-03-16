@@ -4,6 +4,8 @@ import { DisasterService } from "../services/disaster.service";
 import httpStatus from "http-status";
 import { ImageService } from "../services/image.service";
 import { IDisaster } from "../../common/types/disaster.type";
+import actionLog from "../../common/helpers/actionLog";
+import { ApiError } from "../../common/middlewares/error-handler";
 
 @Service()
 export class DisasterController {
@@ -13,9 +15,23 @@ export class DisasterController {
   ) {}
 
   get = catchAsync(async (req, res) => {
-    const { limit = 10, skip = 0, ...body } = req.query;
-    const result = await this.disasterService.get(body, { limit, skip });
-    res.status(200).send({ sucess: true, data: result });
+    try {
+
+      actionLog("PROC", "Getting disaster information...");
+      const { limit = 10, skip = 0, ...body } = req.query;
+      const result = await this.disasterService.get(body, { limit, skip });
+      actionLog("INFO", "Disaster information retrieved successfully");
+      res.status(200).send({ sucess: true, data: result });
+    } catch (e) {
+      actionLog("ERROR", "Error while retrieving disaster information");
+      if (e instanceof ApiError) {
+        throw e; // rethrow the error if it is a custom error
+      }
+      throw new ApiError( // else make it custom
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "Error while retrieving disaster information, please try again later."
+      );
+    }
   });
 
   create = catchAsync(async (req, res) => {

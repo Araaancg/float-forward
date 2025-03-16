@@ -1,0 +1,90 @@
+TO DO:
+- vistas que faltan:
+    - landing
+        - who is this page for
+        - how it works
+        - recent disasters
+        - contact
+        - about us
+    - mis pins
+        - poner un botón de resuelto de alguna forma
+    - i am a first responder - pensar que leches quiero hacer con esto
+    - disaster / volunteer / online help
+    - cambiar un poco las páginas que listan los pins 
+    - settings
+    - mi perfil
+        - que se pueda cambiar la contraseña
+        - que se pueda cambiar la foto 
+            - conectar con cloudinary, puff julio lo que queda
+- pensar en si eliminar notificaciones porque en verdad no las necesitaré
+- poner mensajes cuando no haya cosas del back 
+    - home (pensar porque en verdad siempre va a haber algo)
+    - pins en los desastres
+    - mis chats
+    - mis pins
+    - todas las páginas de volunteer, help request y missings
+- poner el footer
+- poner paginación
+- skeleton loader
+- error handling en el backend, hay tantas cosas que arreglar que madre mía julio 
+- arreglar el login - primero ver que leches pasa 
+- hacer que si el modal hace scroll, le header se quede fijo
+- guardar el estado de la sidebar en el localhost para que al refrescar se gestione de ahí
+- custom hook que me gestione los url params, no solo para los pins pero también para los chats
+- backend user, que no devuelva nunca ni la password ni el provider 
+- componente avatar se achata, hacer que mantenga el aspect ratio
+- chat
+    - poner un iconito de número de los mensajes sin ver
+    - poner el mismo icono dentro del chat de los chats sin abrir
+    - hacer de una vez el flujo entero en el front (cuando arregle el login que vaya cuadro)
+    - mirar porqué no funciona el pinColor 
+- crear un toast notification
+- 404 page
+- put auth in middleware.js ¿?
+- devolver los pins de más cercano al usuario a menos - poner distancia en la lista
+- sacar una página de estadísticas o algo de ese palo
+    - gente ayudada
+    - voluntarios
+    - pines resueltos
+    - puntos de colección
+    - todo eso que se me ocurra
+- gestionar cuando la api no funcione
+
+MANAGING USE-EFFECTS
+- ver si puedo quitarlos
+- ver como funciona las pages con el async
+
+LOGIN 
+aparte de arreglar:
+- si el usuario se registra no con google - verificar el email - crear todo lo pertinente para que esto funcione
+
+PREGUNTAS SUPERVISOR (si es que la reu dura más de 5min)
+- en la rubrica te pone que si te has adherido al gantt que hiciste te dan más nota, es eso cierto?
+- puedo poner este proyecto en mi cv?
+
+DOCUEMENTACIÓN (anexos????)
+- api endpoints
+- tablas de la base de datos
+- arquitectura y tecnologías
+- testing
+- más cosas que no me quepan
+
+DELIVERABLES
+- postman
+- figma
+- code
+- documentation
+- report
+
+IDEAS APARTE 
+- skeleton puede ser un component que le pases el width y heigh
+- hacerlo de manera más eficiente de como hice telegram
+- se pueden poner cosas en común entre front y back?
+- de que va ese package.json en el root del proyecto
+- utilizar la función getPinColor para el resto de vistas, no solo el chat
+
+COSAS A GESTIONAR
+- i am a first responder
+- verify email
+- pin priority ??
+- handle encryption or something - at least for the positions??

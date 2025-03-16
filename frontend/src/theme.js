@@ -16,7 +16,7 @@ const theme = {
         opacity50: "#9BC53D22",
         opacity90: "#9BC53DCC",
       },
-      error: "F02D3A",
+      error: "#F02D3A",
       info: "#4EA5FF",
       disabled: { input: "#DCDCDD", button: "#BCBABA" },
       pins: {
@@ -27,6 +27,7 @@ const theme = {
         lightBlue: { primary: "#4EA5FF", opacity: "#4EA5FFCC" },
         darkBlue: { primary: "#1976D2", opacity: "#1976D2CC" },
       },
+      chat: { background: "#EDEDED" },
     },
     screens: {
       xxs: "370px", // smaller mobile

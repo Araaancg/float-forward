@@ -2,6 +2,7 @@ import { Service } from "typedi";
 import { catchAsync } from "../../common/helpers/catch-async";
 import { PinService } from "../services/pin.service";
 import { PinTypesService } from "../services/pinTypes.service";
+import actionLog from "../../common/helpers/actionLog";
 
 @Service()
 export class PinController {
@@ -11,15 +12,15 @@ export class PinController {
   ) {}
 
   get = catchAsync(async (req, res) => {
+    actionLog("PROC", "Retrieving pin(s) information...")
     const { limit = 10, skip = 0, ...body } = req.query;
     const pins = await this.pinService.get(body, { limit, skip });
-    return res.status(200).send(pins);
+    actionLog("INFO", "Pin information retrieved succesfully")
+    return res.status(200).send({success: true, data: pins});
   });
 
   create = catchAsync(async (req, res) => {
     const body = req.body;
-    console.log("Inside backend pin controller")
-    console.log("body", body)
     const pinType = (await this.pinTypeService.get({ title: body.type }))[0];
     console.log(pinType)
 
@@ -28,7 +29,6 @@ export class PinController {
       type: pinType._id.toString(),
       user: req.token.sub,
     });
-    console.log("\n PIN CREATED", pin)
     return res.status(200).send({ sucess: true, data: pin });
   });
 

@@ -23,3 +23,15 @@ export const pinTypesCrossColor: Record<PinTypes, keyof typeof theme.extend.colo
   [PinTypes.HELP_OFFER]: "green",
   [PinTypes.INFORMATION_POINT]: "darkBlue",
 };
+
+export enum MessageStatus {
+  SENT = "sent",
+  RECEIVED = "received",
+  READ = "read",
+  FAILED = "failed"
+}
+
+export enum ChatStatus {
+  ACTIVE = "active",
+  ARCHIVED = "archived"
+}

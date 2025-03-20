@@ -5,12 +5,16 @@ import { Types } from "mongoose";
 import { IDisaster } from "../../common/types/disaster.type";
 import { PinService } from "./pin.service";
 import actionLog from "../../common/helpers/actionLog";
+import { ImageService } from "./image.service";
 
 @Service()
 export class DisasterService {
   private disasterModel: any;
 
-  constructor(private pinService: PinService) {
+  constructor(
+    private pinService: PinService,
+    private imageService: ImageService
+  ) {
     this.disasterModel = Container.get("Disaster");
   }
 
@@ -18,38 +22,92 @@ export class DisasterService {
     filter?: { [key: string]: any },
     options?: { [key: string]: any }
   ): Promise<any> {
-    const query = { ...filter, deletedAt: null };
-    actionLog("PROC", "Getting images from disaster...")
-    let disasters = await this.disasterModel
-    .find(query, {}, options)
-    .populate("images");
-    actionLog("INFO", "Images from disaster retrieved successfully")
-    
-    actionLog("PROC", "Getting pins from disaster...")
-    const disastersWithPins = await Promise.all(
-      disasters.map(async (disaster: any) => {
-        const pins = await this.pinService.get({ disaster: disaster._id });
-        
-        // Convert Mongoose document to plain object to avoid modification issues
-        const disasterObj = disaster.toObject();
-        return {
-          ...disasterObj,
-          pins,
-        };
-      })
-    );
-    actionLog("INFO", "Pins from disaster retrieved successfully")
-    return disastersWithPins;
-  }
-
-  async create(disaster: Partial<IDisaster>): Promise<any> {
     try {
-      const disasterCreated = await this.disasterModel.create(disaster);
-      return disasterCreated;
-    } catch (e: any) {
+      actionLog("PROCESS", "DISASTERS", "Retriving disasters...");
+      const query = { ...filter, deletedAt: null };
+      let disasters = await this.disasterModel
+        .find(query, {}, options)
+        .populate("images");
+
+      actionLog("INFO", "DISASTERS", "Disasters retrieved successfully");
+      actionLog(
+        "PROCESS",
+        "DISASTERS",
+        "Getting pin information from each disaster..."
+      );
+      const disastersWithPins = await Promise.all(
+        disasters.map(async (disaster: any) => {
+          const pins = await this.pinService.get({ disaster: disaster._id });
+
+          // Convert Mongoose document to plain object to avoid modification issues
+          const disasterObj = disaster.toObject();
+          return {
+            ...disasterObj,
+            pins,
+          };
+        })
+      );
+
+      actionLog(
+        "SUCCESS",
+        "DISASTERS",
+        "Disaster information and its pins retrieved successfully"
+      );
+
+      return {
+        success: true,
+        data: disastersWithPins,
+      };
+    } catch (e) {
+      actionLog(
+        "ERROR",
+        "DISASTERS",
+        `Something went wrong retriving disasters: ${e}`
+      );
+      if (e instanceof ApiError) {
+        throw e;
+      }
       throw new ApiError(
         httpStatus.INTERNAL_SERVER_ERROR,
-        "There was an error creating the disaster"
+        `Something went wrong retriving disasters: ${e}`
+      );
+    }
+  }
+
+  async create(disaster: any): Promise<any> {
+    try {
+      actionLog("PROCESS", "DISASTER", "Creating disaster...");
+      const disasterInfo: IDisaster = {
+        title: disaster.title,
+        description: disaster.description,
+        country: disaster.country,
+        city: disaster.city,
+        slug: disaster.slug,
+        coordinates: disaster.coordinates,
+      };
+
+      actionLog("PROCESS", "DISASTER", "Uploading images...");
+      const imagesInfo = [...disaster.images];
+      const images = await this.imageService.create(imagesInfo);
+      const imagesId = images.map((img: any) => img._id);
+
+      actionLog("SUCCESS", "DISASTER", "Images uploaded successfully");
+      const disasterCreated = await this.disasterModel.create(disasterInfo);
+      const allDisaster = { ...disasterCreated, images: imagesId };
+      actionLog("SUCCESS", "DISASTER", "Disaster created successfully");
+      return { success: true, data: allDisaster };
+    } catch (e: any) {
+      actionLog(
+        "ERROR",
+        "DISASTERS",
+        `Something went wrong creating the disaster: ${e}`
+      );
+      if (e instanceof ApiError) {
+        throw e;
+      }
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        `Something went wrong creating the disaster: ${e}`
       );
     }
   }
@@ -59,38 +117,68 @@ export class DisasterService {
     disaster: Partial<IDisaster>
   ): Promise<any> {
     try {
-      const _disaster = (await this.get({ _id }, {}))[0];
-      if (!_disaster) {
-        throw new ApiError(httpStatus.NOT_FOUND, "Disaster not found");
+      actionLog("PROCESS", "DISASTERS", "Updating disaster...");
+      if (!_id || !disaster) {
+        actionLog("ERROR", "DISASTERS", "Information to update not provided");
+        throw new ApiError(
+          httpStatus.BAD_REQUEST,
+          "Information to update not provided"
+        );
       }
-      // Assign the updated data and save it
+      const _disaster = (await this.get({ _id }, {})).data[0];
+      if (!_disaster) {
+        actionLog("ERROR", "DISASTERS", "Disaster to update not found in db");
+        throw new ApiError(
+          httpStatus.NOT_FOUND,
+          "Disaster to update not found in db"
+        );
+      }
       Object.assign(_disaster, disaster);
       const updatedDisaster = await _disaster.save();
-      return updatedDisaster;
+      return { success: true, data: updatedDisaster };
     } catch (e) {
+      actionLog(
+        "ERROR",
+        "DISASTERS",
+        `Something went wrong updating the disaster: ${e}`
+      );
+      if (e instanceof ApiError) {
+        throw e;
+      }
       throw new ApiError(
         httpStatus.INTERNAL_SERVER_ERROR,
-        "There was an error updating disaster"
+        `Something went wrong updating the disaster: ${e}`
       );
     }
   }
 
   async delete(_id: Types.ObjectId): Promise<any> {
     try {
-      console.log("id", _id);
-      const disaster = (await this.get({ _id }, {}))[0];
+      actionLog("PROCESS", "DISASTERS", "Deleting disaster...");
+      const disaster = (await this.get({ _id }, {})).data[0];
       if (!disaster) {
+        actionLog("ERROR", "DISASTERS", "Disaster to delete not found in db");
         throw new ApiError(httpStatus.NOT_FOUND, "Disaster not found");
       }
-      return await this.disasterModel.findByIdAndUpdate(
+      const result = await this.disasterModel.findByIdAndUpdate(
         _id,
         { deletedAt: new Date() }, // Set the logical deletion timestamp
         { new: true } // Return the updated document
       );
+      actionLog("SUCCESS", "DISASTERS", "Disaster deleted successfully");
+      return { success: true, data: result };
     } catch (e) {
+      actionLog(
+        "ERROR",
+        "DISASTERS",
+        `Something went wrong deleting the disaster: ${e}`
+      );
+      if (e instanceof ApiError) {
+        throw e;
+      }
       throw new ApiError(
         httpStatus.INTERNAL_SERVER_ERROR,
-        "There was an error deleting disaster"
+        `Something went wrong deleting the disaster: ${e}`
       );
     }
   }

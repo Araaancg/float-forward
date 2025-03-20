@@ -15,14 +15,14 @@ export class PinTypesController {
   create = catchAsync(async (req, res) => {
     const body = req.body;
     const result = await this.pinTypesService.create(body);
-    return res.status(200).json({ sucess: true, pinType: result });
+    return res.status(200).json(result);
   });
 
   update = catchAsync(async (req, res) => {
     const id = req.params.id;
     const body = req.body;
     const result = await this.pinTypesService.update(id, body);
-    return res.status(200).json({ sucess: true, disaster: result });
+    return res.status(200).json(result);
   });
 
   delete = catchAsync(async (req, res) => {

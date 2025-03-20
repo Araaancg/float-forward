@@ -13,7 +13,6 @@ const pinTypesRoutes = () => {
     .route("/")
     .get(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      // validate(schemas),
       pinTypesController.get
     );
 
@@ -21,7 +20,6 @@ const pinTypesRoutes = () => {
     .route("/")
     .post(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      // validate(schemas),
       pinTypesController.create
     );
 
@@ -29,7 +27,6 @@ const pinTypesRoutes = () => {
     .route("/:id")
     .put(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      // validate(schemas),
       pinTypesController.update
     );
 
@@ -37,7 +34,6 @@ const pinTypesRoutes = () => {
     .route("/:id")
     .delete(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      // validate(schemas),
       pinTypesController.delete
     );
 

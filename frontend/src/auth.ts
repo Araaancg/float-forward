@@ -6,7 +6,6 @@ import { JWT } from "next-auth/jwt";
 import { IUser } from "./types/structures";
 import refreshAccessToken from "./utils/functions/refreshAccessToken";
 import { IToken } from "./types/interfaces";
-import actionLog from "./utils/functions/actionLog";
 
 declare module "next-auth" {
   interface Session {
@@ -19,6 +18,7 @@ declare module "next-auth" {
       name: string;
       email: string;
       profilePicture: string;
+      isVerified: boolean;
     };
   }
 }
@@ -41,7 +41,7 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          actionLog("ERROR", "Email and password required");
+          // actionLog("ERROR", "Email and password required");
           throw new Error(
             JSON.stringify({
               status: 400,
@@ -120,7 +120,7 @@ export const authOptions = {
       // Initial sign in
       if (trigger === "signIn" && user) {
         if (account?.provider === "credentials") {
-          actionLog("SIGN IN", "Loggin in with credentials...");
+          // actionLog("SIGN IN", "Loggin in with credentials...");
           return {
             ...token,
             access: user.access,
@@ -174,6 +174,47 @@ export const authOptions = {
         }
       }
 
+      if (trigger === "update") {
+        // actionLog("UPDATE", "Updating user session...");
+
+        try {
+          // Call your backend API to get the latest user data
+          const response = await fetch(
+            `${GENERAL_VARIABLES.apiUrl}/users?_id=${
+              (token?.user as IUser)._id
+            }`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${(token.access as IToken).token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = await response.json();
+          console.log("\n\nDATA", data);
+          if (data.success) {
+            // Update the token with the latest user data
+            console.log("\n\n to see", {
+              ...token,
+              user: data.data[0],
+              success: true,
+              error: null,
+            });
+            return {
+              ...token,
+              user: data.data[0], // This should include the updated isVerified status
+              success: true,
+              error: null,
+            };
+          }
+        } catch (error) {
+          // actionLog("ERROR", "Failed to update user session");
+          console.error("Session update error:", error);
+        }
+      }
+
       // Return previous token if the access token has not expired
       if (new Date((token.access as IToken)?.expires) > new Date()) {
         return token;
@@ -184,6 +225,7 @@ export const authOptions = {
     },
 
     async session({ session, token }: { session: any; token: JWT }) {
+      console.log("token.user", token.user);
       return {
         access: token.access as IToken,
         refresh: token.refresh as IToken,
@@ -195,6 +237,7 @@ export const authOptions = {
           name: (token.user as IUser).name,
           email: (token.user as IUser).email,
           profilePicture: (token.user as IUser).profilePicture,
+          isVerified: (token.user as IUser).isVerified,
         },
       };
     },

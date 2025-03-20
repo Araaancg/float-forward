@@ -7,7 +7,7 @@ export interface IUser {
   email?: string | null;
   profilePicture?: string | null;
   authProvider?: "google" | "email";
-  password?: string;
+  isVerified?: boolean
   // accessToken?: string;
   // refreshToken?: string;
 }

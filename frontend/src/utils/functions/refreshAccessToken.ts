@@ -3,7 +3,6 @@ import { IToken } from "@/types/interfaces";
 import { JWT } from "next-auth/jwt";
 
 export default async function refreshAccessToken(token: JWT) {
-  // console.log("token", token);
   console.log("\n\nREFRESHING TOKENS\n\n");
   try {
     const response = await fetch(`${GENERAL_VARIABLES.apiUrl}/auth/refresh`, {

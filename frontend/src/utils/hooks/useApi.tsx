@@ -1,6 +1,4 @@
-// hooks/useApi.ts
 import { useState } from "react";
-import actionLog from "../functions/actionLog";
 
 interface ApiOptions {
   method: "GET" | "POST" | "PUT" | "DELETE";
@@ -50,7 +48,7 @@ export function useApi(session?: any) {
       const data = await response.json();
 
       if (!response.ok) {
-        actionLog("error", `ApiCall not ok: ${data.message}`);
+        // actionLog("error", `ApiCall not ok: ${data.message}`);
         throw new Error(data.message || "An error occurred");
       }
 

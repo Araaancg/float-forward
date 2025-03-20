@@ -138,7 +138,7 @@ export default function Sidebar({
                   <span className="text-base text-black-primary font-normal">
                     {user?.name?.slice(0, 20)}
                     <br />
-                    <span className="text-xs">{user?.email}</span>
+                    <span className="text-xs">{user?.email?.slice(0, 25)}...</span>
                   </span>
                 )}
               </li>

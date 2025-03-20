@@ -67,6 +67,3 @@ For further documentation on the project, please read the following documents th
 - [Architecture & Technologies](./docs/architecture-and-technologies.md)
 - [Database Schema](./docs/database-schema.md)
 - [API Documentation](./docs/backend-documentation/api-intro.md)
-
-## Deployment
-This project is deployed...

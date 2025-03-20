@@ -42,8 +42,10 @@ export default function LoginForm({
         placeholder="Your password"
         label="Passwrod"
       />
-      {/* <Button isFullWidth disabled={!isValid} type="submit"> */}
-      <Button isFullWidth type="submit">
+      <Button variant="no-color" color="green" isLink linkProps={{href: "/auth/forgot-password"}}>
+        Forgot password?
+      </Button>
+      <Button isFullWidth type="submit" disabled={!isValid}>
         Login
       </Button>
     </form>

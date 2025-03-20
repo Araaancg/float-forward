@@ -9,3 +9,9 @@ export interface ITokens {
   };
 }
 
+export enum ETokenTypes {
+  ACCESS_TOKEN = "access",
+  REFRESH_TOKEN = "refresh",
+  RESET_PASSWORD_TOKEN = "resetPassword",
+  VERIFY_EMAIL_TOKEN = "verifyEmail"
+}

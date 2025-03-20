@@ -3,8 +3,6 @@ import Container from "typedi";
 import { auth } from "../../common/middlewares/auth-handler";
 import { JSON_WEB_TOKENS } from "../../common/config";
 import { PinController } from "../controllers/pin.controller";
-// import { validate } from "../../common/validations/validate";
-// import { schemas } from "../../common/validations";
 
 const pinRoutes = () => {
   const router = Router();
@@ -13,7 +11,6 @@ const pinRoutes = () => {
     .route("/")
     .get(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      // validate(schemas),
       pinController.get
     );
     
@@ -21,7 +18,6 @@ const pinRoutes = () => {
     .route("/")
     .post(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      // validate(schemas),
       pinController.create
     );
 
@@ -29,7 +25,6 @@ const pinRoutes = () => {
     .route("/:id")
     .put(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      // validate(schemas),
       pinController.update
     );
 
@@ -37,7 +32,6 @@ const pinRoutes = () => {
     .route("/:id")
     .delete(
       auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      // validate(schemas),
       pinController.delete
     );
 

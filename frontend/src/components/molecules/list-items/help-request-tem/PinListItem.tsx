@@ -3,45 +3,60 @@ import { IPin } from "@/types/structures";
 import SeeMoreP from "@/components/atoms/see-more-p/SeeMoreP";
 import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
 import handleMapsRedirect from "@/utils/functions/handleMapsRedirect";
-import "./help-request-item.scss";
+import getPinColor from "@/utils/functions/getPinColor";
+import "./pin-list-item.scss";
+import { useMemo } from "react";
 
-export default function HelpRequestItem({ data }: { data: IPin }) {
-
+export default function PinListItem({
+  data,
+  onCardClick,
+  isOwn,
+}: {
+  data: IPin;
+  onCardClick: (pin: IPin) => void;
+  isOwn: boolean;
+}) {
   const onPinClick = (pin: IPin) => {
     handleMapsRedirect(pin.coordinates.lat, pin.coordinates.lng);
   };
 
+  const pinColor = useMemo(() => getPinColor(data), [data.type.title]);
+
   return (
-    <div className="hritem">
-      <div className="hritem-info w-1/2">
+    <div className="plitem" onClick={() => onCardClick(data)}>
+      <div className="plitem-info w-3/5">
         <div>
-          <h4 className="text-base font-normal mb-4">{data.title}</h4>
+          <span className={`plitem-type color-${pinColor}`}>
+            {data.type.title}
+          </span>
+          {isOwn && <span className="plitem-own">Yours</span>}
+          <h4 className="text-base font-normal mb-4 mt-2">{data.title}</h4>
           <SeeMoreP
             text={data.description}
             size="sm"
             className="text-sm"
             buttonClassName="text-sm"
+            quantityShown={70}
           />
         </div>
         <div className="flex gap-3 text-[10px]">
           <span className="flex justify-center items-center gap-2">
             <PriorityIcon size={16} />
-            {data.priority}
+            {data.priority || "Medium "}
           </span>
-          {/* <span className="flex justify-center items-center gap-2">
-            <HouseIcon size={16} />
-            Locality
-          </span> */}
         </div>
       </div>
-      <div className="hritem-map w-1/2 h-64	">
+      <div className="plitem-map w-2/5 h-40">
         <div className="w-full h-full">
           <MapReadPins
             givenPins={[data]}
             onPinClick={onPinClick}
             className="w-full h-full"
-            defaultCenter={{ lat: data.coordinates.lat, lng: data.coordinates.lng }}
-            customPinColor="red"
+            defaultCenter={{
+              lat: data.coordinates.lat,
+              lng: data.coordinates.lng,
+            }}
+            customPinColor={getPinColor(data!)}
             disableDefaultUI={true}
           />
         </div>

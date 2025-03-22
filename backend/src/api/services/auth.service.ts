@@ -130,17 +130,18 @@ export class AuthService {
       if (!equalPasswords) {
         actionLog("ERROR", "AUTH", "Passwords must be the same");
         throw new ApiError(
-          httpStatus.UNAUTHORIZED,
+          httpStatus.CONFLICT,
           "Passwords must be the same"
         );
       }
 
-      actionLog("SUCCESS", "AUTH", "User logged in correctly");
-
-      actionLog("PROCESS", "AUTH", "Generating auth tokens...");
+      actionLog("INFO", "AUTH", "Username and password are correct");
+      
+      actionLog("PROCESS", "TOKEN", "Generating auth tokens...");
       const tokens = await this.tokenService.generateAuthTokens(user);
-      actionLog("SUCCESS", "AUTH", "Auth tokens generated successfully");
-
+      actionLog("SUCCESS", "TOKEN", "Auth tokens generated successfully");
+      
+      actionLog("SUCCESS", "AUTH", "User logged in correctly");
       return {
         success: true,
         user: {

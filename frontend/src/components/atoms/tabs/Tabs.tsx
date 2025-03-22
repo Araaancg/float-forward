@@ -11,7 +11,7 @@ interface ITabs {
 }
 
 export default function Tabs({ options, paramKey = "tab", className, onTabChange }: ITabs) {
-  const { selectedTab, onTabClick } = useTabParams(paramKey); // Use the custom hook
+  const { selectedTab, onTabClick } = useTabParams(paramKey); 
 
   const [indicatorStyle, setIndicatorStyle] = useState({});
   const tabRefs = useRef<HTMLDivElement[]>([]);

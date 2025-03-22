@@ -7,14 +7,15 @@ interface ISeeMoreP extends HTMLAttributes<HTMLParagraphElement> {
   text: string;
   size?: "sm" | "lg"
   buttonClassName?: string,
+  quantityShown?: number
 }
 
-export default function SeeMoreP({ text, size = "lg", className, ...props }: ISeeMoreP) {
+export default function SeeMoreP({ text, size = "lg", className, quantityShown = 150, ...props }: ISeeMoreP) {
   const [seeMoreInfo, setSeeMoreInfo] = useState<boolean>(false);
 
   return (
     <p className={`${size === "lg" ? "text-base":"text-sm"}`}>
-      {seeMoreInfo ? text : text?.slice(0, 150)}
+      {seeMoreInfo ? text : `${text?.slice(0, quantityShown)}...`}
       <Button onClick={() => setSeeMoreInfo(!seeMoreInfo)} variant="no-color" size={size}>
         {seeMoreInfo ? "See less" : "See more"}
       </Button>

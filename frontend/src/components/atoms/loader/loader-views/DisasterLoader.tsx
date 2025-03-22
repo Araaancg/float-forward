@@ -3,8 +3,8 @@ import "../loader.scss";
 export default function DisasterLoader() {
   return (
     <>
-      <div className="flex sm:hidden w-full p-4 justify-center ">
-        <div className="p-4 w-full max-4xl flex flex-col justify-center items-center gap-4">
+      <div className="flex sm:hidden w-full p-4 justify-center max-w-2xl">
+        <div className="p-4 w-full max-w-4xl flex flex-col justify-center items-center gap-4">
           <div className="skeleton skeleton-title"></div>
           <div className="skeleton skeleton-image"></div>
           <div className="skeleton-wrapper skeleton-wrapper-center">

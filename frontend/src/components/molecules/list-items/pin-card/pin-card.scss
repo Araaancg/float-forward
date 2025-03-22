@@ -3,6 +3,12 @@
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
 
+  &-own {
+    @apply px-2 py-1 text-white-primary 
+    bg-pins-yellow-primary text-[10px];
+    border-radius: 16px !important;
+  }
+
   &-card {
     @apply h-screen w-full bg-white-full flex flex-col gap-8 justify-start 
         overflow-y-auto p-6;
@@ -31,7 +37,7 @@
 
     &-header {
       @apply flex w-full justify-between items-center;
-      & > span {
+      & > div > span {
         @apply w-fit px-2 py-1 text-white-full rounded;
 
         &.color {

@@ -9,7 +9,7 @@ export const schema = yup
       .required("Este campo es obligatorio")
       .matches(
         /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i,
-        "El formato del email no parece válido!"
+        "Email format is invalid"
       ),
     password: yup.string().required("This field is required"),
     confirmPassword: yup

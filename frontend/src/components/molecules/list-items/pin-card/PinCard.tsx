@@ -9,19 +9,19 @@ import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
 import { PinTypes, pinTypesCrossColor } from "@/types/enums";
 import { IPin } from "@/types/structures";
 import handleMapsRedirect from "@/utils/functions/handleMapsRedirect";
+import getPinColor from "@/utils/functions/getPinColor";
 import "./pin-card.scss";
 
 export default function PinCard({
   data,
   onClose,
+  isOwn,
 }: {
   data: IPin;
   onClose: () => void;
+  isOwn: boolean;
 }) {
-  const pinColor = useMemo(
-    () => pinTypesCrossColor[data.type.title as PinTypes],
-    [data.type.title]
-  );
+  const pinColor = useMemo(() => getPinColor(data), [data.type.title]);
 
   const onPinClick = (pin: IPin) => {
     handleMapsRedirect(pin.coordinates.lat, pin.coordinates.lng);
@@ -35,7 +35,10 @@ export default function PinCard({
         }`}
       >
         <section className="pinInfo-card-header">
-          <span className={`color-${pinColor}`}>{data.type.title}</span>
+          <div className="flex flex-row gap-2 justify-center items-center">
+            <span className={`color-${pinColor}`}>{data.type.title}</span>
+            {isOwn && <span className="pinInfo-own">Yours</span>}
+          </div>
           <Button variant="no-color" onClick={onClose}>
             <XMarkIcon color={theme.extend.colors.black.primary} />
           </Button>
@@ -60,7 +63,10 @@ export default function PinCard({
               givenPins={[data]}
               onPinClick={onPinClick}
               className="w-full h-full"
-              defaultCenter={{ lat: data.coordinates.lat, lng: data.coordinates.lng }}
+              defaultCenter={{
+                lat: data.coordinates.lat,
+                lng: data.coordinates.lng,
+              }}
               customPinColor="red"
               disableDefaultUI={true}
             />
@@ -79,7 +85,15 @@ export default function PinCard({
           </p>
         </section>
 
-        <Button isFullWidth color={pinColor} isLink linkProps={{href: `/chat?pin=${data._id}&receiver=${data.user._id}`}}>
+        <Button
+          isFullWidth
+          color={pinColor}
+          disabled={isOwn}
+          isLink={!isOwn}
+          linkProps={{
+            href: `/chat?pin=${data._id}&receiver=${data.user._id}`,
+          }}
+        >
           Send message
         </Button>
       </div>

@@ -6,17 +6,24 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import TextArea from "@/components/molecules/inputs/textarea/TextArea";
 import MapLocationPicker from "../../maps/map-location-picker/MapLocationPicker";
 import { useState } from "react";
-import { schema } from "./requets-help-form";
 import { IDisasters } from "@/types/structures";
 import { useApi } from "@/utils/hooks/useApi";
 import { PinTypes } from "@/types/enums";
+import { useFeedback } from "@/context/feedbackContext";
+import Toast from "@/components/molecules/toast/Toast";
+import Loader from "@/components/atoms/loader/Loader";
+import { schema } from "./request-help-schema";
 
-export default function RequestHelpForm({
+export default function ReportMissingForm({
   disaster,
+  session,
 }: {
   disaster: IDisasters;
+  session: any;
 }) {
-  const { callApi, loading, error } = useApi();
+  const { callApi, loading, error } = useApi(session);
+  const { toast, showToast, resetToast } = useFeedback();
+
   const {
     register,
     reset,
@@ -43,38 +50,74 @@ export default function RequestHelpForm({
       longitude: place?.lng!,
       address: place?.address!,
     });
+    // Do something with the selected place data
+    // e.g., update form state, make API calls, etc.
   };
 
   const sendData = async (data: any) => {
-    data["coordinates"] = {
-      lat: selectedPlace?.latitude,
-      lng: selectedPlace?.longitude,
-    };
-    data["address"] = selectedPlace?.address;
-    data["disaster"] = disaster._id;
-    data["type"] = PinTypes.HELP_REQUEST;
-    console.log(data);
+    try {
+      if (!selectedPlace) {
+        showToast(
+          "error",
+          "Incomplete information",
+          "Please select a location in the map"
+        );
+        return;
+      } else {
+        data["coordinates"] = {
+          lat: selectedPlace?.latitude,
+          lng: selectedPlace?.longitude,
+        };
+        data["address"] = selectedPlace?.address;
+        data["disaster"] = disaster._id;
+        data["type"] = PinTypes.HELP_REQUEST;
 
-    const response = await callApi(`/api/pins`, {
-      method: "POST",
-      requiresAuth: true,
-      body: data
-    });
-    console.log("pin created res", response)
-    reset()
+        const response = await callApi(`/api/pins`, {
+          method: "POST",
+          requiresAuth: true,
+          body: data,
+        });
+        if (response.success) {
+          showToast("success", "Success!", "Pin registered successfully.");
+          reset();
+        } else {
+          throw Error;
+        }
+      }
+    } catch (e) {
+      showToast(
+        "error",
+        "Oh no!",
+        `Something went wrong when registering this pin. Try again later. Error: ${e}`
+      );
+    }
   };
+
+  if (loading) {
+    return <Loader view="form" />;
+  }
+
+  if (error) {
+    <p>Error: {error}</p>
+  }
 
   return (
     <form
       className="w-full flex flex-col gap-4 max-w-[800px]"
       onSubmit={handleSubmit(sendData)}
     >
+      <Toast
+        variant={toast.variant}
+        content={toast.content}
+        showToast={toast.showToast}
+        onClose={resetToast}
+      />
       <TextField
         register={register}
         errors={errors}
         name="title"
         type="text"
-        placeholder="Collection Point on High Street"
+        placeholder="Title of the pin"
         label="Title"
       />
       <TextArea
@@ -82,7 +125,7 @@ export default function RequestHelpForm({
         errors={errors}
         name="description"
         type="text"
-        placeholder="Near the old supermarket there is a collection point... We need x materials"
+        placeholder="Description of the requested help, what is exactly needed."
         label="Description"
       />
       <MapLocationPicker
@@ -99,7 +142,7 @@ export default function RequestHelpForm({
         label="Additional Information"
       />
       <Button isFullWidth disabled={!isValid} type="submit">
-        Submit missings pin
+        Submit help request
       </Button>
     </form>
   );

@@ -37,7 +37,7 @@ export class DisasterService {
       );
       const disastersWithPins = await Promise.all(
         disasters.map(async (disaster: any) => {
-          const pins = await this.pinService.get({ disaster: disaster._id });
+          const pins = (await this.pinService.get({ disaster: disaster._id })).data;
 
           // Convert Mongoose document to plain object to avoid modification issues
           const disasterObj = disaster.toObject();

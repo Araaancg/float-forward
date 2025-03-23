@@ -1,15 +1,17 @@
 import GENERAL_VARIABLES from "@/general";
+import actionLog from "@/utils/functions/actionLog";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request): Promise<NextResponse> {
-  const url = new URL(req.url);
-  const params = new URLSearchParams(url.search);
-
-  const apiUrl = GENERAL_VARIABLES.apiUrl;
-
+  actionLog("PROCESS", "disasters", "GET", "Calling backend...");
   try {
+    const url = new URL(req.url);
+    const params = new URLSearchParams(url.search);
+    if (params) {
+      actionLog("INFO", "disasters", "GET", `Params to send: ${params.toString()}`);
+    }
     const res = await fetch(
-      `${apiUrl}/disasters${params.toString() ? "?" + params.toString() : ""}`,
+      `${GENERAL_VARIABLES.apiUrl}/disasters${params.toString() ? "?" + params.toString() : ""}`,
       {
         headers: {
           Accept: "application/json",
@@ -18,9 +20,24 @@ export async function GET(req: Request): Promise<NextResponse> {
       }
     );
     const response = await res.json();
-    return NextResponse.json(response);
+    if (response.success) {
+      actionLog(
+        "SUCCESS",
+        "disasters",
+        "GET",
+        "Data from API received correctly"
+      );
+    } else {
+      actionLog("ERROR", "disasters", "GET", "Something went wrong in the API");
+    }
+    return NextResponse.json(response, { status: res.status });
   } catch (error: any) {
-    console.error(error);
+    actionLog(
+      "ERROR",
+      "disasters",
+      "GET",
+      `Something went wrong when calling the API. ${error.message}`
+    );
     return NextResponse.json({ success: false, message: error.message });
   }
 }

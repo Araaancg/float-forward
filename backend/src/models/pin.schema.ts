@@ -18,7 +18,7 @@ export const PinSchema = new mongoose.Schema<any>(
           const wordCount = value.trim().split(/\s+/).length; // Count words
           return wordCount <= 75;
         },
-        message: "Description cannot exceed 5 words.",
+        message: "Description cannot exceed 75 words.",
       },
     },
     additionalInfo: {
@@ -30,7 +30,7 @@ export const PinSchema = new mongoose.Schema<any>(
           const wordCount = value.trim().split(/\s+/).length; // Count words
           return wordCount <= 150;
         },
-        message: "Additional Information cannot exceed 5 words.",
+        message: "Additional Information cannot exceed 150 words.",
       },
     },
     disaster: {
@@ -50,6 +50,7 @@ export const PinSchema = new mongoose.Schema<any>(
       },
       required: true,
     },
+    status: { type: String, required: true },
     address: { type: String, required: true },
     deletedAt: { type: Date, default: null },
   },

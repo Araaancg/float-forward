@@ -9,6 +9,12 @@
     border-radius: 16px !important;
   }
 
+  &-closed {
+    @apply px-2 py-1 text-white-primary 
+    bg-pins-red-primary text-[10px];
+    border-radius: 16px !important;
+  }
+
   &-card {
     @apply h-screen w-full bg-white-full flex flex-col gap-8 justify-start 
         overflow-y-auto p-6;
@@ -81,6 +87,10 @@
       & > p {
         @apply flex gap-3;
       }
+    }
+    &-options {
+      @apply flex flex-col gap-3 justify-center items-center w-full;
+     
     }
   }
 }

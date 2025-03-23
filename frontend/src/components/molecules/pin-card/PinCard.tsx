@@ -6,8 +6,8 @@ import MailIcon from "@/components/atoms/icons/MailIcon";
 import UserIcon from "@/components/atoms/icons/UserIcon";
 import SeeMoreP from "@/components/atoms/see-more-p/SeeMoreP";
 import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
-import { PinTypes, pinTypesCrossColor } from "@/types/enums";
-import { IPin } from "@/types/structures";
+import { PinStatus, PinTypes, pinTypesCrossColor } from "@/types/enums";
+import { IPin, IUser } from "@/types/structures";
 import handleMapsRedirect from "@/utils/functions/handleMapsRedirect";
 import getPinColor from "@/utils/functions/getPinColor";
 import "./pin-card.scss";
@@ -16,10 +16,14 @@ export default function PinCard({
   data,
   onClose,
   isOwn,
+  closePin,
+  editPin,
 }: {
   data: IPin;
   onClose: () => void;
   isOwn: boolean;
+  closePin?: (pin: IPin) => void,
+  editPin?: (pin: IPin) => void,
 }) {
   const pinColor = useMemo(() => getPinColor(data), [data.type.title]);
 
@@ -38,6 +42,7 @@ export default function PinCard({
           <div className="flex flex-row gap-2 justify-center items-center">
             <span className={`color-${pinColor}`}>{data.type.title}</span>
             {isOwn && <span className="pinInfo-own">Yours</span>}
+            {data.status === PinStatus.CLOSED && <span className="pinInfo-closed">Closed</span>}
           </div>
           <Button variant="no-color" onClick={onClose}>
             <XMarkIcon color={theme.extend.colors.black.primary} />
@@ -73,29 +78,65 @@ export default function PinCard({
           </div>
         </section>
 
-        <section className="pinInfo-card-contact">
-          <h4 className="subtitle">Contact Information</h4>
-          <p className="flex gap-3">
-            <UserIcon color={theme.extend.colors.pins[pinColor].primary} />
-            {data.user.name}
-          </p>
-          <p className="flex gap-3">
-            <MailIcon color={theme.extend.colors.pins[pinColor].primary} />
-            {data.user.email}
-          </p>
-        </section>
+        {!isOwn ? (
+          <>
+            <section className="pinInfo-card-contact">
+              <h4 className="subtitle">Contact Information</h4>
+              <p className="flex gap-3">
+                <UserIcon color={theme.extend.colors.pins[pinColor].primary} />
+                {data.user.name}
+              </p>
+              <p className="flex gap-3">
+                <MailIcon color={theme.extend.colors.pins[pinColor].primary} />
+                {data.user.email}
+              </p>
+            </section>
 
-        <Button
-          isFullWidth
-          color={pinColor}
-          disabled={isOwn}
-          isLink={!isOwn}
-          linkProps={{
-            href: `/chat?pin=${data._id}&receiver=${data.user._id}`,
-          }}
-        >
-          Send message
-        </Button>
+            <Button
+              isFullWidth
+              color={pinColor}
+              isLink
+              linkProps={{
+                href: `/chat?pin=${data._id}&receiver=${data.user._id}`,
+              }}
+            >
+              Send message
+            </Button>
+          </>
+        ) : (
+          data?.contacts &&
+          data?.contacts?.length > 0 && (
+            <section className="pinInfo-card-contact">
+              <h4 className="subtitle">Your were contacted by</h4>
+              {data?.contacts!.map((c: IUser, index: number) => (
+                <Button
+                  className="flex gap-3"
+                  variant="no-color"
+                  color="black"
+                  isLink
+                  linkProps={{
+                    href: `/chat?pin=${data._id}&receiver=${data.user._id}`,
+                  }}
+                >
+                  <UserIcon
+                    color={theme.extend.colors.pins[pinColor].primary}
+                  />
+                  {c.name}
+                </Button>
+              ))}
+            </section>
+          )
+        )}
+        {(isOwn && data.status === PinStatus.ACTIVE) && (
+          <section className="pinInfo-card-options">
+              <Button variant="primary" color="green" isFullWidth onClick={() => editPin && editPin(data)}>
+                Edit pin
+              </Button>
+              <Button variant="primary" color="yellow" isFullWidth onClick={() => closePin && closePin(data)}>
+                Close pin
+              </Button>
+          </section>
+        )}
       </div>
     </div>
   );

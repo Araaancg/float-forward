@@ -35,3 +35,9 @@ export enum ChatStatus {
   ACTIVE = "active",
   ARCHIVED = "archived"
 }
+
+export enum PinStatus {
+  ACTIVE = "active",
+  CLOSED = "closed",
+  DELETED = "deleted",
+}

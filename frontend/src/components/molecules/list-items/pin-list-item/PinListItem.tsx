@@ -4,8 +4,9 @@ import SeeMoreP from "@/components/atoms/see-more-p/SeeMoreP";
 import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
 import handleMapsRedirect from "@/utils/functions/handleMapsRedirect";
 import getPinColor from "@/utils/functions/getPinColor";
-import "./pin-list-item.scss";
 import { useMemo } from "react";
+import { PinStatus } from "@/types/enums";
+import "./pin-list-item.scss";
 
 export default function PinListItem({
   data,
@@ -30,6 +31,7 @@ export default function PinListItem({
             {data.type.title}
           </span>
           {isOwn && <span className="plitem-own">Yours</span>}
+          {data.status ===  PinStatus.CLOSED && <span className="plitem-closed">Closed</span>}
           <h4 className="text-base font-normal mb-4 mt-2">{data.title}</h4>
           <SeeMoreP
             text={data.description}

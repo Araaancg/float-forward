@@ -1,5 +1,11 @@
 .messageItem {
-    @apply p-3 bg-white-full rounded w-fit;
+    @apply p-2 rounded w-fit;
+    &.left {
+        @apply bg-white-full;
+    }
+    &.right {
+        @apply bg-green-opacity90;
+    }
     &-date {
         @apply w-full flex justify-end items-center text-[10px];
     }

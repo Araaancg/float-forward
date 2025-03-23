@@ -8,12 +8,12 @@ import ExclamationMarkIcon from "@/components/atoms/icons/ExclamationMarkIcon";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
 import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
-import PinCard from "@/components/molecules/list-items/pin-card/PinCard";
+import PinCard from "@/components/molecules/pin-card/PinCard";
 import usePinManagement from "@/utils/hooks/usePinManagement";
 import { IDisasters, IPin } from "@/types/structures";
 import { useApi } from "@/utils/hooks/useApi";
 import { usePathname } from "next/navigation";
-import PinListItem from "@/components/molecules/list-items/help-request-tem/PinListItem";
+import PinListItem from "@/components/molecules/list-items/pin-list-item/PinListItem";
 import { useAuth } from "@/utils/hooks/useAuth";
 import Loader from "@/components/atoms/loader/Loader";
 import { PinTypes } from "@/types/enums";
@@ -78,7 +78,7 @@ export default function RequestHelpView() {
   };
 
   if (loading || sessionLoading || !disaster) {
-    return <Loader view="disaster" />;
+    return <Loader view="pin" />;
   }
 
   if (error) {

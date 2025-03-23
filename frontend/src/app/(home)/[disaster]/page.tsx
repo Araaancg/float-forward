@@ -3,7 +3,7 @@ import React, { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/atoms/button/Button";
-import PinCard from "@/components/molecules/list-items/pin-card/PinCard";
+import PinCard from "@/components/molecules/pin-card/PinCard";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
 import MapReadPins from "@/components/organisms/maps/map-read-pins/MapReadPins";
 import PinFilters from "@/components/organisms/maps/pin-filters/PinFilters";
@@ -56,11 +56,11 @@ export default function DisasterView() {
   );
 
   if (sessionLoading || loading) {
-    return <Loader view="disaster"/>;
+    return <Loader view="disaster" />;
   }
 
   if (error) {
-    return <div>Error: {error}</div>
+    return <div>Error: {error}</div>;
   }
 
   return disaster ? (
@@ -147,7 +147,13 @@ export default function DisasterView() {
       {/* ADDITIONAL INFORMATION  */}
 
       {/* PIN CARD - conditionally rendered based on URL parameter */}
-      {selectedPin && <PinCard data={selectedPin} onClose={removePinParam} />}
+      {selectedPin && (
+        <PinCard
+          data={selectedPin}
+          onClose={removePinParam}
+          isOwn={session?.user._id === selectedPin.user._id}
+        />
+      )}
     </div>
   ) : (
     <div>loading...</div>

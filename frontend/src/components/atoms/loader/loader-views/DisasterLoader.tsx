@@ -23,7 +23,7 @@ export default function DisasterLoader() {
       </div>
 
       <div className="hidden sm:flex w-full p-4 justify-center ">
-        <div className="p-4 w-full max-4xl flex flex-col justify-center items-center gap-4">
+        <div className="p-4 w-full max-w-4xl flex flex-col justify-center items-center gap-4">
           <div className="skeleton skeleton-title"></div>
           <div className="w-full flex gap-3">
             <div className="skeleton-wrapper skeleton-wrapper-start">

@@ -12,6 +12,13 @@ export class PinController {
     return res.status(200).send(result);
   });
 
+  getMyPins = catchAsync(async (req, res) => {
+    const { limit = 10, skip = 0, ...body } = req.query;
+    const user = req.token.sub;
+    const result = await this.pinService.getMyPins(user, body, { limit, skip });
+    return res.status(200).send(result);
+  });
+
   create = catchAsync(async (req, res) => {
     const body = req.body;
     const result = await this.pinService.create(body, req.token.sub);

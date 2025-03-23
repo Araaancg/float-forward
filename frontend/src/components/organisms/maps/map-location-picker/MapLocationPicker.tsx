@@ -11,6 +11,7 @@ interface IMapLocationPicker {
   onLocationSelect?: (location: ILocation) => void;
   label?: string;
   className?: string;
+  defaultPin?: ICoordinates;
 }
 
 const MapLocationPicker = ({
@@ -18,6 +19,7 @@ const MapLocationPicker = ({
   onLocationSelect,
   label,
   className,
+  defaultPin,
 }: IMapLocationPicker) => {
   const [selectedLocation, setSelectedLocation] = useState<ILocation | null>(
     null
@@ -66,16 +68,16 @@ const MapLocationPicker = ({
   );
 
   const [userLocation, setUserLocation] = useState<ICoordinates | undefined>();
-  
-    useEffect(() => {
-      if (!defaultCenter) {
-        getUserLocation().then((response) => {
-          if (response) {
-            setUserLocation(response);
-          }
-        });
-      }
-    }, [getUserLocation]);
+
+  useEffect(() => {
+    if (!defaultCenter) {
+      getUserLocation().then((response) => {
+        if (response) {
+          setUserLocation(response);
+        }
+      });
+    }
+  }, [getUserLocation]);
 
   return (
     <div className={`w-full ${className}`}>
@@ -100,14 +102,17 @@ const MapLocationPicker = ({
 
       <Map
         defaultZoom={13}
-        defaultCenter={defaultCenter || userLocation}
+        defaultCenter={defaultPin || defaultCenter || userLocation}
         mapId="YOUR_MAP_ID"
         onClick={handleMapClick}
         className="w-full h-96"
       >
-        {selectedLocation && (
+        {(selectedLocation || defaultPin) && (
           <AdvancedMarker
-            position={{ lat: selectedLocation.lat, lng: selectedLocation.lng }}
+            position={{
+              lat: selectedLocation ? selectedLocation?.lat! : defaultPin?.lat!,
+              lng: selectedLocation ? selectedLocation?.lng! : defaultPin?.lng!,
+            }}
           >
             <MapPinIcon
               color={theme.extend.colors.pins.red.primary}

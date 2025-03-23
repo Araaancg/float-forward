@@ -103,7 +103,7 @@ export default function Sidebar({
                   )}
               </li>
               <li>
-                <Button isLink variant="no-color" color="black">
+                <Button isLink variant="no-color" color="black" linkProps={{ href: "/my-pins" }}>
                   <MapPinWithBaseIcon size={32} />
                   {isExpanded && "My pins"}
                 </Button>

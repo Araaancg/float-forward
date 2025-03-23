@@ -1,12 +1,13 @@
 import GENERAL_VARIABLES from "@/general";
+import actionLog from "@/utils/functions/actionLog";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request): Promise<NextResponse> {
-  const apiUrl = GENERAL_VARIABLES.apiUrl;
+  actionLog("PROCESS", "custom-login", "POST", "Calling backend...");
   const body = await req.json();
-
+  actionLog("INFO", "custom-login", "POST", `Data to send: ${body}`);
   try {
-    const res = await fetch(`${apiUrl}/auth/login`, {
+    const res = await fetch(`${GENERAL_VARIABLES.apiUrl}/auth/login`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -15,12 +16,31 @@ export async function POST(req: Request): Promise<NextResponse> {
       body: JSON.stringify(body),
     });
     const response = await res.json();
+    if (response.success) {
+      actionLog(
+        "SUCCESS",
+        "custom-login",
+        "POST",
+        "Data from API received correctly"
+      );
+    } else {
+      actionLog(
+        "ERROR",
+        "custom-login",
+        "POST",
+        "Something went wrong in the API"
+      );
+    }
     return NextResponse.json(response, { status: res.status });
-  } catch (e) {
+  } catch (error: any) {
+    actionLog(
+      "ERROR",
+      "custom-login",
+      "POST",
+      `Something went wrong when calling the API. ${error.message}`
+    );
     return NextResponse.json(
-      {
-        error: `There was an error getting a response from backend/auth/login: ${e}`,
-      },
+      { success: false, message: error.message },
       { status: 500 }
     );
   }

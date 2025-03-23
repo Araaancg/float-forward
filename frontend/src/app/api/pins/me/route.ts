@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request): Promise<NextResponse> {
   actionLog(
     "PROCESS",
-    "chat/unread-messages",
+    "pins/me",
     "GET",
     "Request received, verifying tokens before sending it to API..."
   );
@@ -19,26 +19,19 @@ export async function GET(req: Request): Promise<NextResponse> {
       }
     }
     if (token) {
-      actionLog(
-        "INFO",
-        "chat/unread-messages",
-        "GET",
-        "Valid token, calling API..."
-      );
+      actionLog("INFO", "pins/me", "GET", "Valid token, calling API...");
       const url = new URL(req.url);
       const params = new URLSearchParams(url.search);
       if (params) {
         actionLog(
           "INFO",
-          "chat/unread-messages",
+          "pins/me",
           "GET",
           `Params to send: ${params.toString()}`
         );
       }
       const res = await fetch(
-        `${GENERAL_VARIABLES.apiUrl}/chats/unread-messages${
-          params.toString() ? "?" + params.toString() : ""
-        }`,
+        `${GENERAL_VARIABLES.apiUrl}/pins/me${params.toString() ? "?" + params.toString() : ""}`,
         {
           headers: {
             Accept: "application/json",
@@ -49,25 +42,15 @@ export async function GET(req: Request): Promise<NextResponse> {
       );
       const response = await res.json();
       if (response.success) {
-        actionLog(
-          "SUCCESS",
-          "chat/unread-messages",
-          "GET",
-          "Data from API received correctly"
-        );
+        actionLog("SUCCESS", "pins/me", "GET", "Data from API received correctly");
       } else {
-        actionLog(
-          "ERROR",
-          "chat/unread-messages",
-          "GET",
-          "Something went wrong in the API"
-        );
+        actionLog("ERROR", "pins/me", "GET", "Something went wrong in the API");
       }
       return NextResponse.json(response);
     } else {
       actionLog(
         "ERROR",
-        "chat/unread-messages",
+        "pins/me",
         "GET",
         "Invalid authorization header format. Expected: Bearer <token>"
       );

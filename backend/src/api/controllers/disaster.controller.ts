@@ -1,9 +1,7 @@
 import { Service } from "typedi";
 import { catchAsync } from "../../common/helpers/catch-async";
 import { DisasterService } from "../services/disaster.service";
-import httpStatus from "http-status";
 import { ImageService } from "../services/image.service";
-import { IDisaster } from "../../common/types/disaster.type";
 
 @Service()
 export class DisasterController {

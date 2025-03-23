@@ -10,7 +10,8 @@ export interface IPin {
   longitude: number;
   address: string;
   user: string | Schema.Types.ObjectId;
-  disasterId: string;
+  disaster: string;
+  status: PinStatus,
   priority?: string;
 }
 
@@ -18,4 +19,10 @@ export interface IPinType {
   _id: string | Schema.Types.ObjectId;
   title: string;
   description: string;
+}
+
+export enum PinStatus {
+  ACTIVE = "active",
+  CLOSED = "closed",
+  DELETED = "deleted",
 }

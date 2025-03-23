@@ -15,6 +15,9 @@
   &-own {
     @apply px-2 py-1 mb-2 text-white-primary bg-pins-yellow-primary text-[10px] rounded-xl;
   }
+  &-closed {
+    @apply px-2 py-1 mb-2 text-white-primary bg-pins-red-primary text-[10px] rounded-xl ml-2;
+  }
 
   &-type {
     @apply w-fit px-2 py-1 text-white-full rounded text-[10px] mr-3;

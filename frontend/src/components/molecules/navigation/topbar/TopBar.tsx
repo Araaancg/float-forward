@@ -6,12 +6,13 @@ import Menu from "../menu/Menu";
 import "./topbar.scss";
 import { IUser } from "@/types/structures";
 import { signOut, useSession } from "next-auth/react";
+import useOutsideClick from "@/utils/hooks/useOutsideClick";
 
 export default function Topbar({
   isSidebarOpen,
   isLoggedIn,
   user,
-  unreadMessages
+  unreadMessages,
 }: {
   isSidebarOpen: boolean;
   isLoggedIn: boolean;
@@ -26,13 +27,15 @@ export default function Topbar({
   return (
     <div className="topbar">
       {/* MOBILE */}
-      <Image
-        src="/logo-horizontal-xs.png"
-        alt="AIDNET logo"
-        width={100}
-        height={25}
-        className="sm:hidden"
-      />
+      <Button variant="no-color" isLink linkProps={{ href: "/" }}>
+        <Image
+          src="/logo-horizontal-xs.png"
+          alt="AIDNET logo"
+          width={100}
+          height={25}
+          className="sm:hidden"
+        />
+      </Button>
       <Button variant="no-color" onClick={() => setShowMenu(true)}>
         <MenuBurgerIcon className="sm:hidden" />
       </Button>
@@ -41,7 +44,6 @@ export default function Topbar({
         showMenu={showMenu}
         toggleMenu={() => setShowMenu(!showMenu)}
         isLoggedIn={isLoggedIn}
-        user={user}
         session={session}
         signOut={signOut}
         unreadMessages={unreadMessages}

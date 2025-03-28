@@ -138,7 +138,7 @@ export default function OfferHelpView() {
               onPinClick={onPinClick}
               defaultCenter={disaster?.coordinates}
             />
-            <div className="w-full sm:w-1/2 flex flex-col gap-2 h-96 overflow-y-auto p-2">
+            <div className="w-full sm:w-1/2 flex flex-col items-center gap-2 h-96 overflow-y-auto p-2">
               {offerHelpPins.map((pin: IPin, index: number) => (
                 <PinListItem
                   data={pin}

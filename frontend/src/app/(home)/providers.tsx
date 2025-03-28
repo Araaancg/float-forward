@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Sidebar from "@/components/molecules/navigation/sidebar/SideBar";
 import Topbar from "@/components/molecules/navigation/topbar/TopBar";
 import { useSession } from "next-auth/react";
 import { useData } from "@/utils/hooks/useData";
+import Footer from "@/components/molecules/footer/Footer";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [expandSidebar, setExpandSidebar] = useState<boolean>(true);
@@ -41,27 +42,36 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     session
   );
 
+  const isLoggedIn = useMemo(() => status === "authenticated", [session]);
+
   return (
-    <main className="flex flex-row w-screen">
-      <Sidebar
-        isExpanded={expandSidebar}
-        toggleExpansion={toggleExpansion}
-        isLoggedIn={status === "authenticated"}
-        user={session?.user}
-        unreadMessages={unreadMessages?.data}
-      />
-      <div
-        className={`sidebar-${
-          expandSidebar ? "expanded" : "collapsed"
-        } h-screen overflow-y-auto`}
-      >
-        <Topbar
-          isSidebarOpen={expandSidebar}
-          isLoggedIn={status === "authenticated"}
-          unreadMessages={unreadMessages?.data}
-        />
-        {children}
-      </div>
-    </main>
+    <div>
+      <main className="flex flex-row w-screen">
+        {status === "authenticated" && (
+          <Sidebar
+            isExpanded={expandSidebar}
+            toggleExpansion={toggleExpansion}
+            isLoggedIn={isLoggedIn}
+            user={session?.user}
+            unreadMessages={unreadMessages?.data}
+          />
+        )}
+        <div
+          className={`${
+            isLoggedIn
+              ? `sidebar-${expandSidebar ? "expanded" : "collapsed"}`
+              : "sidebar-null"
+          } h-screen overflow-y-auto`}
+        >
+          <Topbar
+            isSidebarOpen={expandSidebar}
+            isLoggedIn={isLoggedIn}
+            unreadMessages={unreadMessages?.data}
+          />
+          {children}
+        </div>
+      </main>
+      {/* <Footer /> */}
+    </div>
   );
 }

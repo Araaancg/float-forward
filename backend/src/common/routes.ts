@@ -5,6 +5,7 @@ import disasterRoutes from "../api/routes/disasters.route";
 import pinRoutes from "../api/routes/pin.route";
 import pinTypesRoutes from "../api/routes/pinTypes.route";
 import chatRoutes from "../api/routes/chat.route";
+import contactUsRoutes from "../api/routes/contactUs.route";
 
 const routes = () => {
   const router = Router();
@@ -33,6 +34,10 @@ const routes = () => {
     {
       path: "/chats",
       route: chatRoutes(),
+    },
+    {
+      path: "/contact-us",
+      route: contactUsRoutes(),
     },
   ];
 

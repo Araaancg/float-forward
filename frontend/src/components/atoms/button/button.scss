@@ -26,6 +26,13 @@ a.button.button.primary {
     }
   }
 
+  &.white {
+    @apply bg-white-primary text-black-primary;
+    &:hover {
+      @apply underline;
+    }
+  }
+
   &.yellow {
     @apply bg-pins-yellow-opacity;
     &:hover {

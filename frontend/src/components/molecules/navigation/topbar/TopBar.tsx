@@ -25,15 +25,15 @@ export default function Topbar({
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const { data: session } = useSession();
   return (
-    <div className="topbar">
+    <div className={`topbar ${isLoggedIn ? "":"sm:justify-end"}`}>
       {/* MOBILE */}
       <Button variant="no-color" isLink linkProps={{ href: "/" }}>
         <Image
-          src="/logo-horizontal-xs.png"
+          src="/logo-s.png"
           alt="AIDNET logo"
-          width={100}
+          width={200}
           height={25}
-          className="sm:hidden"
+          className={isLoggedIn ? "sm:hidden":""}
         />
       </Button>
       <Button variant="no-color" onClick={() => setShowMenu(true)}>
@@ -50,32 +50,53 @@ export default function Topbar({
       />
 
       {/* DESKTOP */}
+
       <ul
         className={`topbar-links ${
           isSidebarOpen ? "items-start" : "items-center"
         }`}
       >
         <li>
-          <Button isLink variant="no-color" color="black">
-            About us
-          </Button>
-        </li>
-        <li>
-          <Button isLink variant="no-color" color="black">
-            Contact
-          </Button>
-        </li>
-        <li>
-          <Button isLink variant="no-color" color="black">
+          <Button isLink variant="no-color" color="black" linkProps={{href: "/#help"}}>
             Help
           </Button>
         </li>
-        {session && (
+        <li>
+          <Button isLink variant="no-color" color="black" linkProps={{href: "/#contact-us"}}>
+            Contact Us
+          </Button>
+        </li>
+        {session ? (
           <li>
             <Button variant="no-color" color="black" onClick={() => signOut()}>
               Log out
             </Button>
           </li>
+        ) : (
+          <>
+            <li>
+              <Button
+                variant="primary"
+                color="green"
+                isLink
+                linkProps={{href: "/auth/login"}}
+                className="w-[200px]"
+              >
+                Log in
+              </Button>
+            </li>
+            <li>
+              <Button
+                variant="secondary"
+                color="green"
+                isLink
+                linkProps={{href: "/auth/login"}}
+                className="w-[200px]"
+              >
+                Register
+              </Button>
+            </li>
+          </>
         )}
       </ul>
     </div>

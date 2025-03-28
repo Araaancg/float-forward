@@ -28,6 +28,11 @@ export class DisasterService {
       let disasters = await this.disasterModel
         .find(query, {}, options)
         .populate("images");
+      
+      if (disasters && disasters.length === 0) {
+        actionLog("ERROR", "DISASTERS", "No disasters were found");
+        throw new ApiError(httpStatus.NOT_FOUND, "No disasters were found")
+      }
 
       actionLog("INFO", "DISASTERS", "Disasters retrieved successfully");
       actionLog(

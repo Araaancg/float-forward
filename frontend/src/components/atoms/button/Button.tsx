@@ -5,7 +5,7 @@ import "./button.scss";
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "no-color";
-  color?: "green" | "yellow" | "black" | "red" | "lightBlue" | "darkBlue";
+  color?: "green" | "yellow" | "black" | "red" | "lightBlue" | "darkBlue" | "white";
   size?: "lg" | "sm" | "xs";
   isLink?: boolean;
   linkProps?: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>;

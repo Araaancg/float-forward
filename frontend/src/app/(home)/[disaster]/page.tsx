@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useMemo } from "react";
-import { usePathname } from "next/navigation";
+import { notFound, usePathname } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/atoms/button/Button";
 import PinCard from "@/components/molecules/pin-card/PinCard";
@@ -60,6 +60,9 @@ export default function DisasterView() {
   }
 
   if (error) {
+    if (error === "No disasters were found") {
+      notFound()
+    }
     return <div>Error: {error}</div>;
   }
 

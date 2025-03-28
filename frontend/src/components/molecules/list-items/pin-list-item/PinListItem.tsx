@@ -25,7 +25,7 @@ export default function PinListItem({
 
   return (
     <div className="plitem" onClick={() => onCardClick(data)}>
-      <div className="plitem-info w-3/5">
+      <div className="plitem-info w-full sm:w-3/5">
         <div>
           <span className={`plitem-type color-${pinColor}`}>
             {data.type.title}
@@ -48,7 +48,7 @@ export default function PinListItem({
           </span>
         </div>
       </div>
-      <div className="plitem-map w-2/5 h-40">
+      <div className="plitem-map w-full sm:w-2/5 h-40">
         <div className="w-full h-full">
           <MapReadPins
             givenPins={[data]}

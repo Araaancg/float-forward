@@ -13,9 +13,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Loader from "@/components/atoms/loader/Loader";
 import { useAuth } from "@/utils/hooks/useAuth";
 import { useApi } from "@/utils/hooks/useApi";
-import { pusherClient } from "@/pusher";
 import { useFeedback } from "@/context/feedbackContext";
 import Toast from "@/components/molecules/toast/Toast";
+import { useSocket } from "@/context/socketContext";
+import { MessageStatus } from "@/types/enums";
 import "./chat.scss";
 
 export default function ChatView() {
@@ -35,9 +36,11 @@ export default function ChatView() {
   const { callApi, loading, error } = useApi(session);
 
   const selectedUser = useMemo(() => {
-    return selectedChat?.participants.filter(
+    const receiver = selectedChat?.participants.filter(
       (el) => el.user._id !== me?._id
     )[0];
+    console.log("SELECTED RECEIVER", receiver?.user._id);
+    return receiver;
   }, [selectedChat]);
 
   const toggleMobileView = () =>
@@ -45,6 +48,7 @@ export default function ChatView() {
     setView((prev) => (prev === "list" ? "chat" : "list"));
 
   const onChatClick = async (chat: IChat, isMobile: boolean) => {
+    console.log("SELECTED PIN", chat.pin._id);
     if (isMobile) toggleMobileView();
 
     // Set the selected chat
@@ -59,15 +63,21 @@ export default function ChatView() {
     params.set("pin", pin);
     params.set("receiver", receiver);
 
-    const response = await callApi(`/api/chat/read-messages`, {
-      method: "POST",
-      requiresAuth: true,
-      body: { chatId: chat._id },
-    });
+    // const response = await callApi(`/api/chat/read-messages`, {
+    //   method: "POST",
+    //   requiresAuth: true,
+    //   body: { chatId: chat._id },
+    // });
 
-    console.log("response read messages", response);
-
+    // console.log("response read messages", response);
     router.push(`/chat?pin=${pin}&receiver=${receiver}`, { scroll: false });
+  };
+
+  const removeChatParams = () => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.delete("pin");
+    newSearchParams.delete("receiver");
+    router.push("/chat", { scroll: false });
   };
 
   useEffect(() => {
@@ -142,9 +152,33 @@ export default function ChatView() {
         fetchUser();
       }
     }
-  }, [chats, searchParams, router, session]);
+  }, [chats, session]);
+
+  // SOCKET FUNCTIONALITY
+  const { socket, isConnected } = useSocket();
+
+  useEffect(() => {
+    if (!socket) return;
+
+    // Listen for new messages
+    socket.on("newMessage", (message: IMessage) => {
+      setSelectedChat((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          messages: [...prev?.messages!, message],
+        };
+      });
+    });
+
+    // Clean up
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [socket]);
 
   const sendData = async (data: any) => {
+    if (!socket || !data.message.trim()) return;
     data.chatId = selectedChat?._id;
     data.pinId = searchParams.get("pin");
     data.receiver = searchParams.get("receiver");
@@ -153,38 +187,20 @@ export default function ChatView() {
       requiresAuth: true,
       body: JSON.stringify(data),
     });
+    socket.emit("sendMessage", {
+      sender: session?.user._id,
+      content: data.message,
+      status: MessageStatus.SENT,
+      chatId: data.chatId,
+      receiverId: searchParams.get("receiver")
+    });
     if (!response.success) {
       showToast("error", "Message could not be sent", response.error);
     }
   };
 
-  useEffect(() => {
-    if (!selectedChat?._id || !me?._id) return;
-
-    const chatChannel = `chat__${selectedChat._id}`;
-
-    pusherClient.subscribe(chatChannel);
-
-    const newMessagesHandler = (message: IMessage) => {
-      // Update the selected chat with the new message
-      setSelectedChat((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          messages: [...prev?.messages!, message],
-        };
-      });
-    };
-
-    pusherClient.bind("new_message", newMessagesHandler);
-
-    return () => {
-      pusherClient.unsubscribe(chatChannel);
-      pusherClient.unbind("new_message", newMessagesHandler);
-    };
-  }, [selectedChat?._id, me?._id]);
-
-  if (sessionLoading) { // add loading here?
+  if (sessionLoading) {
+    // add loading here?
     return <Loader view="chat" />;
   }
 
@@ -247,7 +263,12 @@ export default function ChatView() {
                 selectedUser={selectedUser || isNewChat}
                 pinUrl={`/${selectedChat?.pin?.disaster?.slug}?pin=${selectedChat?.pin?._id}`}
               />
-              <ChatBody selectedChat={selectedChat!} me={me!} pin={pin} receiver={selectedUser?.user}/>
+              <ChatBody
+                selectedChat={selectedChat!}
+                me={me!}
+                pin={pin}
+                receiver={selectedUser?.user}
+              />
               <ChatInput sendData={sendData} />
             </div>
           </div>
@@ -277,7 +298,10 @@ export default function ChatView() {
                   variant="no-color"
                   color="black"
                   className="ml-4"
-                  onClick={toggleMobileView}
+                  onClick={() => {
+                    toggleMobileView();
+                    removeChatParams()
+                  }}
                 >
                   <ArrowIcon
                     size={24}
@@ -289,7 +313,7 @@ export default function ChatView() {
                     selectedUser={selectedUser}
                     pinUrl={`/${selectedChat?.pin?.disaster?.slug}?pin=${selectedChat?.pin?._id}`}
                   />
-                  <ChatBody selectedChat={selectedChat!} me={me!} pin={pin} />
+                  <ChatBody selectedChat={selectedChat!} me={me!} pin={pin} receiver={selectedUser?.user}/>
                   <ChatInput sendData={sendData} />
                 </div>
               </div>

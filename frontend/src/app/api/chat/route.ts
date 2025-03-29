@@ -105,24 +105,24 @@ export async function POST(req: Request): Promise<NextResponse> {
           "POST",
           "Data from API received correctly"
         );
-        const channel = `chat__${JSON.parse(body).chatId}`;
-        actionLog(
-          "PROCESS",
-          "chat",
-          "POST",
-          `Pusher: Triggering channel: ${channel}`
-        );
-        await pusherServer.trigger(
-          channel,
-          "new_message",
-          response.data.messages.slice(-1)[0]
-        );
-        const receiver = JSON.parse(body).receiver;
-        await pusherServer.trigger(
-          `user__${receiver}__unread_messages`,
-          "unread_message",
-          response.data
-        );
+        // const channel = `chat__${JSON.parse(body).chatId}`;
+        // actionLog(
+        //   "PROCESS",
+        //   "chat",
+        //   "POST",
+        //   `Pusher: Triggering channel: ${channel}`
+        // );
+        // await pusherServer.trigger(
+        //   channel,
+        //   "new_message",
+        //   response.data.messages.slice(-1)[0]
+        // );
+        // const receiver = JSON.parse(body).receiver;
+        // await pusherServer.trigger(
+        //   `user__${receiver}__unread_messages`,
+        //   "unread_message",
+        //   response.data
+        // );
       } else {
         actionLog("ERROR", "chat", "POST", "Something went wrong in the API");
       }

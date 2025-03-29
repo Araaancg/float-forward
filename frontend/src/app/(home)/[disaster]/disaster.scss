@@ -34,4 +34,23 @@
       }
     }
   }
+
+  &-statistics {
+    @apply flex flex-col gap-12 justify-center items-center w-full;
+
+    &-title {
+      @apply w-full text-left text-2xl;
+    }
+    &-container {
+      @apply flex flex-row justify-around items-center w-full sm:w-1/2;
+    }
+    &-single {
+      @apply flex flex-col gap-6 justify-center items-center text-base relative max-w-32	;
+
+      &-number {
+        @apply rounded-full w-8 h-8 flex justify-center items-center absolute top-6 right-2
+    text-white-full bg-pins-yellow-primary text-lg;
+      }
+    }
+  }
 }

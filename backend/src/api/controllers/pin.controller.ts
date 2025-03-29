@@ -1,6 +1,7 @@
 import { Service } from "typedi";
 import { catchAsync } from "../../common/helpers/catch-async";
 import { PinService } from "../services/pin.service";
+import { PinStatus } from "../../common/types/pin.type";
 
 @Service()
 export class PinController {
@@ -8,7 +9,7 @@ export class PinController {
 
   get = catchAsync(async (req, res) => {
     const { limit = 10, skip = 0, ...body } = req.query;
-    const result = await this.pinService.get(body, { limit, skip });
+    const result = await this.pinService.get(body, { limit, skip, status: PinStatus.ACTIVE });
     return res.status(200).send(result);
   });
 

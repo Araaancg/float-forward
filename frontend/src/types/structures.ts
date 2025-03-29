@@ -24,6 +24,11 @@ export interface IDisasters {
   additionalInformation: IAddiontionalInformation[];
   pins: IPin[];
   coordinates: ICoordinates;
+  statistics: {
+    pinsRegistered: number,
+    peopleHelped: number,
+    helpOffers: number
+  }
 }
 
 export interface IAddiontionalInformation {

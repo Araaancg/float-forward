@@ -22,10 +22,11 @@ export class PinService {
 
   async get(
     filter?: { [key: string]: any },
-    options?: { [key: string]: any }
+    options?: { [key: string]: any },
+    status?: PinStatus
   ): Promise<any> {
     try {
-      const query = { ...filter, deletedAt: null, status: PinStatus.ACTIVE } as any;
+      const query = { ...filter, deletedAt: null } as any;
       actionLog("PROCESS", "PINS", "Retrieving pins...");
       const pins = await this.pinModel
         .find(query, {}, options)

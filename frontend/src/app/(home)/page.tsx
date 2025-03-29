@@ -9,10 +9,10 @@ import Button from "@/components/atoms/button/Button";
 import TwoPeopleCarryingBoxIcon from "@/components/atoms/icons/TwoPeopleCarryingBoxIcon";
 import HoldingHandsIcon from "@/components/atoms/icons/HoldingHandsIcon";
 import FirstAidKitIcon from "@/components/atoms/icons/FirstAidKitIcon";
-import "./home.scss";
 import ContactUsForm from "@/components/organisms/forms/ContactUsForm/ContactUsForm";
 import { useFeedback } from "@/context/feedbackContext";
 import Toast from "@/components/molecules/toast/Toast";
+import "./home.scss";
 
 const whoIsThisPlatformFor = [
   {

@@ -51,18 +51,6 @@ export class ChatController {
       chatId,
     });
     // actionLog("SUCCESS", "Unread messages successfully reatrieved");
-    res.send({ success: true, data: result });
+    res.status(200).send(result);
   });
-
-  // update = catchAsync(async (req: any, res: Response) => {
-  //   const result = await this.chatService.update(req.token.sub, req.body);
-
-  //   res.send({ success: true, user: result });
-  // });
-
-  // delete = catchAsync(async (req: any, res: Response) => {
-  //   const result = await this.chatService.delete(req.token.sub);
-
-  //   res.send(result);
-  // });
 }

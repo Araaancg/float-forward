@@ -1,0 +1,16 @@
+.addInfoItem {
+  @apply flex flex-col gap-2 justify-center items-start p-4 text-base text-black-primary
+  rounded-xl;
+  box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.25);
+  width: 380px;
+
+  &-author {
+    @apply font-semibold;
+  }
+  &-title {
+    @apply text-lg;
+  }
+  @-content {
+    @apply text-base;
+  }
+}

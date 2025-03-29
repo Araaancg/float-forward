@@ -17,7 +17,7 @@ export interface IPin {
 
 export interface IPinType {
   _id: string | Schema.Types.ObjectId;
-  title: string;
+  title: PinTypes;
   description: string;
 }
 
@@ -25,4 +25,13 @@ export enum PinStatus {
   ACTIVE = "active",
   CLOSED = "closed",
   DELETED = "deleted",
+}
+
+export enum PinTypes {
+  HELP_REQUEST = "Help Request",
+  COLLECTION_POINT = "Collection Point",
+  MEDICAL_POINT = "Medical Request",
+  MISSINGS = "Missings",
+  HELP_OFFER = "Help Offer",
+  INFORMATION_POINT = "Information Point",
 }

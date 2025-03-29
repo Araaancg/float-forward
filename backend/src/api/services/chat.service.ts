@@ -13,6 +13,8 @@ import {
 } from "../../common/types/chat.type";
 import { Types } from "mongoose";
 import actionLog from "../../common/helpers/actionLog";
+import { getIO, getReceiverSocketId } from "../../common/helpers/socket";
+import { PinStatus } from "../../common/types/pin.type";
 
 @Service()
 export class ChatService {
@@ -108,8 +110,17 @@ export class ChatService {
       if (!chatId) {
         actionLog("PROC", "CHAT", "Chat does not exist, creating chat...");
         // get pin information
-        actionLog("PROC", "CHAT", "Retrieving pin information to link to chat...");
-        const pin = (await this.pinService.get({ _id: pinId })).data[0];
+        actionLog(
+          "PROC",
+          "CHAT",
+          "Retrieving pin information to link to chat..."
+        );
+        const pin = (
+          await this.pinService.get(
+            { _id: pinId },
+            { status: PinStatus.ACTIVE }
+          )
+        ).data[0];
         if (!pin) {
           actionLog("ERROR", "CHAT", "Pin provided does not exist");
           throw new ApiError(httpStatus.NOT_FOUND, "Pin not found");
@@ -159,8 +170,12 @@ export class ChatService {
         // CASE SCENARIO 2: chat exists
         // chat already exists so we just have to create the message
         // either way we retrieve the chat so we can return it too
-        actionLog("INFO", "CHAT", "Chat already exist, retrieving chat information...");
-        const confirmChat = (await this.get({ _id: chatId })).data[0];
+        actionLog(
+          "INFO",
+          "CHAT",
+          "Chat already exist, retrieving chat information..."
+        );
+        const confirmChat: IChat = (await this.get({ _id: chatId })).data[0];
         if (!confirmChat) {
           actionLog("ERROR", "CHAT", "Chat provided could not be found");
           throw new ApiError(httpStatus.NOT_FOUND, "Chat couldn't be found");
@@ -173,6 +188,19 @@ export class ChatService {
           content: message,
           status: MessageStatus.SENT,
         });
+
+        // // SOCKET IO FUNCTIONALITY WILL GO HERE
+        const receiverId = confirmChat.participants
+          .filter((el) => el.user._id?.toString() !== sender)[0]
+          .user.toString();
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if (receiverSocketId) {
+          const io = getIO();
+          // io.emit("someEvent", someData);
+          // io.to(<socket_id>).emit() used to send events to specific client
+          io.to(receiverSocketId).emit("newMessage", message);
+        }
+
         // reget the chat with the new message
         const chat = (await this.get({ _id: chatId })).data[0];
         actionLog("SUCCESS", "CHAT", "Messages posted succesfully");
@@ -183,7 +211,11 @@ export class ChatService {
         };
       }
     } catch (e: any) {
-      actionLog("ERROR", "CHAT", "There was an error when posting new messages");
+      actionLog(
+        "ERROR",
+        "CHAT",
+        "There was an error when posting new messages"
+      );
       if (e instanceof ApiError) {
         // rethrow the error if it is a custom error
         throw e;

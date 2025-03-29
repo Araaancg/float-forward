@@ -1,14 +1,15 @@
 import http from "http";
 import https from "https";
 import { HOST, isDev, PORT } from "./common/config";
-import { init, setupSocketIO } from "./app";
+import { initializeSocket } from "./common/helpers/socket";
+import { init } from "./app";
 
 export const worker = async () => {
   const app = await init();
 
   const server = isDev ? http.createServer(app) : https.createServer(app);
 
-  const io = setupSocketIO(server);
+  initializeSocket(server);
 
   server
     .listen(Number(PORT), HOST, () => {

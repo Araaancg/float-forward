@@ -34,8 +34,6 @@ export function useApi(session?: any) {
       };
 
       if (requiresAuth) {
-        // console.log("\n\n\nREQUIRES AUTHENTICATION", session?.access.token);
-        // console.log(session);
         requestHeaders["Authorization"] = `Bearer ${session?.access.token}`;
       }
 

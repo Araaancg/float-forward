@@ -16,6 +16,19 @@ export interface IToken {
 
 export interface IToast {
   showToast: boolean;
-  variant: 'success' | 'error';
+  variant: "success" | "error";
   content: { title: string; description: string };
+}
+
+export interface IUnreadMessages {
+  totalUnreadCount: number;
+  unreadMessagesByChat: { [key: string]: number };
+}
+
+export interface IAdditionalInformation {
+  id: string;
+  author: string;
+  title: string;
+  content: string;
+  link: string;
 }

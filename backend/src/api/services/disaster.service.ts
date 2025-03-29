@@ -6,6 +6,7 @@ import { IDisaster } from "../../common/types/disaster.type";
 import { PinService } from "./pin.service";
 import actionLog from "../../common/helpers/actionLog";
 import { ImageService } from "./image.service";
+import { IPin, PinStatus, PinTypes } from "../../common/types/pin.type";
 
 @Service()
 export class DisasterService {
@@ -28,10 +29,10 @@ export class DisasterService {
       let disasters = await this.disasterModel
         .find(query, {}, options)
         .populate("images");
-      
+
       if (disasters && disasters.length === 0) {
         actionLog("ERROR", "DISASTERS", "No disasters were found");
-        throw new ApiError(httpStatus.NOT_FOUND, "No disasters were found")
+        throw new ApiError(httpStatus.NOT_FOUND, "No disasters were found");
       }
 
       actionLog("INFO", "DISASTERS", "Disasters retrieved successfully");
@@ -42,13 +43,24 @@ export class DisasterService {
       );
       const disastersWithPins = await Promise.all(
         disasters.map(async (disaster: any) => {
-          const pins = (await this.pinService.get({ disaster: disaster._id })).data;
+          const pins = (await this.pinService.get({ disaster: disaster._id }))
+            .data;
 
           // Convert Mongoose document to plain object to avoid modification issues
           const disasterObj = disaster.toObject();
+
+          // get statistics on disasters
+          const statistics = {
+            pinsRegistered: pins.length,
+            helpOffers: pins.filter(
+              (el: any) => el.type.title === PinTypes.HELP_OFFER
+            ).length,
+            peopleHelped: pins.filter((el: IPin) => el.status === PinStatus.CLOSED).length
+          };
           return {
             ...disasterObj,
-            pins,
+            pins: pins.filter((el: IPin) => el.status === PinStatus.ACTIVE),
+            statistics
           };
         })
       );

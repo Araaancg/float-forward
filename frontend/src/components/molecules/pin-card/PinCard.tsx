@@ -1,7 +1,8 @@
+"use client"
 import XMarkIcon from "@/components/atoms/icons/XMarkIcon";
 import Button from "@/components/atoms/button/Button";
 import theme from "@/theme";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import MailIcon from "@/components/atoms/icons/MailIcon";
 import UserIcon from "@/components/atoms/icons/UserIcon";
 import SeeMoreP from "@/components/atoms/see-more-p/SeeMoreP";
@@ -11,6 +12,7 @@ import { IPin, IUser } from "@/types/structures";
 import handleMapsRedirect from "@/utils/functions/handleMapsRedirect";
 import getPinColor from "@/utils/functions/getPinColor";
 import "./pin-card.scss";
+import Modal from "../modal/Modal";
 
 export default function PinCard({
   data,
@@ -22,9 +24,10 @@ export default function PinCard({
   data: IPin;
   onClose: () => void;
   isOwn: boolean;
-  closePin?: (pin: IPin) => void,
-  editPin?: (pin: IPin) => void,
+  closePin?: (pin: IPin) => void;
+  editPin?: (pin: IPin) => void;
 }) {
+  const [showConfirmCloseModal, setShowConfirmCloseModal] = useState<boolean>(false)
   const pinColor = useMemo(() => getPinColor(data), [data.type.title]);
 
   const onPinClick = (pin: IPin) => {
@@ -42,7 +45,9 @@ export default function PinCard({
           <div className="flex flex-row gap-2 justify-center items-center">
             <span className={`color-${pinColor}`}>{data.type.title}</span>
             {isOwn && <span className="pinInfo-own">Yours</span>}
-            {data.status === PinStatus.CLOSED && <span className="pinInfo-closed">Closed</span>}
+            {data.status === PinStatus.CLOSED && (
+              <span className="pinInfo-closed">Closed</span>
+            )}
           </div>
           <Button variant="no-color" onClick={onClose}>
             <XMarkIcon color={theme.extend.colors.black.primary} />
@@ -127,14 +132,41 @@ export default function PinCard({
             </section>
           )
         )}
-        {(isOwn && data.status === PinStatus.ACTIVE) && (
+        {isOwn && data.status === PinStatus.ACTIVE && (
           <section className="pinInfo-card-options">
-              <Button variant="primary" color="green" isFullWidth onClick={() => editPin && editPin(data)}>
-                Edit pin
+            <Button
+              variant="primary"
+              color="green"
+              isFullWidth
+              onClick={() => editPin && editPin(data)}
+            >
+              Edit pin
+            </Button>
+            <Button
+              variant="primary"
+              color="yellow"
+              isFullWidth
+              onClick={() => setShowConfirmCloseModal(true)}
+            >
+              Close pin
+            </Button>
+
+            <Modal
+              onClose={() => setShowConfirmCloseModal(false)}
+              isOpen={showConfirmCloseModal}
+              title="Confirm Action"
+              className="flex flex-col gap-6 max-w-xl	"
+            >
+              <p>Are you sure you want to close this pin?</p>
+              <Button
+                variant="primary"
+                color="red"
+                onClick={() => closePin && closePin(data)}
+                isFullWidth
+              >
+                Confirm
               </Button>
-              <Button variant="primary" color="yellow" isFullWidth onClick={() => closePin && closePin(data)}>
-                Close pin
-              </Button>
+            </Modal>
           </section>
         )}
       </div>

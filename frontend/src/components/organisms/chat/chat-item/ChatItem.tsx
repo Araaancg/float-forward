@@ -17,15 +17,15 @@ export default function ChatItem({
 }) {
   const receiver = data.participants.filter((el) => el.user._id !== me?._id)[0];
   let unreadMessages = 0
-  if (data && data.messages) {
-    // Count unread messages (status = 'sent')
-    const unreadMessages_ = data.messages.filter(
-      (message) => message.status === "sent" && message.sender !== me?._id
-    ).length;
+  // if (data && data.messages) {
+  //   // Count unread messages (status = 'sent')
+  //   const unreadMessages_ = data.messages.filter(
+  //     (message) => message.status === "sent" && message.sender !== me?._id
+  //   ).length;
 
-    // Store count for the individual chat
-    unreadMessages = unreadMessages_;
-  }
+  //   // Store count for the individual chat
+  //   unreadMessages = unreadMessages_;
+  // }
 
   return (
     <div

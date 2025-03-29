@@ -15,6 +15,11 @@ import { useAuth } from "@/utils/hooks/useAuth";
 import { useData } from "@/utils/hooks/useData";
 import Loader from "@/components/atoms/loader/Loader";
 import "./disaster.scss";
+import MapPinWithBaseIcon from "@/components/atoms/icons/MapPinWithBaseIcon";
+import HoldingHandsIcon from "@/components/atoms/icons/HoldingHandsIcon";
+import TwoPeopleCarryingBoxIcon from "@/components/atoms/icons/TwoPeopleCarryingBoxIcon";
+import AdditionalInformationCarrousel from "@/components/organisms/additional-information/additonal-information-carrousel/AdditionalInformationCarrousel";
+import { additionalInformationMock } from "@/mocks/additional-information";
 
 export default function DisasterView() {
   const { sessionLoading, session } = useAuth();
@@ -61,7 +66,7 @@ export default function DisasterView() {
 
   if (error) {
     if (error === "No disasters were found") {
-      notFound()
+      notFound();
     }
     return <div>Error: {error}</div>;
   }
@@ -104,14 +109,14 @@ export default function DisasterView() {
           color="yellow"
           className="w-full sm:w-fit"
           isLink
-          linkProps={{ href: `${"floods-valencia-2024"}/request-help` }}
+          linkProps={{ href: `${disaster.slug}/request-help` }}
         >
           Request help
         </Button>
         <Button
           className="w-full sm:w-fit"
           isLink
-          linkProps={{ href: `${"floods-valencia-2024"}/offer-help` }}
+          linkProps={{ href: `${disaster.slug}/offer-help` }}
         >
           Offer help{" "}
         </Button>
@@ -119,7 +124,7 @@ export default function DisasterView() {
           color="black"
           className="w-full sm:w-fit"
           isLink
-          linkProps={{ href: `${"floods-valencia-2024"}/missings` }}
+          linkProps={{ href: `${disaster.slug}/missings` }}
         >
           Report missing peson or pet
         </Button>
@@ -147,7 +152,45 @@ export default function DisasterView() {
         </div>
       )}
 
+      {/* NUMBERS */}
+      <section className="disasterView-statistics">
+        <h2 className="disasterView-statistics-title">Numbers</h2>
+        <div className="disasterView-statistics-container">
+          <div className="disasterView-statistics-single">
+            <MapPinWithBaseIcon size={50} />
+            <span className="disasterView-statistics-single-number">
+              {disaster.statistics?.pinsRegistered}
+            </span>
+            <span className="disasterView-statistics-single-title">
+              Pins Registered
+            </span>
+          </div>
+          <div className="disasterView-statistics-single">
+            <HoldingHandsIcon size={50} />
+            <span className="disasterView-statistics-single-number">
+              {disaster.statistics?.peopleHelped}
+            </span>
+            <span className="disasterView-statistics-single-title">
+              People Helped
+            </span>
+          </div>
+          <div className="disasterView-statistics-single">
+            <TwoPeopleCarryingBoxIcon size={50} />
+            <span className="disasterView-statistics-single-number">
+              {disaster.statistics?.helpOffers}
+            </span>
+            <span className="disasterView-statistics-single-title">
+              Help Offers
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* ADDITIONAL INFORMATION  */}
+      <section className="flex flex-col justify-center items-start gap-12 w-full">
+        <h2 className="text-2xl">Additional Information</h2>
+        <AdditionalInformationCarrousel data={additionalInformationMock}/>
+      </section>
 
       {/* PIN CARD - conditionally rendered based on URL parameter */}
       {selectedPin && (

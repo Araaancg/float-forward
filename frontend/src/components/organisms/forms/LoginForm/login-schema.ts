@@ -5,10 +5,10 @@ export const schema = yup
   .shape({
     email: yup
       .string()
-      .required("Este campo es obligatorio")
+      .required("This field is required")
       .matches(
         /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i,
-        "El formato del email no parece válido!"
+        "Invalid email format"
       ),
     password: yup.string().required("This field is required"),
   })

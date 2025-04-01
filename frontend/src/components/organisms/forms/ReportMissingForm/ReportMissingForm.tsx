@@ -10,13 +10,20 @@ import { schema } from "./report-missing-schema";
 import { IDisasters } from "@/types/structures";
 import { useApi } from "@/utils/hooks/useApi";
 import { PinTypes } from "@/types/enums";
+import { useFeedback } from "@/context/feedbackContext";
+import Toast from "@/components/molecules/toast/Toast";
+import Loader from "@/components/atoms/loader/Loader";
 
 export default function ReportMissingForm({
   disaster,
+  session,
 }: {
   disaster: IDisasters;
+  session: any;
 }) {
-  const { callApi, loading, error } = useApi();
+  const { callApi, loading, error } = useApi(session);
+  const { toast, showToast, resetToast } = useFeedback();
+
   const {
     register,
     reset,
@@ -38,7 +45,6 @@ export default function ReportMissingForm({
     lat?: number;
     lng?: number;
   }) => {
-    console.log("Selected place:", place);
     setSelectedPlace({
       latitude: place?.lat!,
       longitude: place?.lng!,
@@ -49,35 +55,69 @@ export default function ReportMissingForm({
   };
 
   const sendData = async (data: any) => {
-    data["coordinates"] = {
-      lat: selectedPlace?.latitude,
-      lng: selectedPlace?.longitude,
-    };
-    data["address"] = selectedPlace?.address;
-    data["disaster"] = disaster._id;
-    data["type"] = PinTypes.MISSINGS;
-    console.log(data);
+    try {
+      if (!selectedPlace) {
+        showToast(
+          "error",
+          "Incomplete information",
+          "Please select a location in the map"
+        );
+        return;
+      } else {
+        data["coordinates"] = {
+          lat: selectedPlace?.latitude,
+          lng: selectedPlace?.longitude,
+        };
+        data["address"] = selectedPlace?.address;
+        data["disaster"] = disaster._id;
+        data["type"] = PinTypes.MISSINGS;
 
-    const response = await callApi(`/api/pins`, {
-      method: "POST",
-      requiresAuth: true,
-      body: data,
-    });
-    console.log("pin created res", response);
-    reset();
+        const response = await callApi(`/api/pins`, {
+          method: "POST",
+          requiresAuth: true,
+          body: data,
+        });
+        if (response.success) {
+          showToast("success", "Success!", "Pin registered successfully.");
+          reset();
+        } else {
+          throw Error;
+        }
+      }
+    } catch (e) {
+      showToast(
+        "error",
+        "Oh no!",
+        `Something went wrong when registering this pin. Try again later. Error: ${e}`
+      );
+    }
   };
+
+  if (loading) {
+    return <Loader view="form" />;
+  }
+
+  if (error) {
+    <p>Error: {error}</p>
+  }
 
   return (
     <form
       className="w-full flex flex-col gap-4 max-w-[800px]"
       onSubmit={handleSubmit(sendData)}
     >
+      <Toast
+        variant={toast.variant}
+        content={toast.content}
+        showToast={toast.showToast}
+        onClose={resetToast}
+      />
       <TextField
         register={register}
         errors={errors}
         name="title"
         type="text"
-        placeholder="Collection Point on High Street"
+        placeholder="Title of the pin"
         label="Title"
       />
       <TextArea
@@ -85,12 +125,13 @@ export default function ReportMissingForm({
         errors={errors}
         name="description"
         type="text"
-        placeholder="Near the old supermarket there is a collection point... We need x materials"
+        placeholder="Description of the missing person, pet or item, as detailed as possible"
         label="Description"
       />
       <MapLocationPicker
         onLocationSelect={handlePlaceSelect}
         label="Select a location"
+        defaultCenter={disaster?.coordinates}
       />
       <TextArea
         register={register}

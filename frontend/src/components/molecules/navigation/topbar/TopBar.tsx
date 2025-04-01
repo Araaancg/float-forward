@@ -6,12 +6,13 @@ import Menu from "../menu/Menu";
 import "./topbar.scss";
 import { IUser } from "@/types/structures";
 import { signOut, useSession } from "next-auth/react";
+import useOutsideClick from "@/utils/hooks/useOutsideClick";
 
 export default function Topbar({
   isSidebarOpen,
   isLoggedIn,
   user,
-  unreadMessages
+  unreadMessages,
 }: {
   isSidebarOpen: boolean;
   isLoggedIn: boolean;
@@ -24,15 +25,17 @@ export default function Topbar({
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const { data: session } = useSession();
   return (
-    <div className="topbar">
+    <div className={`topbar ${isLoggedIn ? "":"sm:justify-end"}`}>
       {/* MOBILE */}
-      <Image
-        src="/logo-horizontal-xs.png"
-        alt="AIDNET logo"
-        width={100}
-        height={25}
-        className="sm:hidden"
-      />
+      <Button variant="no-color" isLink linkProps={{ href: "/" }}>
+        <Image
+          src="/logo-s.png"
+          alt="AIDNET logo"
+          width={200}
+          height={25}
+          className={isLoggedIn ? "sm:hidden":""}
+        />
+      </Button>
       <Button variant="no-color" onClick={() => setShowMenu(true)}>
         <MenuBurgerIcon className="sm:hidden" />
       </Button>
@@ -41,39 +44,59 @@ export default function Topbar({
         showMenu={showMenu}
         toggleMenu={() => setShowMenu(!showMenu)}
         isLoggedIn={isLoggedIn}
-        user={user}
         session={session}
         signOut={signOut}
         unreadMessages={unreadMessages}
       />
 
       {/* DESKTOP */}
+
       <ul
         className={`topbar-links ${
           isSidebarOpen ? "items-start" : "items-center"
         }`}
       >
         <li>
-          <Button isLink variant="no-color" color="black">
-            About us
-          </Button>
-        </li>
-        <li>
-          <Button isLink variant="no-color" color="black">
-            Contact
-          </Button>
-        </li>
-        <li>
-          <Button isLink variant="no-color" color="black">
+          <Button isLink variant="no-color" color="black" linkProps={{href: "/#help"}}>
             Help
           </Button>
         </li>
-        {session && (
+        <li>
+          <Button isLink variant="no-color" color="black" linkProps={{href: "/#contact-us"}}>
+            Contact Us
+          </Button>
+        </li>
+        {session ? (
           <li>
             <Button variant="no-color" color="black" onClick={() => signOut()}>
               Log out
             </Button>
           </li>
+        ) : (
+          <>
+            <li>
+              <Button
+                variant="primary"
+                color="green"
+                isLink
+                linkProps={{href: "/auth/login"}}
+                className="w-[210px]"
+              >
+                Log in
+              </Button>
+            </li>
+            <li>
+              <Button
+                variant="secondary"
+                color="green"
+                isLink
+                linkProps={{href: "/auth/login"}}
+                className="w-[210px]"
+              >
+                Register
+              </Button>
+            </li>
+          </>
         )}
       </ul>
     </div>

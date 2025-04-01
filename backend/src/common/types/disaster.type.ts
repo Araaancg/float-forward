@@ -1,6 +1,7 @@
 import { IImages } from "./image.types";
 
 export interface IDisaster {
+  _id?: string
   title: string;
   description: string;
   country: string;

@@ -5,6 +5,7 @@ import Container, { Service } from "typedi";
 import httpStatus from "http-status";
 import { JSON_WEB_TOKENS } from "../../common/config";
 import { ApiError } from "../../common/middlewares/error-handler";
+import { ETokenTypes } from "../../common/types";
 
 @Service()
 export class TokenService {
@@ -62,8 +63,9 @@ export class TokenService {
     let payload;
 
     try {
+      console.log("verifying token")
       payload = jwt.verify(token, JSON_WEB_TOKENS.PRIVATE_KEY!);
-      console.log("payload", payload)
+      console.log("payload", payload);
     } catch (error) {
       throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid token");
     }
@@ -103,7 +105,7 @@ export class TokenService {
         user: user._id,
       },
       accessTokenExpires,
-      "access"
+      ETokenTypes.ACCESS_TOKEN
     );
 
     const refreshTokenExpires = moment().add(
@@ -114,14 +116,14 @@ export class TokenService {
     const refreshToken = this.generateToken(
       user._id,
       refreshTokenExpires,
-      "refresh"
+      ETokenTypes.REFRESH_TOKEN
     );
 
     await this.saveToken(
       refreshToken,
       user._id,
       refreshTokenExpires,
-      "refresh"
+      ETokenTypes.REFRESH_TOKEN
     );
 
     return {
@@ -138,7 +140,6 @@ export class TokenService {
 
   async generateVerifyEmailToken(
     user: Partial<any>
-    // session: mongoose.ClientSession
   ): Promise<string> {
     const expires = moment().add(
       JSON_WEB_TOKENS.verifyEmailExpirationMinutes,
@@ -148,11 +149,30 @@ export class TokenService {
     const verifyEmailToken = this.generateToken(
       { user: user._id },
       expires,
-      "verifyEmail"
+      ETokenTypes.VERIFY_EMAIL_TOKEN
     );
 
     await this.saveToken(verifyEmailToken, user._id, expires, "verifyEmail");
 
     return verifyEmailToken;
+  }
+
+  async generateResetPasswordToken(
+    user: Partial<any>
+  ): Promise<string> {
+    const expires = moment().add(
+      JSON_WEB_TOKENS.resetPasswordExpirationMinutes,
+      "minutes"
+    );
+
+    const resetPasswordToken = this.generateToken(
+      { user: user._id },
+      expires,
+      ETokenTypes.RESET_PASSWORD_TOKEN
+    );
+
+    await this.saveToken(resetPasswordToken, user._id, expires, ETokenTypes.RESET_PASSWORD_TOKEN);
+
+    return resetPasswordToken;
   }
 }

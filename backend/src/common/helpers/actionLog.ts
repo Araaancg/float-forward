@@ -3,7 +3,7 @@
  * @param action The action being performed
  * @param message The message to log
  */
-export default function actionLog(action: string, message: string): void {
+export default function actionLog(action: string, service:string, message: string): void {
   // Get current date and time
   const now = new Date();
 
@@ -22,7 +22,7 @@ export default function actionLog(action: string, message: string): void {
   ].join(":");
 
   // Format the log message
-  const formattedMessage = `${date} ${time} | ${action.toUpperCase()} | ${message}`;
+  const formattedMessage = `${date} ${time} | ${service.toUpperCase()} | ${action.toUpperCase()} | ${message}`;
 
   // Log to console
   console.log(formattedMessage);

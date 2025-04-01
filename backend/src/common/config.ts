@@ -30,24 +30,3 @@ export const JSON_WEB_TOKENS = {
 
 // MONGO DB (TODO)
 export const MONGODB_URI = process.env.MONGODB_URI
-
-// export const MAIL = {
-//   smtp: {
-//     host: process.env.EMAIL_HOST,
-//     port: process.env.EMAIL_PORT,
-//     service: process.env.EMAIL_SERVICE,
-//     auth: {
-//       user: process.env.EMAIL_USER,
-//       pass: process.env.EMAIL_PASS
-//     }
-//   },
-//   from: process.env.EMAIL_FROM,
-//   urls: {
-//     emailVerify: isDev
-//       ? `${process.env.FRONT_URL_DEV}/authentication/verify-email`
-//       : `${process.env.FRONT_URL_PROD}/authentication/verify-email`,
-//     passwordReset: isDev
-//       ? `${process.env.FRONT_URL_DEV}/reset-password`
-//       : `${process.env.FRONT_URL_PROD}/reset-password`
-//   }
-// }

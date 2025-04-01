@@ -12,10 +12,12 @@ const ChatBody = ({
   selectedChat,
   me,
   pin,
+  receiver,
 }: {
   selectedChat: IChat;
   me: IUser;
   pin?: IPin;
+  receiver?: IUser
 }) => {
   const pinToShow = useMemo(() => selectedChat ? selectedChat.pin : pin, [selectedChat, pin])
   // The component is going to be reversed so that is kept scrolled down
@@ -32,6 +34,7 @@ const ChatBody = ({
                 selectedChat?.messages![index - 1].sender !== msg.sender
               }
               side={msg.sender === me._id ? "right" : "left"}
+              avatar={msg.sender === me._id ? me.profilePicture! : receiver?.profilePicture!}
             />
           ))}
         </div>

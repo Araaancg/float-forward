@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "brookes-dissertation-447618",
+  "private_key_id": "7a4e48c47a8eb6009df4a07b703ee1b0fc5e90de",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCdSu1MveQi9bTz\nyEEdUjYy56IESKjB0//7m0D3eNYR9VE4gqqo4BWpsn0PjJjPpqsOzoIUXaY/HNJt\neDLHP0EJg5BWg0ya0rqpwInC0uVhRGc7zYSnADQN49PdRdFGgMsc0ZqyTQPZmx3b\n7G+CHxGSmCi3NEX1Mj59VXjd68WOtrz8S84SisUyRUjVPYn2xnfF4wl3a39i89fv\n9Az+QtnmArZz1AP3VEHqoLtlEbWqK1eaFMbOJRZ10ePVssR12Ps2gSK9sAkwknNd\nhGSTgw9tv5oc+gpHuhpmwPr75EbKr5qSfRtPSj5NTbDsjSduXb1t6rZTrNUwJ0es\nQrxzlXwJAgMBAAECggEASIPwnv60nMF2aSWbj28FebZ8ZUkyNBoO2+qZqv3Ug3b7\nuPfUwgJ9Oj0FlxOUp7cJCcx+//Ck4lfhU4KktmMdEsvK0Xe6623XjMctO9qK0ar9\nhP6c93kKhpTQaiTz9HMQMPsZPLZw3fO7clawmebE7TalHsFEt2Qwlwu+q2E1NTOl\nDzmKod7OiBn5D47Pb90qkS1cThEwrBg14y4KPyej1mxan41LD6RNcUSpKC3Z6eb+\nGM7CxtdLMSd1+B2jASwJFwqBXa4Rqfp3PxV6dV+uepqptBswHPtZEMD8xtVTeaw9\nqaXSYUoJr7ZBg5jph8b6ZwdyFDUzV5b9Yw7YXbQ3eQKBgQDPlerFQnS5o6sNzrqK\nt9saL38eQnTXA3C4cB8ugf4wKHhz103PBtFiwr4qpgmim4TKX2yHfB830XUDJBZm\nIep3zaH0fthwQuImG8W0ruFq5zNEzMvVvYJJFBwCEwEefQ3/hMFrdSEnjHuvOS/9\ndmMSDlH2wJ5eubdQYzRgqrmmLwKBgQDB+jnXDEybb58M3nyiStxuxIAaoES81S0f\nkoGi4IDlm/xdQEFRJXSLF2VZcetvbkjxcr2RlCC6fi2sls5Qrf1fX7DL7KjvKkkk\ndIZ2/7WoKp/i1oCPVYEXQdnHg6b/TYyH3zipb/DWaYQhX6GU21p6uNWgCpB1Kwab\nEOVSGpmrRwKBgQCi5I50umBkKBWbYSSqo/mPw8OpmBadfrqeUIV3dlRjr+5NYJ9T\nHJOEPzMAvogDDKyYLWc5reHFaFy82T2maWjXGArFlB/9f858fwCWd0C2JbTqgRZW\npD4vYFNWIVmYdiNc5eztiN06bpfD+Uk6SQMW8RvKWH4t8OfzcdVxIadKywKBgB2J\nN2NqSQPl9Cbmfb3MflITc5oaSz0hjJRhH4IogxfzL3MXhJqRhHRlZJZBBWNbPJof\nKYRQNMeQzO2ZrOKWC52JGYeDipmYK7j0UUEvYH6xttS4aqzojRZ4fWumvTfknABY\nWe1a0SYkvOzD/fuHhvhmyohq82IT4hacdP6SdFGjAoGAXhHQO2SOMfXuATwV0Vkr\n5/MuW6MXSWPzLP8hexL2rKPgn2cEc/HAEAIQdEBGriTqEmKUcisaqsPUXP3Xx3IJ\nn06FoPolvg1SBDrXmIT4vcy09OIthzl+4UW4z4ymoUiObAruxlcy58jUHsG95O9+\n8EB5Qm4tkOIFS4LPCdPsFOk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "brookes-dissertation-bucket@brookes-dissertation-447618.iam.gserviceaccount.com",
+  "client_id": "108682844779674041819",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/brookes-dissertation-bucket%40brookes-dissertation-447618.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -5,7 +5,11 @@ import Button from "@/components/atoms/button/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./forgot-password-schema";
 
-export default function ForgotPasswordForm() {
+export default function ForgotPasswordForm({
+  onFormSubmit,
+}: {
+  onFormSubmit: (data: any) => void;
+}) {
   const {
     register,
     reset,
@@ -17,13 +21,8 @@ export default function ForgotPasswordForm() {
   });
 
   const sendData = async (data: any) => {
-    console.log(data);
-    // const res = await fetch("/api/auth/login", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    // });
-    // const response = await res.json();
-    // reset();
+    onFormSubmit(data);
+    reset();
   };
 
   return (
@@ -40,7 +39,7 @@ export default function ForgotPasswordForm() {
         label="Email"
       />
       <Button isFullWidth disabled={!isValid} type="submit">
-        Send recover email
+        Send reset email
       </Button>
     </form>
   );

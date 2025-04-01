@@ -1,7 +1,9 @@
 import AuthLoader from "./loader-views/AuthLoader";
 import ChatLoader from "./loader-views/ChatLoader";
 import DisasterLoader from "./loader-views/DisasterLoader";
+import FormLoader from "./loader-views/FormLoader";
 import HomeLoader from "./loader-views/HomeLoader";
+import PinLoader from "./loader-views/PinLoader";
 import "./loader.scss";
 
 export default function Loader({ view }: { view: string }) {
@@ -14,6 +16,10 @@ export default function Loader({ view }: { view: string }) {
       return <DisasterLoader />;
     case "chat":
       return <ChatLoader />;
+    case "form":
+      return <FormLoader />
+    case "pin":
+      return <PinLoader />
     default:
       return <div>Loading...</div>;
   }

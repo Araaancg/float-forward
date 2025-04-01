@@ -20,32 +20,7 @@ This project is built in two main parts, the frontend using NextJS and the backe
 
 - Node.js
 - MongDB 
-- The following environmental variables (.env file)
-
-```
-# Authentication with authJS + Google
-AUTH_SECRET=
-AUTH_GOOGLE_ID=
-AUTH_GOOGLE_SECRET=
-
-# General variables to handle integration
-DEVELOPMENT=
-API_PREFIX=api/v1
-API_URL_DEV="http://localhost:8000"
-API_URL_PROD=
-
-
-# Database uri connection
-MONGODB_URI=
-
-# JWT handling
-JWT_PUBLIC_KEY=
-JWT_PRIVATE_KEY=
-JWT_ACCESS_EXPIRATION_MINUTES=30 
-JWT_REFRESH_EXPIRATION_DAYS=30
-JWT_RESET_PASSWORD_EXPIRATION_MINUTES=15 
-JWT_VERIFY_EMAIL_EXPIRATION_MINUTES=10
-```
+- Environmental variables. Take the .env.example file in each part: frontend and backend
 
 ### Installation
 
@@ -67,6 +42,3 @@ For further documentation on the project, please read the following documents th
 - [Architecture & Technologies](./docs/architecture-and-technologies.md)
 - [Database Schema](./docs/database-schema.md)
 - [API Documentation](./docs/backend-documentation/api-intro.md)
-
-## Deployment
-This project is deployed...

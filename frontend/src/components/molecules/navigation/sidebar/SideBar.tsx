@@ -30,8 +30,6 @@ export default function Sidebar({
 }: ISidebar) {
   return (
     <aside className={`sidebar ${isExpanded ? "open" : "close"}`}>
-      {isLoggedIn ? (
-        <>
           {/* TOP PART */}
           <div className="sidebar-top">
             <div className={`w-full flex flex-col gap-6`}>
@@ -61,9 +59,9 @@ export default function Sidebar({
                 >
                   {isExpanded ? (
                     <Image
-                      src="/logo-horizontal.png"
+                      src="/logo-s.png"
                       alt="AIDNET logo horizontal"
-                      width={134}
+                      width={200}
                       height={38}
                     />
                   ) : (
@@ -103,13 +101,13 @@ export default function Sidebar({
                   )}
               </li>
               <li>
-                <Button isLink variant="no-color" color="black">
+                <Button isLink variant="no-color" color="black" linkProps={{ href: "/my-pins" }}>
                   <MapPinWithBaseIcon size={32} />
                   {isExpanded && "My pins"}
                 </Button>
               </li>
               <li>
-                <Button isLink variant="no-color" color="black">
+                <Button isLink variant="no-color" color="black" linkProps={{href: "/first-responder"}}>
                   <HealthcareIcon size={32} />
                   {isExpanded && "I am a first responder"}
                 </Button>
@@ -138,51 +136,12 @@ export default function Sidebar({
                   <span className="text-base text-black-primary font-normal">
                     {user?.name?.slice(0, 20)}
                     <br />
-                    <span className="text-xs">{user?.email}</span>
+                    <span className="text-xs">{user?.email?.slice(0, 25)}...</span>
                   </span>
                 )}
               </li>
             </ul>
           </div>
-        </>
-      ) : (
-        <div className="w-full flex flex-col gap-10">
-          <div>
-            <Button variant="no-color" color="black" isLink>
-              {isExpanded ? (
-                <Image
-                  src="/logo-horizontal.png"
-                  alt="AIDNET logo horizontal"
-                  width={134}
-                  height={38}
-                />
-              ) : (
-                <Image
-                  src="/logo-symbol.png"
-                  alt="AIDNET symbol"
-                  width={56}
-                  height={38}
-                />
-              )}
-            </Button>
-          </div>
-          <div className="flex flex-col gap-6">
-            <p>You have to authenticate yourself.</p>
-            <Button isFullWidth isLink linkProps={{ href: "/auth/login" }}>
-              Log in
-            </Button>
-            <hr className="border border-solid border-green-primary" />
-            <Button
-              variant="secondary"
-              isFullWidth
-              isLink
-              linkProps={{ href: "/auth/register" }}
-            >
-              Register
-            </Button>
-          </div>
-        </div>
-      )}
     </aside>
   );
 }

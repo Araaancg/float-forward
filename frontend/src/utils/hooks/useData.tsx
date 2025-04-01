@@ -44,7 +44,6 @@ export function useData<T>(
           body: options.body,
           requiresAuth: options.requiresAuth,
         });
-
         if (response.success) {
           setData(response.data);
           setError(null);

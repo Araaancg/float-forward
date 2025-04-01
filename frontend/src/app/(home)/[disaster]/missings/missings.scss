@@ -1,3 +1,7 @@
 .missingsView {
     @apply w-11/12 m-auto flex flex-col gap-12 justify-center items-center my-6;
+
+    &-mapList {
+        @apply flex flex-col sm:flex-row justify-between items-center w-full gap-2;
+    }
 }

@@ -11,9 +11,10 @@ import {
   IMessage,
   MessageStatus,
 } from "../../common/types/chat.type";
-import actionLog from "../../common/helpers/actionLog";
 import { Types } from "mongoose";
-import { getIO } from "../../app";
+import actionLog from "../../common/helpers/actionLog";
+import { getIO, getReceiverSocketId } from "../../common/helpers/socket";
+import { PinStatus } from "../../common/types/pin.type";
 
 @Service()
 export class ChatService {
@@ -31,48 +32,64 @@ export class ChatService {
     options?: { [key: string]: any },
     userId?: string
   ): Promise<any> {
-    const query = { ...filter, deletedAt: null } as any;
-    if (userId) {
-      query["participants"] = {
-        $elemMatch: {
-          user: userId,
-        },
-      };
-    }
-    let chats = await this.chatModel
-      .find(query, {}, options)
-      .populate("participants.user")
-      .populate("pin")
-      .populate({
-        path: "pin",
-        populate: {
-          path: "disaster",
-        },
-      })
-      .populate({
-        path: "pin",
-        populate: {
-          path: "type",
-        },
-      });
-
-    actionLog("PROC", "Getting messages from chats...");
-
-    const chatWithMessages = await Promise.all(
-      chats.map(async (chat: any) => {
-        const messages = await this.messageService.get({ chatId: chat._id });
-
-        const chatObj = chat.toObject();
-        return {
-          ...chatObj,
-          messages,
+    try {
+      actionLog("PROCESS", "CHAT", `Retrieving chats from user: ${userId}`);
+      const query = { ...filter, deletedAt: null } as any;
+      if (userId) {
+        query["participants"] = {
+          $elemMatch: {
+            user: userId,
+          },
         };
-      })
-    );
+      }
+      let chats = await this.chatModel
+        .find(query, {}, options)
+        .populate("participants.user")
+        .populate("pin")
+        .populate({
+          path: "pin",
+          populate: {
+            path: "disaster",
+          },
+        })
+        .populate({
+          path: "pin",
+          populate: {
+            path: "type",
+          },
+        });
+      actionLog("SUCCESS", "CHAT", `Chats retrived successfully`);
+      actionLog("PROCESS", "CHAT", `Retrieving messages from chats...`);
 
-    actionLog("INFO", "Messages retrieved successfully");
+      const chatWithMessages = await Promise.all(
+        chats.map(async (chat: any) => {
+          const messages = await this.messageService.get({ chatId: chat._id });
 
-    return { success: true, data: chatWithMessages };
+          const chatObj = chat.toObject();
+          return {
+            ...chatObj,
+            messages,
+          };
+        })
+      );
+
+      actionLog("SUCCESS", "CHAT", `Messages retrived successfully`);
+
+      return { success: true, data: chatWithMessages };
+    } catch (e) {
+      actionLog(
+        "ERROR",
+        "CHAT",
+        `Something went wrong when retriving chats: ${e}`
+      );
+      if (e instanceof ApiError) {
+        throw e;
+      }
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        `Something went wrong when retriving chats: ${e}`
+      );
+    }
   }
 
   async create({
@@ -89,18 +106,26 @@ export class ChatService {
     message: string;
   }): Promise<any> {
     try {
-      // console.log({ chatId, pinId, sender, receiver, message });
       // CASE SCENARIO 1: Chat does not exist
       if (!chatId) {
-        actionLog("PROC", "Chat does not exist, creating chat...");
+        actionLog("PROC", "CHAT", "Chat does not exist, creating chat...");
         // get pin information
-        actionLog("PROC", "Retrieving pin information to link to chat...");
-        const pin = (await this.pinService.get({ _id: pinId }))[0];
+        actionLog(
+          "PROC",
+          "CHAT",
+          "Retrieving pin information to link to chat..."
+        );
+        const pin = (
+          await this.pinService.get(
+            { _id: pinId },
+            { status: PinStatus.ACTIVE }
+          )
+        ).data[0];
         if (!pin) {
-          actionLog("ERROR", "Pin provided does not exist");
+          actionLog("ERROR", "CHAT", "Pin provided does not exist");
           throw new ApiError(httpStatus.NOT_FOUND, "Pin not found");
         }
-        actionLog("INFO", "Pin information retrieved succesfully");
+        actionLog("INFO", "CHAT", "Pin information retrieved succesfully");
         // Create object of participants
         const participants = [
           {
@@ -125,17 +150,17 @@ export class ChatService {
             },
           ])
         )[0];
-        actionLog("INFO", "Chat created succesfully");
+        actionLog("SUCCESS", "CHAT", "Chat created succesfully");
 
         // create the first message in db
-        actionLog("PROC", "Posting messages...");
+        actionLog("PROCESS", "CHAT", "Posting messages...");
         const messageCreated = await this.messageService.create({
           chatId: chatCreated._id,
           sender,
           content: message,
           status: MessageStatus.SENT,
         });
-        actionLog("INFO", "Message posted succesfully");
+        actionLog("SUCCESS", "CHAT", "Message posted succesfully");
 
         return {
           success: true,
@@ -145,23 +170,40 @@ export class ChatService {
         // CASE SCENARIO 2: chat exists
         // chat already exists so we just have to create the message
         // either way we retrieve the chat so we can return it too
-        actionLog("INFO", "Chat already exist, retrieving chat information...");
-        const confirmChat = (await this.get({ _id: chatId })).data[0];
+        actionLog(
+          "INFO",
+          "CHAT",
+          "Chat already exist, retrieving chat information..."
+        );
+        const confirmChat: IChat = (await this.get({ _id: chatId })).data[0];
         if (!confirmChat) {
-          actionLog("ERROR", "Chat provided could not be found");
+          actionLog("ERROR", "CHAT", "Chat provided could not be found");
           throw new ApiError(httpStatus.NOT_FOUND, "Chat couldn't be found");
         }
-        actionLog("INFO", "Chat information retrieved succesfully");
-        actionLog("PROC", "Posting new messages");
+        actionLog("SUCCESS", "CHAT", "Chat information retrieved succesfully");
+        actionLog("PROCESS", "CHAT", "Posting new messages...");
         await this.messageService.create({
           chatId,
           sender,
           content: message,
           status: MessageStatus.SENT,
         });
+
+        // // SOCKET IO FUNCTIONALITY WILL GO HERE
+        const receiverId = confirmChat.participants
+          .filter((el) => el.user._id?.toString() !== sender)[0]
+          .user.toString();
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if (receiverSocketId) {
+          const io = getIO();
+          // io.emit("someEvent", someData);
+          // io.to(<socket_id>).emit() used to send events to specific client
+          io.to(receiverSocketId).emit("newMessage", message);
+        }
+
         // reget the chat with the new message
         const chat = (await this.get({ _id: chatId })).data[0];
-        actionLog("INFO", "Messages posted succesfully");
+        actionLog("SUCCESS", "CHAT", "Messages posted succesfully");
 
         return {
           success: true,
@@ -169,7 +211,11 @@ export class ChatService {
         };
       }
     } catch (e: any) {
-      actionLog("ERROR", "There was an error when posting new messages");
+      actionLog(
+        "ERROR",
+        "CHAT",
+        "There was an error when posting new messages"
+      );
       if (e instanceof ApiError) {
         // rethrow the error if it is a custom error
         throw e;
@@ -192,7 +238,7 @@ export class ChatService {
     try {
       const chat = (await this.get({ _id })).data[0];
       if (!chat) {
-        actionLog("ERROR", "Chat provided was not found");
+        // actionLog("ERROR", "Chat provided was not found");
         throw new ApiError(httpStatus.NOT_FOUND, "Chat provided was not found");
       }
 
@@ -203,14 +249,14 @@ export class ChatService {
             (el.user._id?.toString() as string) === user.toString()
         ).length > 0;
       if (!isParticpant) {
-        actionLog("ERROR", "User provided is not a participant of this chat");
+        // actionLog("ERROR", "User provided is not a participant of this chat");
         throw new ApiError(
           httpStatus.UNAUTHORIZED,
           "User is not authorized to update this chat."
         );
       }
 
-      actionLog("PROC", "Retrieving all messages from chat...");
+      // actionLog("PROC", "Retrieving all messages from chat...");
       const allMessages: IMessage[] = chat.messages;
 
       const unreadMessages = allMessages.filter(
@@ -221,11 +267,11 @@ export class ChatService {
 
       // update status of all messges to read
       if (unreadMessages.length === 0) {
-        actionLog("INFO", "No unread messages found in this chat");
+        // actionLog("INFO", "No unread messages found in this chat");
         return { data: 0, success: true };
       }
 
-      actionLog("PROC", "Updating messages status");
+      // actionLog("PROC", "Updating messages status");
       const updatePromises = unreadMessages.map(async (message) => {
         // Await the update for each message
         return await this.messageService.update(message._id, {
@@ -233,11 +279,6 @@ export class ChatService {
         });
       });
       const updateResults = await Promise.all(updatePromises);
-
-      actionLog(
-        "INFO",
-        `Updated ${updateResults.length} messages to 'read' status`
-      );
 
       return {
         data: updateResults.length,
@@ -296,26 +337,17 @@ export class ChatService {
       let allChats: IChat[];
       if (!chatId) {
         // SCENARIO 1: No chat ID was provided - getting all unread messages
-        actionLog(
-          "INFO",
-          "No chatId was provided, getting all unread messages"
-        );
-        actionLog("PROC", "Retrieving all chats from user...");
+        // actionLog("PROC", "Retrieving all chats from user...");
         allChats = (await this.get({}, {}, userId.toString())).data;
-        // console.log(allChats);
       } else {
         // SCENARIO 2: chat ID is provided - we just get unread messages from that chat
         allChats = (await this.get({ _id: chatId })).data;
       }
 
-      actionLog("PROC", "Counting all unreadMessages...");
+      // actionLog("PROC", "Counting all unreadMessages...");
       unreadMessages = this.countUnreadMessagesPerChat(
         allChats!,
         userId.toString()
-      );
-      actionLog(
-        "INFO",
-        `Number of unread messages retrieved succesfully: ${unreadMessages.totalUnreadCount}`
       );
       return {
         data: unreadMessages, // number of unread messages

@@ -2,6 +2,7 @@ import MapPinIcon from "@/components/atoms/icons/MapPinIcon";
 import theme from "@/theme";
 import { PinTypes, pinTypesCrossColor } from "@/types/enums";
 import { IPin } from "@/types/structures";
+import getPinColor from "@/utils/functions/getPinColor";
 import { Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
 import { AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
 import { useCallback, useRef } from "react";
@@ -80,7 +81,7 @@ const PoiMarkers = ({
           <MapPinIcon
             color={
               customPinColor ||
-              pinTypesCrossColor[poi.type.title as PinTypes] ||
+              getPinColor(poi) ||
               theme.extend.colors.black.primary
             }
             size={28}

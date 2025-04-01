@@ -13,8 +13,6 @@ This API is built using **Node.js**, **Express**, and **JWT** for authentication
    - [models folder](#models-folder)
    - [api folder](#api-folder)
 3. [Endpoint Documentation](#endpoint-documentation)
-   - [Login](#login)
-   - [Other Endpoints](#other-endpoints)
 
 ## Technologies Used
 
@@ -80,3 +78,6 @@ All the endpoint documentation can be looked in the `/endpoints/` folder where t
 
 - [Authentication](./endpoints/authentication.md)
 - [Users](./endpoints/users.md)
+- [Disasters](./endpoints/disasters.md)
+- [Pin](./endpoints/pins.md)
+- [Pin Types](./endpoints/pin-types.md)

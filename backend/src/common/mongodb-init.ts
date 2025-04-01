@@ -10,6 +10,7 @@ import { PinSchema } from '../models/pin.schema';
 import { PinTypesSchema } from '../models/pinType.schema';
 import { ChatSchema } from '../models/chat.schema';
 import { MessageSchema } from '../models/message.schema';
+import { ApplicationSchema } from '../models/application.schema';
 
 export class DatabaseConnection {
   private static connection: mongoose.Connection | null = null;
@@ -41,6 +42,7 @@ export class DatabaseConnection {
     Container.set('PinTypes', connection.model('PinTypes', PinTypesSchema));
     Container.set('Chat', connection.model('Chat', ChatSchema));
     Container.set('Message', connection.model('Message', MessageSchema));
+    Container.set('Application', connection.model('Application', ApplicationSchema));
   }
 }
 

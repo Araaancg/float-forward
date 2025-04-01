@@ -17,10 +17,13 @@ body {
 .sidebar-collapsed {
   width: calc(100% - 100px);
 }
-
+.sidebar-null {
+  width: 100%;
+}
 
 @media (max-width: 790px) {
-  .sidebar-collapsed, .sidebar-expanded {
+  .sidebar-collapsed,
+  .sidebar-expanded {
     width: 100%;
   }
 }

@@ -35,3 +35,14 @@ export enum ChatStatus {
   ACTIVE = "active",
   ARCHIVED = "archived"
 }
+
+export enum PinStatus {
+  ACTIVE = "active",
+  CLOSED = "closed",
+  DELETED = "deleted",
+}
+
+export enum UserRoles {
+  FIRST_RESPONDER = "first-responder",
+  REGULAR = "regular"
+}

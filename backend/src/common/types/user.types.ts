@@ -9,4 +9,6 @@ export interface IUser {
   password?: string;
   googleId: string,
   authProvider: "google" | "credentials"
+  isVerified: boolean;
+  role: "first-responder" | "regular";
 }

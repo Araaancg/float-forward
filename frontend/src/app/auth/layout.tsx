@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main className="authlayout">
         <div className="authlayout-container">
           <Image
-            src="/logo-horizontal-m.png"
+            src="/logo-s.png"
             alt="AIDNET logo"
             width={204}
             height={58}

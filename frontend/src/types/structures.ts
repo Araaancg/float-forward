@@ -1,4 +1,4 @@
-import { ChatStatus, MessageStatus, PinTypes, PriorityTypes } from "./enums";
+import { ChatStatus, MessageStatus, PinStatus, PinTypes, PriorityTypes, UserRoles } from "./enums";
 import { ICoordinates } from "./interfaces";
 
 export interface IUser {
@@ -7,7 +7,8 @@ export interface IUser {
   email?: string | null;
   profilePicture?: string | null;
   authProvider?: "google" | "email";
-  password?: string;
+  isVerified?: boolean;
+  role: UserRoles
   // accessToken?: string;
   // refreshToken?: string;
 }
@@ -24,6 +25,11 @@ export interface IDisasters {
   additionalInformation: IAddiontionalInformation[];
   pins: IPin[];
   coordinates: ICoordinates;
+  statistics: {
+    pinsRegistered: number,
+    peopleHelped: number,
+    helpOffers: number
+  }
 }
 
 export interface IAddiontionalInformation {
@@ -47,6 +53,8 @@ export interface IPin {
   user: IUser;
   disaster: IDisasters;
   priority?: PriorityTypes;
+  contacts?: IUser[]
+  status: PinStatus
 }
 
 export interface ITypeInformation {

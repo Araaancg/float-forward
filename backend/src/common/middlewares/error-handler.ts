@@ -27,6 +27,7 @@ export const errorHandler =
       res.locals.errorMessage = err.message
 
       const response = {
+        success: false,
         code: statusCode,
         message
       }

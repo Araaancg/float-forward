@@ -2,7 +2,7 @@ button.button,
 a.button {
   @apply no-underline flex 
   items-center gap-2 rounded-md
-  cursor-pointer;
+  cursor-pointer text-center;
 
   &.lg {
     @apply py-2 px-4 text-base;

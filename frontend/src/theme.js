@@ -1,4 +1,4 @@
-const theme = {
+ const theme = {
   extend: {
     colors: {
       black: {

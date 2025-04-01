@@ -11,8 +11,6 @@ export function useApi(session?: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // const { data: session } = useSession();
-
   const callApi = async (
     endpoint: string,
     options: ApiOptions = { method: "GET" }
@@ -29,24 +27,29 @@ export function useApi(session?: any) {
       setError(null);
 
       const requestHeaders: Record<string, string> = {
-        "Content-Type": "application/json",
         ...headers,
       };
+      
+      // Only add Content-Type for JSON requests, not for FormData
+      if (!(body instanceof FormData)) {
+        requestHeaders["Content-Type"] = "application/json";
+      }
 
       if (requiresAuth) {
         requestHeaders["Authorization"] = `Bearer ${session?.access.token}`;
       }
 
-      const response = await fetch(endpoint, {
+      const requestOptions: RequestInit = {
         method,
         headers: requestHeaders,
-        body: body ? JSON.stringify(body) : undefined,
-      });
+        // If body is FormData, send it directly; otherwise stringify it
+        body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined,
+      };
 
+      const response = await fetch(endpoint, requestOptions);
       const data = await response.json();
 
       if (!response.ok) {
-        // actionLog("error", `ApiCall not ok: ${data.message}`);
         throw new Error(data.message || "An error occurred");
       }
 

@@ -5,6 +5,8 @@ import { getForgotPasswordHtml } from "./templates/ForgotPasswordTemplate";
 import { getVerifyEmailHtml } from "./templates/VerifyEmailTemplate";
 import actionLog from "../actionLog";
 import { getContactUsHtml } from "./templates/ContactUsSenderTemplate";
+import { getApplicationHtml } from "./templates/ApplicationTemplate";
+import { ApplicationStatus } from "../../types/application.types";
 
 export function createTransport() {
   const transporter = nodemailer.createTransport({
@@ -20,7 +22,11 @@ export function createTransport() {
   return transporter;
 }
 
-export function sendResetPasswordEmail(email: string, name: string, token: string) {
+export function sendResetPasswordEmail(
+  email: string,
+  name: string,
+  token: string
+) {
   if (!email) {
     actionLog("error", "NODEMAILER", "Email recipient was not provided");
     throw new ApiError(
@@ -36,15 +42,24 @@ export function sendResetPasswordEmail(email: string, name: string, token: strin
       to: email, // list of receivers
       subject: "Reset your password",
       text: "That was easy!",
-      html: getForgotPasswordHtml({email, name, token}),
+      html: getForgotPasswordHtml({ email, name, token }),
     };
     actionLog("INFO", "NODEMAILER", "Transporter created succesfully");
     transporter.sendMail(mailData, function (err, info) {
-      if (err) actionLog("ERROR", "NODEMAILER", `Something went wrong when sending the email: ${err}`)
-        else actionLog("SUCCESS", "NODEMAILER", "Email sent succesfully");
+      if (err)
+        actionLog(
+          "ERROR",
+          "NODEMAILER",
+          `Something went wrong when sending the email: ${err}`
+        );
+      else actionLog("SUCCESS", "NODEMAILER", "Email sent succesfully");
     });
   } catch (e) {
-    actionLog("ERROR", "NODEMAILER", `Something went wrong sending email to: ${email}`);
+    actionLog(
+      "ERROR",
+      "NODEMAILER",
+      `Something went wrong sending email to: ${email}`
+    );
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       `Something went wrong sending email to: ${email}`
@@ -68,15 +83,24 @@ export function sendVerifyEmail(email: string, name: string, token: string) {
       to: email, // list of receivers
       subject: "Verify your email",
       text: "That was easy!",
-      html: getVerifyEmailHtml({email, name, token}),
+      html: getVerifyEmailHtml({ email, name, token }),
     };
     actionLog("INFO", "NODEMAILER", "Transporter created succesfully");
     transporter.sendMail(mailData, function (err, info) {
-        if (err) actionLog("ERROR", "NODEMAILER", `Something went wrong when sending the email: ${err}`)
-        else actionLog("SUCCESS", "NODEMAILER", "Email sent succesfully");
+      if (err)
+        actionLog(
+          "ERROR",
+          "NODEMAILER",
+          `Something went wrong when sending the email: ${err}`
+        );
+      else actionLog("SUCCESS", "NODEMAILER", "Email sent succesfully");
     });
   } catch (e) {
-    actionLog("ERROR", "NODEMAILER", `Something went wrong sending email to: ${email}`);
+    actionLog(
+      "ERROR",
+      "NODEMAILER",
+      `Something went wrong sending email to: ${email}`
+    );
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       `Something went wrong sending email to: ${email}`
@@ -84,7 +108,11 @@ export function sendVerifyEmail(email: string, name: string, token: string) {
   }
 }
 
-export function sendContactUsMessage(name: string, email: string, message: string) {
+export function sendContactUsMessage(
+  name: string,
+  email: string,
+  message: string
+) {
   if (!email) {
     actionLog("error", "NODEMAILER", "Email recipient was not provided");
     throw new ApiError(
@@ -100,15 +128,80 @@ export function sendContactUsMessage(name: string, email: string, message: strin
       to: email, // list of receivers
       subject: "Message sent!",
       text: "Message sent!",
-      html: getContactUsHtml({name, email, message}),
+      html: getContactUsHtml({ name, email, message }),
     };
     actionLog("INFO", "NODEMAILER", "Transporter created succesfully");
     transporter.sendMail(mailData, function (err, info) {
-        if (err) actionLog("ERROR", "NODEMAILER", `Something went wrong when sending the email: ${err}`)
-        else actionLog("SUCCESS", "NODEMAILER", "Email sent succesfully");
+      if (err)
+        actionLog(
+          "ERROR",
+          "NODEMAILER",
+          `Something went wrong when sending the email: ${err}`
+        );
+      else actionLog("SUCCESS", "NODEMAILER", "Email sent succesfully");
     });
   } catch (e) {
-    actionLog("ERROR", "NODEMAILER", `Something went wrong sending email to: ${email}`);
+    actionLog(
+      "ERROR",
+      "NODEMAILER",
+      `Something went wrong sending email to: ${email}`
+    );
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      `Something went wrong sending email to: ${email}`
+    );
+  }
+}
+
+export function sendApplicationUpdateEmail(
+  name: string,
+  email: string,
+  status: ApplicationStatus,
+  token?: string
+) {
+  if (!email) {
+    actionLog("error", "NODEMAILER", "Email recipient was not provided");
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Email recipient was not provided"
+    );
+  }
+  actionLog("PROCESS", "NODEMAILER", `Ready to send an email to ${email}`);
+
+  let html;
+  if (status === ApplicationStatus.APPROVED) {
+    html = getApplicationHtml({ name, email, status });
+  } else if (status === ApplicationStatus.LACKING_INFO) {
+    html = getApplicationHtml({ name, email, status, token });
+  } else {
+    html = getApplicationHtml({ name, email, status });
+  }
+
+  try {
+    const transporter = createTransport();
+    const mailData = {
+      from: process.env.EMAIL_USER!, // sender address
+      to: email, // list of receivers
+      subject: "First Responder Application Update",
+      text: "First Responder Application Update",
+      html,
+    };
+    actionLog("INFO", "NODEMAILER", "Transporter created succesfully");
+    transporter.sendMail(mailData, function (err, info) {
+      if (err)
+        actionLog(
+          "ERROR",
+          "NODEMAILER",
+          `Something went wrong when sending the email: ${err}`
+        );
+      else actionLog("SUCCESS", "NODEMAILER", "Email sent succesfully");
+    });
+  } catch (e) {
+    actionLog(
+      "ERROR",
+      "NODEMAILER",
+      `Something went wrong sending email to: ${email}`
+    );
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       `Something went wrong sending email to: ${email}`

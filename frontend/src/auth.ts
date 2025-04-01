@@ -13,13 +13,7 @@ declare module "next-auth" {
     refresh: IToken;
     success: boolean;
     error: string | null;
-    user: {
-      _id: string;
-      name: string;
-      email: string;
-      profilePicture: string;
-      isVerified: boolean;
-    };
+    user: IUser;
   }
 }
 
@@ -225,7 +219,7 @@ export const authOptions = {
     },
 
     async session({ session, token }: { session: any; token: JWT }) {
-      console.log("token.user", token.user);
+      // console.log("token.user", token.user);
       return {
         access: token.access as IToken,
         refresh: token.refresh as IToken,
@@ -238,6 +232,7 @@ export const authOptions = {
           email: (token.user as IUser).email,
           profilePicture: (token.user as IUser).profilePicture,
           isVerified: (token.user as IUser).isVerified,
+          role: (token.user as IUser).role
         },
       };
     },

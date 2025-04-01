@@ -2,17 +2,17 @@
 import { useAuth } from "@/utils/hooks/useAuth";
 import Loader from "@/components/atoms/loader/Loader";
 import Breadcrumbs from "@/components/atoms/breadcrumbs/Breadcrumbs";
-import "./register-fr.scss";
 import RegisterFirstResponderForm from "@/components/organisms/forms/RegisterFirstResponderForm/RegisterFirstResponderForm";
 import { useFeedback } from "@/context/feedbackContext";
 import Toast from "@/components/molecules/toast/Toast";
+import "./register-fr.scss";
 
 export default function RegisterFirstResponder() {
   const { sessionLoading, session } = useAuth();
   const { showToast, toast, resetToast } = useFeedback();
 
   if (sessionLoading) {
-    return <Loader view="chat" />;
+    return <Loader view="form" />;
   }
 
   return (
@@ -29,7 +29,7 @@ export default function RegisterFirstResponder() {
         To register as a first responder, please fill out the following form:
       </p>
 
-      <RegisterFirstResponderForm showToast={showToast} />
+      <RegisterFirstResponderForm showToast={showToast} session={session}/>
       <Toast
         variant={toast.variant}
         content={toast.content}

@@ -80,7 +80,7 @@ export default function Topbar({
                 color="green"
                 isLink
                 linkProps={{href: "/auth/login"}}
-                className="w-[200px]"
+                className="w-[210px]"
               >
                 Log in
               </Button>
@@ -91,7 +91,7 @@ export default function Topbar({
                 color="green"
                 isLink
                 linkProps={{href: "/auth/login"}}
-                className="w-[200px]"
+                className="w-[210px]"
               >
                 Register
               </Button>

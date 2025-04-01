@@ -6,6 +6,7 @@ import pinRoutes from "../api/routes/pin.route";
 import pinTypesRoutes from "../api/routes/pinTypes.route";
 import chatRoutes from "../api/routes/chat.route";
 import contactUsRoutes from "../api/routes/contactUs.route";
+import applicationRoutes from "../api/routes/application.route";
 
 const routes = () => {
   const router = Router();
@@ -38,6 +39,10 @@ const routes = () => {
     {
       path: "/contact-us",
       route: contactUsRoutes(),
+    },
+    {
+      path: "/applications",
+      route: applicationRoutes(),
     },
   ];
 

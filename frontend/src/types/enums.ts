@@ -41,3 +41,8 @@ export enum PinStatus {
   CLOSED = "closed",
   DELETED = "deleted",
 }
+
+export enum UserRoles {
+  FIRST_RESPONDER = "first-responder",
+  REGULAR = "regular"
+}

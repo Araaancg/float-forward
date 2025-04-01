@@ -9,7 +9,7 @@ import { useState } from "react";
 import { schema } from "./offer-help-schema";
 import { IDisasters } from "@/types/structures";
 import { useApi } from "@/utils/hooks/useApi";
-import { PinTypes } from "@/types/enums";
+import { PinTypes, UserRoles } from "@/types/enums";
 import { useFeedback } from "@/context/feedbackContext";
 import Toast from "@/components/molecules/toast/Toast";
 import Loader from "@/components/atoms/loader/Loader";
@@ -56,7 +56,7 @@ export default function OfferOwnHelpForm({
     // Do something with the selected place data
     // e.g., update form state, make API calls, etc.
   };
-
+  
   const sendData = async (data: any) => {
     try {
       if (!selectedPlace) {
@@ -116,17 +116,35 @@ export default function OfferOwnHelpForm({
         onClose={resetToast}
       />
       <Selector
-        options={[
-          { placeholder: "Own Help Offer", value: PinTypes.HELP_OFFER },
-          {
-            placeholder: "Collection Point",
-            value: PinTypes.COLLECTION_POINT,
-          },
-          {
-            placeholder: "Information Point",
-            value: PinTypes.INFORMATION_POINT,
-          },
-        ]}
+        options={
+          session?.user?.role === UserRoles.FIRST_RESPONDER
+            ? [
+                { placeholder: "Own Help Offer", value: PinTypes.HELP_OFFER },
+                {
+                  placeholder: "Collection Point",
+                  value: PinTypes.COLLECTION_POINT,
+                },
+                {
+                  placeholder: "Information Point",
+                  value: PinTypes.INFORMATION_POINT,
+                },
+                {
+                  placeholder: "Medical Point",
+                  value: PinTypes.MEDICAL_POINT,
+                },
+              ]
+            : [
+                { placeholder: "Own Help Offer", value: PinTypes.HELP_OFFER },
+                {
+                  placeholder: "Collection Point",
+                  value: PinTypes.COLLECTION_POINT,
+                },
+                {
+                  placeholder: "Information Point",
+                  value: PinTypes.INFORMATION_POINT,
+                },
+              ]
+        }
         selected={helpType}
         onSelect={(value: string) => setHelpType(value)}
       />

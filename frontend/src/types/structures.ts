@@ -1,4 +1,4 @@
-import { ChatStatus, MessageStatus, PinStatus, PinTypes, PriorityTypes } from "./enums";
+import { ChatStatus, MessageStatus, PinStatus, PinTypes, PriorityTypes, UserRoles } from "./enums";
 import { ICoordinates } from "./interfaces";
 
 export interface IUser {
@@ -7,7 +7,8 @@ export interface IUser {
   email?: string | null;
   profilePicture?: string | null;
   authProvider?: "google" | "email";
-  isVerified?: boolean
+  isVerified?: boolean;
+  role: UserRoles
   // accessToken?: string;
   // refreshToken?: string;
 }

@@ -8,6 +8,10 @@ import theme from "@/theme";
 import HoldingHandsIcon from "@/components/atoms/icons/HoldingHandsIcon";
 import Button from "@/components/atoms/button/Button";
 import HealthcareIcon from "@/components/atoms/icons/HealthcareIcon";
+import { UserRoles } from "@/types/enums";
+import ContactUsForm from "@/components/organisms/forms/ContactUsForm/ContactUsForm";
+import { useFeedback } from "@/context/feedbackContext";
+import Toast from "@/components/molecules/toast/Toast";
 
 const benefits = [
   {
@@ -81,9 +85,10 @@ const whoCanApply = [
 
 export default function FirstResponderView() {
   const { sessionLoading, session } = useAuth();
+  const { showToast, toast, resetToast } = useFeedback();
 
   if (sessionLoading) {
-    return <Loader view="chat" />;
+    return <Loader view="home" />;
   }
 
   return (
@@ -104,57 +109,91 @@ export default function FirstResponderView() {
           </div>
           <h1 className="text-2xl">FIRST RESPONDERS</h1>
         </div>
-        <h2 className="font-semibold">
-          &quot;Your expertise is vital. Join us in providing critical support
-          during emergencies.&quot;
-        </h2>
-        <p>
-          This page is dedicated to trained first responders who wish to
-          contribute their skills in times of crisis. By registering, you'll
-          gain access to key platform features that allow you to:
-        </p>
-        <div className="firstResponderView-benefits">
-          {benefits.map((card: any) => (
-            <div key={card.id} className="firstResponderView-benefits-card">
-              <div className="flex flex-col justify-center items-center w-full sm:w-1/3 gap-4">
-                {card.icon}
-                <p className="text-lg">{card.title}</p>
-              </div>
-              <div className="w-full sm:w-2/3">{card.content}</div>
+        {session?.user.role === UserRoles.REGULAR && (
+          <>
+            <h2 className="font-semibold">
+              &quot;Your expertise is vital. Join us in providing critical
+              support during emergencies.&quot;
+            </h2>
+            <p>
+              This page is dedicated to trained first responders who wish to
+              contribute their skills in times of crisis. By registering, you'll
+              gain access to key platform features that allow you to:
+            </p>
+            <div className="firstResponderView-benefits">
+              {benefits.map((card: any) => (
+                <div key={card.id} className="firstResponderView-benefits-card">
+                  <div className="flex flex-col justify-center items-center w-full sm:w-1/3 gap-4">
+                    {card.icon}
+                    <p className="text-lg">{card.title}</p>
+                  </div>
+                  <div className="w-full sm:w-2/3">{card.content}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
+        {session?.user.role === UserRoles.FIRST_RESPONDER && (
+          <>
+            <p>
+              Thank you for registering as a first responder. Below you can find
+              a form where you can make official requests to the platform.
+            </p>
+            <p>
+              Every idea or suggestion is welcome. You can even request to show
+              certain additional information if you think people are going to
+              find it userful.
+            </p>
+          </>
+        )}
       </section>
 
-      <Button
-        variant="primary"
-        color="red"
-        isLink
-        linkProps={{ href: "/first-responder/register" }}
-        className="w-full sm:w-1/3"
-      >
-        Register as a first responder
-      </Button>
+      {session?.user.role === UserRoles.REGULAR && (
+        <>
+          <Button
+            variant="primary"
+            color="red"
+            isLink
+            linkProps={{ href: "/first-responder/register" }}
+            className="w-full sm:w-1/3"
+          >
+            Register as a first responder
+          </Button>
 
-      <hr className="w-11/12 border border-pins-red-primary" />
+          <hr className="w-11/12 border border-pins-red-primary" />
 
-      <section className="wcafr">
-        <h3 className="wcafr-title">
-          Who can apply for the "first responder" role in Float Forward?
-        </h3>
-        <ul className="wcafr-list">
-          {whoCanApply.map((card: any, index: number) => (
-            <li key={card.id} className={`wcafr-list-item`}>
-              <span
-                className={`wcafr-list-item-number  ${index === 0 && "first"}`}
-              >
-                {card.number}
-              </span>
-              <p className="wcafr-list-item-text">{card.text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+          <section className="wcafr">
+            <h3 className="wcafr-title">
+              Who can apply for the "first responder" role in Float Forward?
+            </h3>
+            <ul className="wcafr-list">
+              {whoCanApply.map((card: any, index: number) => (
+                <li key={card.id} className={`wcafr-list-item`}>
+                  <span
+                    className={`wcafr-list-item-number  ${
+                      index === 0 && "first"
+                    }`}
+                  >
+                    {card.number}
+                  </span>
+                  <p className="wcafr-list-item-text">{card.text}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      )}
+      {session?.user.role === UserRoles.FIRST_RESPONDER && (
+        <>
+          <ContactUsForm showToast={showToast} />
+          <Toast
+            variant={toast.variant}
+            content={toast.content}
+            showToast={toast.showToast}
+            onClose={resetToast}
+          />
+        </>
+      )}
     </div>
   );
 }

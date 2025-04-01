@@ -10,6 +10,7 @@ export const UserSchema = new mongoose.Schema<any>(
     googleId: { type: String, required: false },
     deletedAt: { type: Date, default: null },
     isVerified: { type: Boolean, default: false },
+    role: { type: String, default: "regular", required: true },
   },
   { timestamps: true, versionKey: false }
 );

@@ -44,7 +44,6 @@ export function useData<T>(
           body: options.body,
           requiresAuth: options.requiresAuth,
         });
-        console.log("useData", response)
         if (response.success) {
           setData(response.data);
           setError(null);

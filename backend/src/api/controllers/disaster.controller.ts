@@ -11,7 +11,7 @@ export class DisasterController {
   ) {}
 
   get = catchAsync(async (req, res) => {
-    const { limit = 10, skip = 0, ...body } = req.query;
+    const { limit, skip, ...body } = req.query;
     const result = await this.disasterService.get(body, { limit, skip });
     res.status(200).send(result);
   });

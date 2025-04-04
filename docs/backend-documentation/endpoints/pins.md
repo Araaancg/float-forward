@@ -1,14 +1,70 @@
 # Pin API Routes
 
 1. [GET](#get)
-2. [POST](#post)
-3. [PUT](#put)
-4. [DELETE](#delete)
+2. [My Pins](#my-pins)
+3. [POST](#post) 
+4. [PUT](#put)
+5. [DELETE](#delete)
 
 ## GET
 
 **Status**: Operative
 **Description**: Retrieves all the pins. It can be filtered passing in the query params any wanted criteria.
+**Endpoint**: `/pins`
+**Method**: `GET`
+**Requires authentication**: `True`
+
+- **Response**:
+  **Status 200 OK**:
+
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "_id": string,
+        "title": string,
+        "type": IPinType,
+        "description": string,
+        "disaster": string,
+        "user": IUser,
+        "coordinates": {
+          "lat": number,
+          "lng": number,
+        },
+        "address": string,
+        "deletedAt": null,
+        "createdAt": Date,
+        "updatedAt": Date
+      }
+    ]
+  }
+  ```
+
+  **Status 401 Unauthorized**: JWT provided is malformed, expired or was not provided.
+
+  ```json
+  {
+    "success": false,
+    "error": "Authentication failed: ${e}"
+  }
+  ```
+
+  **Status 500 Internal Server Error**: Internal server error.
+
+  ```json
+  {
+    "success": false,
+    "error": "Something went wrong retriving pin : ${e}"
+  }
+  ```
+
+---
+
+## My pins
+
+**Status**: Operative
+**Description**: Retrieves all the pins from the authenticated user. It can be filtered passing in the query params any wanted criteria.
 **Endpoint**: `/pins`
 **Method**: `GET`
 **Requires authentication**: `True`
@@ -237,12 +293,12 @@
   }
   ```
 
-  **404 Not Found**: Pin type not found
+  **404 Not Found**: Pin not found
 
   ```json
   {
     "success": false,
-    "error": "Pin type not found"
+    "error": "Pin not found"
   }
   ```
 
@@ -251,6 +307,6 @@
   ```json
   {
     "success": false,
-    "error": "There was an error updating pin type: ${e}"
+    "error": "There was an error updating pin: ${e}"
   }
   ```

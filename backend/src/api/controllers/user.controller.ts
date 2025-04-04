@@ -8,7 +8,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   get = catchAsync(async (req: Request, res: Response) => {
-    const { limit = 10, skip = 0, ...body } = req.query;
+    const { limit, skip, ...body } = req.query;
     const result = await this.userService.get(body, { limit, skip });
     res.status(200).send(result);
   });

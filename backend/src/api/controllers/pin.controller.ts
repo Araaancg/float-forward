@@ -8,13 +8,13 @@ export class PinController {
   constructor(private pinService: PinService) {}
 
   get = catchAsync(async (req, res) => {
-    const { limit = 10, skip = 0, ...body } = req.query;
+    const { limit, skip, ...body } = req.query;
     const result = await this.pinService.get(body, { limit, skip, status: PinStatus.ACTIVE });
     return res.status(200).send(result);
   });
 
   getMyPins = catchAsync(async (req, res) => {
-    const { limit = 10, skip = 0, ...body } = req.query;
+    const { limit, skip, ...body } = req.query;
     const user = req.token.sub;
     const result = await this.pinService.getMyPins(user, body, { limit, skip });
     return res.status(200).send(result);

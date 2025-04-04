@@ -7,7 +7,7 @@ export class PinTypesController {
   constructor(private pinTypesService: PinTypesService) {}
 
   get = catchAsync(async (req, res) => {
-    const { limit = 10, skip = 0, ...body } = req.query;
+    const { limit, skip, ...body } = req.query;
     const result = await this.pinTypesService.get(body, { limit, skip });
     res.status(200).send(result);
   });

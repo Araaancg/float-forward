@@ -59,6 +59,22 @@
 **Method**: `POST`
 **Requires authentication**: `True`
 
+- **Body**:
+
+```json
+{
+    "type": IPinType,
+    "title": string,
+    "description": string,
+    "coordinates": {
+        "lat": number, 
+        "lng": number
+    },
+    "address": string,
+    "disaster": string | ObjectID
+}
+```
+
 - **Response**:
   **Status 200 OK**:
 

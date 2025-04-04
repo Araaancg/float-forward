@@ -41,22 +41,6 @@ const chatRoutes = () => {
       chatController.getUnreadMessages
     );
 
-  // router
-  //   .route("/:id")
-  //   .put(
-  //     auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-  //     // validate(schemas),
-  //     chatController.update
-  //   );
-
-  // router
-  //   .route("/:id")
-  //   .delete(
-  //     auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-  //     // validate(schemas),
-  //     chatController.delete
-  //   );
-
   return router;
 };
 

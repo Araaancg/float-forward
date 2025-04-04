@@ -22,8 +22,7 @@ export default function DisasterEventsCard({ info }: { info: IDisasters }) {
       <div className="decard-image">
         {info?.images[0]?.href && info?.images[0]?.alt && (
           <Image
-            // src={info?.images[0]?.href}
-            src={"/mocks/placeholder.png"}
+            src={info?.images[0]?.href}
             alt={info?.images[0]?.alt}
             fill
             className="object-cover rounded-t-md sm:rounded-l-none sm:rounded-r-md"

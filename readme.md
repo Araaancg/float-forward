@@ -1,4 +1,4 @@
-# AIDNET | Community-based disaster handling platform
+# Float Forward – A Community-Based Platform for Disaster Response
 
 ## Table of Contents
 

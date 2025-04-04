@@ -1,0 +1,58 @@
+@keyframes fadeInOut {
+    from {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  div.toast {
+    transition: all;
+    position: fixed;
+    right: 1em;
+    bottom: 1em;
+    @media (min-width: 1024px) {
+      bottom: 5vh;
+      right: 5vw;
+
+    }
+  
+    &.show {
+      display: flex;
+      opacity: 1;
+      animation: fadeInOut 3s ease-in-out forwards;
+    }
+  
+    &.always-on-display {
+      display: flex;
+      opacity: 1;
+    }
+    
+    &.not-show {
+      display: none;
+    }
+  
+    &.success {
+      background-color: #e7f4e8;
+    }
+  
+    &.error {
+      background-color: #ffe2e5;
+    }
+  }
+  
+  h5.title-s {
+    color: #1f2024;
+  }
+  
+  .body-s {
+    color: #494a50;
+  }
+  

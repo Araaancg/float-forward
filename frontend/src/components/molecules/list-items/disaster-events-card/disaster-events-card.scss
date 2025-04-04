@@ -1,0 +1,15 @@
+.decard {
+  @apply flex flex-col-reverse sm:flex-row justify-center items-center w-full rounded-md;
+  background-color: white;
+  box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.25);
+  @media (min-width: 790px) {
+    height: 60vh;
+  }
+
+  &-info {
+    @apply flex flex-col justify-center items-end p-6 w-full sm:w-1/2 text-base gap-5;
+  }
+  &-image {
+    @apply relative w-full sm:w-1/2 h-64 sm:h-full rounded-md;
+  }
+}

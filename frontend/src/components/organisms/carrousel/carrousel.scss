@@ -1,0 +1,17 @@
+.carrousel {
+  @apply w-full;
+  max-width: 1000px;
+
+  &-progress {
+    @apply w-full flex flex-row gap-3 justify-center items-center;
+    &-container {
+      @apply mt-4 rounded-md bg-grey cursor-pointer bg-grey;
+      height: 5px;
+
+      &-bar {
+        @apply h-full rounded-md bg-green-primary;
+        transition: width 0.1s ease-in-out;
+      }
+    }
+  }
+}

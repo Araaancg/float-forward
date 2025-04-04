@@ -1,45 +1,20 @@
-import { Router } from 'express'
-import Container from 'typedi'
-import { JSON_WEB_TOKENS } from '../../common/config'
-import { UserController } from '../controllers/user.controller'
-import { auth } from '../../common/helpers/middlewares'
-import { validate } from '../../common/validations/validate'
-import { schemas } from '../../common/validations'
+import { Router } from "express";
+import Container from "typedi";
+import { UserController } from "../controllers/user.controller";
+import { auth } from "../../common/middlewares/auth-handler";
+import { JSON_WEB_TOKENS } from "../../common/config";
 
 const userRoutes = () => {
-  const router = Router()
-  const userController: UserController = Container.get(UserController)
-  router.route('/').get(
-    auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-    validate(schemas),
-    userController.get)
-
-  router.route('/')
-    .post(
-      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      validate(schemas),
-      userController.create
-    )
+  const router = Router();
+  const userController: UserController = Container.get(UserController);
+  
+  router.route("/").get(auth(JSON_WEB_TOKENS.PUBLIC_KEY), userController.get);
 
   router
-    .route('/')
-    .put(
-      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      validate(schemas),
-      userController.update
-    )
+    .route("/")
+    .put(auth(JSON_WEB_TOKENS.PUBLIC_KEY), userController.update);
 
-  router
-    .route('/')
-    .delete(
-      auth(JSON_WEB_TOKENS.PUBLIC_KEY),
-      validate(schemas),
-      userController.delete
-    )
+  return router;
+};
 
-  return router
-}
-
-export default userRoutes
-
-
+export default userRoutes;

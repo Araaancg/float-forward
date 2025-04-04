@@ -1,0 +1,24 @@
+.avatar {
+  @apply relative rounded-full border-2 border-solid border-green-primary 
+  flex justify-center items-center inline-block bg-white-secondary;
+
+  &-content {
+    @apply rounded-full object-cover w-full h-full;
+  }
+
+  // Yes image
+  &.avatar-with-image {
+    .avatar-content {
+      object-fit: cover;
+    }
+  }
+
+  // No image
+  &.avatar-with-icon > i {
+    @apply flex justify-center items-center;
+    svg {
+      width: 60%;
+      height: 60%;
+    }
+  }
+}

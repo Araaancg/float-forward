@@ -1,0 +1,27 @@
+.tabs {
+  @apply flex justify-center items-center relative;
+
+  & > .tabs-container {
+    @apply flex justify-evenly relative w-full;
+
+    & > .tab {
+      @apply text-sm text-center font-normal cursor-pointer
+        px-4 py-3 relative min-w-[100px] text-black-primary;
+
+      &.active {
+        @apply text-black-primary;
+      }
+    }
+
+    & > .tabs-indicator {
+      @apply absolute
+        bottom-0
+        h-1
+        rounded
+        bg-green-primary
+        transition-all
+        duration-300
+        ease-in-out;
+    }
+  }
+}

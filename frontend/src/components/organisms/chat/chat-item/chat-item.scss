@@ -1,0 +1,45 @@
+.chatItem {
+  @apply w-full px-4 py-3 flex flex-col 
+  gap-3 cursor-pointer bg-white-full;
+  &.selected {
+    @media (min-width: 720px) {
+      background-color: rgba(155, 197, 61, 0.58);
+    }
+  }
+  &-pinType {
+    @apply px-2 py-0.5 text-white-full w-fit
+    text-sm;
+    border-radius: 4px;
+    &.color {
+      &-green {
+        background-color: theme("colors.pins.green.primary");
+      }
+      &-lightBlue {
+        background-color: theme("colors.pins.lightBlue.primary");
+      }
+      &-yellow {
+        background-color: theme("colors.pins.yellow.primary");
+      }
+      &-red {
+        background-color: theme("colors.pins.red.primary");
+      }
+      &-black {
+        background-color: theme("colors.pins.black.primary");
+      }
+      &-darkBlue {
+        background-color: theme("colors.pins.darkBlue.primary");
+      }
+    }
+  }
+  &-body {
+    @apply w-full flex flex-row gap-2 justify-start items-center;
+    &-content {
+      @apply flex flex-col gap-1 w-11/12;
+    }
+  }
+
+  &-unreadMsgs {
+    @apply flex justify-center items-center rounded-full text-white-full
+     bg-green-primary text-xs  px-2 ;
+  }
+}

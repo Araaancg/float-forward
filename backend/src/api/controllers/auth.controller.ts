@@ -1,70 +1,119 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Service } from 'typedi'
-import httpStatus from 'http-status'
-import { AuthService } from '../services/auth/auth.service'
-import { catchAsync } from '../../common/helpers/utils/catchasync'
-import { ApiError } from '../../common/helpers/middlewares'
+import { Service } from "typedi";
+import httpStatus from "http-status";
+import { catchAsync } from "../../common/helpers/catch-async";
+import { ApiError } from "../../common/middlewares/error-handler";
+import { AuthService } from "../services/auth.service";
+import { UserService } from "../services/user.service";
+import actionLog from "../../common/helpers/actionLog";
 
 @Service()
 export class AuthController {
   constructor(
     private authService: AuthService,
-  ) { }
+    private userService: UserService
+  ) {}
+
+  register = catchAsync(async (req, res) => {
+    const { email, name, password, confirmPassword, check } = req.body;
+
+    if (check) {
+      const result = await this.authService.registerCheck({
+        email,
+        name,
+        password,
+        confirmPassword,
+      });
+      return res.status(200).json(result);
+    }
+   
+    const result = await this.authService.register({
+      email,
+      name,
+      confirmPassword,
+      password,
+    });
+    return res.status(200).json(result);
+  });
 
   login = catchAsync(async (req, res) => {
-    const { email, provider, access_token } = req.body
+    const { provider, email, name, picture, token, password } = req.body;
 
     switch (provider) {
-      case 'passwordless':
-        const result = await this.authService.loginPasswordless(email)
-        return res.status(200).send(result)
-      case 'other':
-        throw new ApiError(httpStatus.NOT_IMPLEMENTED, 'Provider not found')
-    }
-  })
-
-  signup = catchAsync(async (req, res) => {
-    const { email, name } = req.body
-
-      
-        const result = await this.authService.signupPasswordless({
+      case "credentials":
+        actionLog("INFO", "AUTH", "Login provider: credentials")
+        const returnCredentials = await this.authService.loginCredentials({
           email,
-          name
-        })
-        return res.status(200).send(result)
-    
-  })
+          password,
+        });
+        return res.status(200).json(returnCredentials);
+        
+        case "google":
+        actionLog("INFO", "AUTH", "Login provider: google")
+        const returnGoogle = await this.authService.loginGoogle({
+          email,
+          name,
+          picture,
+          token,
+        });
+        return res.status(200).json(returnGoogle);
+        
+        case "check":
+        actionLog("INFO", "AUTH", "Login provider: check")
+        const returnCheck = await this.authService.loginCheck({
+          email,
+          password,
+        });
+        return res.status(httpStatus.OK).json(returnCheck);
+
+      default:
+        throw new ApiError(httpStatus.NOT_IMPLEMENTED, "Provider not found");
+    }
+  });
+
+  refresh = catchAsync(async (req, res) => {
+    const { refreshToken } = req.body;
+    const result = await this.authService.refresh(refreshToken);
+    return res.status(200).json(result);
+  });
 
   verifyEmail = catchAsync(async (req, res) => {
-    const { access_token } = req.body
-    const tokens = await this.authService.verifyEmail(access_token)
+    const { verifyEmailToken, email } = req.body;
+    const result = await this.authService.verifyEmail(verifyEmailToken, email);
+    return res.status(200).json(result);
+  });
 
-    return res.status(200).send(tokens)
-  })
+  checkIsVerified = catchAsync(async (req, res) => {
+    actionLog("PROCESS", "AUTH", "Checking if user is verified...")
+    const token = req.token;
+    const result = await this.userService.get({ _id: token.sub });
+    actionLog("SUCCESS", "AUTH", `Check finished: User is${result.data[0].isVerified ? " not": ""} verified`)
+    return res
+      .status(200)
+      .json({ success: true, data: result.data[0].isVerified });
+  });
 
-  logout = catchAsync(async (req, res) => {
-    const { refreshToken } = req.body
+  resendVerifyEmail = catchAsync(async (req, res) => {
+    const token = req.token;
+    const result = await this.authService.resendVerifyEmail(token.sub);
+    return res.status(200).json(result);
+  });
 
-    await this.authService.logout(refreshToken)
+  forgotPassword = catchAsync(async (req, res) => {
+    const { email } = req.body;
+    const result = await this.authService.forgotPassword(email);
+    return res.status(200).json(result);
+  });
 
-    return res.status(httpStatus.NO_CONTENT).send()
-  })
+  resetPassword = catchAsync(async (req, res) => {
+    const { password, confirmPassword, resetPasswordToken, email } = req.body;
+    const result = await this.authService.resetPassword(
+      resetPasswordToken,
+      email,
+      password,
+      confirmPassword
+    );
+    return res.status(200).json(result);
+  });
 
-  refreshTokens = catchAsync(async (req, res) => {
-    const { refreshToken } = req.body
-    const tokens = <
-      {
-        access: {
-          token: string
-          expires: string
-        }
-        refresh: {
-          token: string
-          expires: string
-        }
-      }
-      >await this.authService.refreshAuth({ refreshToken })
-
-    return res.send({ ...tokens })
-  })
+  logout = catchAsync(async (req, res) => {});
 }

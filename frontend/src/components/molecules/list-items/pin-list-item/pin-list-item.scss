@@ -1,0 +1,46 @@
+.plitem {
+  @apply flex flex-col xs:flex-row justify-between items-center w-10/12 sm:w-full
+    rounded-md p-4 sm:p-3 gap-6 cursor-pointer;
+  box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.25);
+
+  &-map {
+    @apply flex flex-col justify-center gap-2 items-center 
+        xs:items-start;
+  }
+
+  &-info {
+    @apply flex flex-col-reverse xs:flex-col gap-3;
+  }
+
+  &-own {
+    @apply px-2 py-1 mb-2 text-white-primary bg-pins-yellow-primary text-[10px] rounded-xl;
+  }
+  &-closed {
+    @apply px-2 py-1 mb-2 text-white-primary bg-pins-red-primary text-[10px] rounded-xl ml-2;
+  }
+
+  &-type {
+    @apply w-fit px-2 py-1 text-white-full rounded text-[10px] mr-3;
+
+    &.color {
+      &-green {
+        background-color: theme("colors.pins.green.primary");
+      }
+      &-lightBlue {
+        background-color: theme("colors.pins.lightBlue.primary");
+      }
+      &-yellow {
+        background-color: theme("colors.pins.yellow.primary");
+      }
+      &-red {
+        background-color: theme("colors.pins.red.primary");
+      }
+      &-black {
+        background-color: theme("colors.pins.black.primary");
+      }
+      &-darkBlue {
+        background-color: theme("colors.pins.darkBlue.primary");
+      }
+    }
+  }
+}

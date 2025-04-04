@@ -7,5 +7,23 @@ body {
   margin: 0;
   overflow-x: hidden;
   width: 100vw;
-  background-color: #F6F3EE;
+  /* background-color: #F6F3EE; */
+  background-color: theme("colors.white.secondary");
+}
+
+.sidebar-expanded {
+  width: calc(100% - 290px);
+}
+.sidebar-collapsed {
+  width: calc(100% - 100px);
+}
+.sidebar-null {
+  width: 100%;
+}
+
+@media (max-width: 790px) {
+  .sidebar-collapsed,
+  .sidebar-expanded {
+    width: 100%;
+  }
 }

@@ -1,0 +1,15 @@
+.verifyEmailBanner {
+  @apply w-full py-3 px-4 rounded-xl max-w-2xl;
+  background-color: #ffe2e5;
+  &-title {
+    @apply text-xl mb-4 text-center;
+    color: #1f2024;
+  }
+  &-text {
+    @apply text-base mb-4 text-center; 
+    color: #494a50;
+  }
+  &-body {
+    @apply flex flex-col justify-center items-center;
+  }
+}
